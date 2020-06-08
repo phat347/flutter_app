@@ -73,8 +73,33 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  Color colorPrimary = HexColor("#c12026");
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       new GlobalKey<RefreshIndicatorState>();
+
+  int _selectedIndex = 0;
+  static const TextStyle optionStyle =
+  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static const List<Widget> _widgetOptions = <Widget>[
+    Text(
+      'Index 0: Home',
+      style: optionStyle,
+    ),
+    Text(
+      'Index 1: Business',
+      style: optionStyle,
+    ),
+    Text(
+      'Index 2: School',
+      style: optionStyle,
+    ),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   Future<List<NationFootballClub>> _getNationList() async {
     var data = await http
@@ -301,6 +326,25 @@ class _MyHomePageState extends State<MyHomePage> {
 //          ],
 //        ),
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            title: Text('Trang chủ'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.business),
+            title: Text('Kho quà'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.school),
+            title: Text('Thông báo'),
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: colorPrimary,
+        onTap: _onItemTapped,
+      )
 //      floatingActionButton: FloatingActionButton(
 //        onPressed: _incrementCounter,
 //        tooltip: 'Tăng số đếm',
@@ -457,4 +501,15 @@ class NationFootballClub {
 
   NationFootballClub(this.id, this.name, this.img_url, this.defend,
       this.midfield, this.attack);
+}
+class HexColor extends Color {
+  static int _getColorFromHex(String hexColor) {
+    hexColor = hexColor.toUpperCase().replaceAll("#", "");
+    if (hexColor.length == 6) {
+      hexColor = "FF" + hexColor;
+    }
+    return int.parse(hexColor, radix: 16);
+  }
+
+  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
 }
