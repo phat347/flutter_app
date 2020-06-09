@@ -11,7 +11,8 @@ import 'dart:async';
 
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:flutter/services.dart';
-
+import 'package:photo_view/photo_view.dart';
+import 'package:photo_view/photo_view_gallery.dart';
 
 void main() {
   runApp(MyApp());
@@ -38,11 +39,7 @@ class MyApp extends StatelessWidget {
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
         primarySwatch: Colors.red,
-        primaryTextTheme: TextTheme(
-            headline6: TextStyle(
-                color: Colors.black
-            )
-        ),
+        primaryTextTheme: TextTheme(headline6: TextStyle(color: Colors.black)),
         // This makes the visual density adapt to the platform that you run
         // the app on. For desktop platforms, the controls will be smaller and
         // closer together (more dense) than on mobile platforms.
@@ -79,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     Text(
       'Index 0: Home',
@@ -190,63 +187,63 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        iconTheme: IconThemeData(
-          color: Colors.black, //change your color here
+        appBar: AppBar(
+          // Here we take the value from the MyHomePage object that was created by
+          // the App.build method, and use it to set our appbar title.
+          iconTheme: IconThemeData(
+            color: Colors.black, //change your color here
+          ),
+          backgroundColor: Colors.white,
+          brightness: Brightness.light,
+          title: Text("PHAT's First Flutter App"),
         ),
-        backgroundColor: Colors.white,
-        brightness: Brightness.light,
-        title: Text("PHAT's First Flutter App"),
-      ),
-      body: RefreshIndicator(
-        key: _refreshIndicatorKey,
-        onRefresh: _getNationListReload,
-        child: FutureBuilder(
-            future: _getNationList(),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (snapshot.data == null) {
-                return Container(
-                    child: ColorLoader5(
-                  dotOneColor: Colors.redAccent,
-                  dotTwoColor: Colors.blueAccent,
-                  dotThreeColor: Colors.green,
-                  dotType: DotType.circle,
-                  dotIcon: Icon(Icons.adjust),
-                  duration: Duration(seconds: 1),
-                ));
-              } else {
-                return ListView.separated(
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                        leading: Hero(
-                            tag: snapshot.data[index].id,
-                            child: CircleAvatar(
-                                backgroundImage:
-                                    NetworkImage(snapshot.data[index].img_url),
-                                backgroundColor: Colors.transparent)),
-                        title: Text(snapshot.data[index].name),
-                        trailing: Icon(Icons.keyboard_arrow_right),
-                        onTap: () {
+        body: RefreshIndicator(
+          key: _refreshIndicatorKey,
+          onRefresh: _getNationListReload,
+          child: FutureBuilder(
+              future: _getNationList(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.data == null) {
+                  return Container(
+                      child: ColorLoader5(
+                    dotOneColor: Colors.redAccent,
+                    dotTwoColor: Colors.blueAccent,
+                    dotThreeColor: Colors.green,
+                    dotType: DotType.circle,
+                    dotIcon: Icon(Icons.adjust),
+                    duration: Duration(seconds: 1),
+                  ));
+                } else {
+                  return ListView.separated(
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return ListTile(
+                          leading: Hero(
+                              tag: snapshot.data[index].id,
+                              child: CircleAvatar(
+                                  backgroundImage: NetworkImage(
+                                      snapshot.data[index].img_url),
+                                  backgroundColor: Colors.transparent)),
+                          title: Text(snapshot.data[index].name),
+                          trailing: Icon(Icons.keyboard_arrow_right),
+                          onTap: () {
 //                      showToast(snapshot.data[index].name.toString()+"\n"+"Tấn công: "+snapshot.data[index].attack.toString()+", Tiền vệ: "+snapshot.data[index].midfield.toString()+", Phòng thủ: "+snapshot.data[index].defend.toString());
-                          Navigator.push(
-                              context,
-                              new MaterialPageRoute(
-                                  builder: (context) =>
-                                      DetailNation(snapshot.data[index])));
-                        });
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return Divider(height: 1);
-                  },
-                );
-              }
-            }),
+                            Navigator.push(
+                                context,
+                                new MaterialPageRoute(
+                                    builder: (context) =>
+                                        DetailNation(snapshot.data[index])));
+                          });
+                    },
+                    separatorBuilder: (BuildContext context, int index) {
+                      return Divider(height: 1);
+                    },
+                  );
+                }
+              }),
 //        child: _myListView(context),
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
+          // Center is a layout widget. It takes a single child and positions it
+          // in the middle of the parent.
 //        child: Column(
 //          // Column is also a layout widget. It takes a list of children and
 //          // arranges them vertically. By default, it sizes itself to fit its
@@ -325,32 +322,72 @@ class _MyHomePageState extends State<MyHomePage> {
 //
 //          ],
 //        ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            title: Text('Trang chủ'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.business),
-            title: Text('Kho quà'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.school),
-            title: Text('Thông báo'),
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: colorPrimary,
-        onTap: _onItemTapped,
-      )
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              activeIcon: ImageIcon(
+                  AssetImage("assets/launcher/combinedshape.png"),
+                  color: colorPrimary),
+              icon: ImageIcon(AssetImage("assets/launcher/combinedshape.png"),
+                  color: Colors.grey),
+              title: Padding(
+                padding: EdgeInsets.all(0),
+                child: Text('Trang chủ'),
+              ),
+            ),
+            BottomNavigationBarItem(
+              activeIcon: ImageIcon(
+                  AssetImage("assets/launcher/menu_khoqua.png"),
+                  color: colorPrimary),
+              icon: ImageIcon(AssetImage("assets/launcher/menu_khoqua.png"),
+                  color: Colors.grey),
+              title: Padding(
+                padding: EdgeInsets.all(0),
+                child: Text('Kho quà'),
+              ),
+            ),
+            BottomNavigationBarItem(
+              activeIcon: Icon(Icons.camera, color: colorPrimary),
+              icon: Icon(Icons.camera, color: Colors.grey),
+              title: Padding(
+                padding: EdgeInsets.all(0),
+                child: Text('Chụp ảnh'),
+              ),
+            ),
+            BottomNavigationBarItem(
+              activeIcon: ImageIcon(AssetImage("assets/launcher/ic_bell_2.png"),
+                  color: colorPrimary),
+              icon: ImageIcon(AssetImage("assets/launcher/ic_bell_2.png"),
+                  color: Colors.grey),
+              title: Padding(
+                padding: EdgeInsets.all(0),
+                child: Text('Thông báo'),
+              ),
+            ),
+            BottomNavigationBarItem(
+              activeIcon: Icon(Icons.menu, color: colorPrimary),
+              icon: Icon(Icons.menu, color: Colors.grey),
+              title: Padding(
+                padding: EdgeInsets.all(0),
+                child: Text('Thêm'),
+              ),
+            )
+          ],
+          type: BottomNavigationBarType.fixed,
+          showSelectedLabels: true,
+          showUnselectedLabels: true,
+          unselectedItemColor: Colors.grey,
+          currentIndex: _selectedIndex,
+          selectedItemColor: colorPrimary,
+          onTap: _onItemTapped,
+        )
 //      floatingActionButton: FloatingActionButton(
 //        onPressed: _incrementCounter,
 //        tooltip: 'Tăng số đếm',
 //        child: Icon(Icons.add),
 //      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+        );
   }
 
   Widget _myListView(BuildContext context) {
@@ -502,6 +539,7 @@ class NationFootballClub {
   NationFootballClub(this.id, this.name, this.img_url, this.defend,
       this.midfield, this.attack);
 }
+
 class HexColor extends Color {
   static int _getColorFromHex(String hexColor) {
     hexColor = hexColor.toUpperCase().replaceAll("#", "");
