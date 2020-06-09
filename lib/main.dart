@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterapp/list_submission.dart';
 import 'package:flutterapp/loaders/color_loader_3.dart';
 import 'package:flutterapp/loaders/color_loader_5.dart';
 import 'package:flutterapp/loaders/dot_type.dart';
+import 'package:flutterapp/models/Submission.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -69,6 +71,14 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final CategoriesScroller categoriesScroller = CategoriesScroller();
+  ScrollController controller = ScrollController();
+  bool closeTopContainer = false;
+  double topContainer = 0;
+
+  List<Submission> itemsData = [];
+
+
   int _counter = 0;
   Color colorPrimary = HexColor("#c12026");
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
@@ -98,6 +108,19 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  @override
+  void initState() {
+    super.initState();
+//    controller.addListener(() {
+//      double value = controller.offset / 119;
+//
+//      setState(() {
+//        topContainer = value;
+//        closeTopContainer = controller.offset > 50;
+//      });
+//    });
+  }
+
   Future<List<NationFootballClub>> _getNationList() async {
     var data = await http
         .get("https://next.json-generator.com/api/json/get/4ykF0L9AH");
@@ -110,6 +133,20 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     return listClub;
   }
+
+  Future<List<Submission>> getListSub() async {
+    var data_server = await http
+        .get("https://next.json-generator.com/api/json/get/EyGudVOhu");
+    List<dynamic> json_data = jsonDecode(data_server.body);
+    List<Submission> data = json_data.map((json_data) => Submission.fromJson(json_data)).toList();
+
+    setState(() {
+      itemsData = data;
+    });
+
+    return data;
+  }
+
 
   Future<List<NationFootballClub>> _getNationListReload() async {
     var data = await http
@@ -128,33 +165,18 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _incrementCounter() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
       _counter++;
     });
   }
 
   void _resetCounter() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
       _counter = 0;
     });
   }
 
   void _decreaseCounter() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
       _counter--;
     });
   }
@@ -180,12 +202,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    final Size size = MediaQuery.of(context).size;
+    final double categoryHeight = size.height * 0.30;
     return Scaffold(
         appBar: AppBar(
           // Here we take the value from the MyHomePage object that was created by
@@ -194,14 +212,27 @@ class _MyHomePageState extends State<MyHomePage> {
             color: Colors.black, //change your color here
           ),
           backgroundColor: Colors.white,
+          leading: Icon(
+            Icons.chat,
+            color: Colors.black,
+          ),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.search, color: Colors.black),
+              onPressed: () {},
+            ),
+            IconButton(
+              icon: Icon(Icons.person, color: Colors.black),
+              onPressed: () {},
+            )
+          ],
           brightness: Brightness.light,
-          title: Text("PHAT's First Flutter App"),
         ),
         body: RefreshIndicator(
           key: _refreshIndicatorKey,
-          onRefresh: _getNationListReload,
+          onRefresh: getListSub,
           child: FutureBuilder(
-              future: _getNationList(),
+              future: getListSub(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.data == null) {
                   return Container(
@@ -214,30 +245,104 @@ class _MyHomePageState extends State<MyHomePage> {
                     duration: Duration(seconds: 1),
                   ));
                 } else {
-                  return ListView.separated(
-                    itemCount: snapshot.data.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return ListTile(
-                          leading: Hero(
-                              tag: snapshot.data[index].id,
-                              child: CircleAvatar(
-                                  backgroundImage: NetworkImage(
-                                      snapshot.data[index].img_url),
-                                  backgroundColor: Colors.transparent)),
-                          title: Text(snapshot.data[index].name),
-                          trailing: Icon(Icons.keyboard_arrow_right),
-                          onTap: () {
-//                      showToast(snapshot.data[index].name.toString()+"\n"+"Tấn công: "+snapshot.data[index].attack.toString()+", Tiền vệ: "+snapshot.data[index].midfield.toString()+", Phòng thủ: "+snapshot.data[index].defend.toString());
-                            Navigator.push(
-                                context,
-                                new MaterialPageRoute(
-                                    builder: (context) =>
-                                        DetailNation(snapshot.data[index])));
-                          });
-                    },
-                    separatorBuilder: (BuildContext context, int index) {
-                      return Divider(height: 1);
-                    },
+                  return Container(
+                    height: size.height,
+                    child: Column(
+                      children: <Widget>[
+//                        AnimatedOpacity(
+//                          duration: const Duration(milliseconds: 200),
+//                          opacity: closeTopContainer ? 0 : 1,
+//                          child: AnimatedContainer(
+//                              duration: const Duration(milliseconds: 200),
+//                              width: size.width,
+//                              alignment: Alignment.topCenter,
+//                              height: closeTopContainer ? 0 : categoryHeight,
+//                              child: categoriesScroller),
+//                        ),
+                        Expanded(
+                            child: ListView.builder(
+//                                controller: controller,
+                                itemCount: itemsData.length,
+                                physics: BouncingScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  var itemSub = itemsData[index];
+                                  double scale = 1.0;
+                                  if (topContainer > 0.5) {
+                                    scale = index + 0.5 - topContainer;
+                                    if (scale < 0) {
+                                      scale = 0;
+                                    } else if (scale > 1) {
+                                      scale = 1;
+                                    }
+                                  }
+                                  return Container(
+                                      width: double.infinity,
+                                      height: 150,
+                                      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                                          color: Colors.white,
+                                          boxShadow: [
+                                            BoxShadow(color: Colors.black.withAlpha(100), blurRadius: 10.0),
+                                          ]),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            Container(
+                                                width: 120,
+                                                height: 120,
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                      fit: BoxFit.cover,
+                                                      image: NetworkImage(itemSub.URL_img_id)),
+                                                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                                                )),
+                                            SizedBox(width: 10),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: <Widget>[
+                                                  Text(
+                                                    itemSub.class_desc,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    maxLines: 2,
+                                                    style: const TextStyle(
+                                                        fontSize: 20, fontWeight: FontWeight.bold),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                  Text(
+                                                    itemSub.extra_desc,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    maxLines: 2,
+                                                    style:
+                                                    const TextStyle(fontSize: 15, color: Colors.grey),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                  Text(
+                                                    itemSub.extra_desc,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    maxLines: 1,
+                                                    style: const TextStyle(
+                                                        fontSize: 15,
+                                                        color: Colors.black,
+                                                        fontWeight: FontWeight.bold),
+                                                  )
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ));
+                                })),
+                      ],
+                    ),
                   );
                 }
               }),
@@ -550,4 +655,121 @@ class HexColor extends Color {
   }
 
   HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
+}
+
+class CategoriesScroller extends StatelessWidget {
+  const CategoriesScroller();
+
+  @override
+  Widget build(BuildContext context) {
+    final double categoryHeight =
+        MediaQuery.of(context).size.height * 0.30 - 50;
+    return SingleChildScrollView(
+      physics: BouncingScrollPhysics(),
+      scrollDirection: Axis.horizontal,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        child: FittedBox(
+          fit: BoxFit.fill,
+          alignment: Alignment.topCenter,
+          child: Row(
+            children: <Widget>[
+              Container(
+                width: 150,
+                margin: EdgeInsets.only(right: 20),
+                height: categoryHeight,
+                decoration: BoxDecoration(
+                    color: Colors.orange.shade400,
+                    borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        "Most\nFavorites",
+                        style: TextStyle(
+                            fontSize: 25,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        "20 Items",
+                        style: TextStyle(fontSize: 16, color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                width: 150,
+                margin: EdgeInsets.only(right: 20),
+                height: categoryHeight,
+                decoration: BoxDecoration(
+                    color: Colors.blue.shade400,
+                    borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                child: Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          "Newest",
+                          style: TextStyle(
+                              fontSize: 25,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          "20 Items",
+                          style: TextStyle(fontSize: 16, color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                width: 150,
+                margin: EdgeInsets.only(right: 20),
+                height: categoryHeight,
+                decoration: BoxDecoration(
+                    color: Colors.lightBlueAccent.shade400,
+                    borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        "Super\nSaving",
+                        style: TextStyle(
+                            fontSize: 25,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        "20 Items",
+                        style: TextStyle(fontSize: 16, color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
