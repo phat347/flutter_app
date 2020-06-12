@@ -5,11 +5,17 @@ part 'Submission.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class Submission {
-  String class_desc,extra_desc,URL_img_id,portrait_url,user_name,rank_desc;
+  String class_desc,
+      extra_desc,
+      URL_img_id,
+      portrait_url,
+      user_name,
+      rank_desc,
+      forum_id;
 
 
   Submission(this.class_desc, this.extra_desc, this.URL_img_id,
-      this.portrait_url, this.user_name, this.rank_desc);
+      this.portrait_url, this.user_name, this.rank_desc, this.forum_id);
 
   factory Submission.fromJson(Map <String,dynamic> data) =>_$SubmissionFromJson(data);
 

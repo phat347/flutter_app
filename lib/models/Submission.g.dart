@@ -14,6 +14,7 @@ Submission _$SubmissionFromJson(Map<String, dynamic> json) {
     json['portrait_url'] as String,
     json['user_name'] as String,
     json['rank_desc'] as String,
+    json['forum_id'] as String,
   );
 }
 
@@ -25,4 +26,5 @@ Map<String, dynamic> _$SubmissionToJson(Submission instance) =>
       'portrait_url': instance.portrait_url,
       'user_name': instance.user_name,
       'rank_desc': instance.rank_desc,
+      'forum_id': instance.forum_id,
     };
