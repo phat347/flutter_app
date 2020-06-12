@@ -40,6 +40,7 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
+        fontFamily: 'Roboto',
         primarySwatch: Colors.red,
         primaryTextTheme: TextTheme(headline6: TextStyle(color: Colors.black)),
         // This makes the visual density adapt to the platform that you run
@@ -77,7 +78,6 @@ class _MyHomePageState extends State<MyHomePage> {
   double topContainer = 0;
 
   List<Submission> itemsData = [];
-
 
   int _counter = 0;
   Color colorPrimary = HexColor("#c12026");
@@ -138,7 +138,8 @@ class _MyHomePageState extends State<MyHomePage> {
     var data_server = await http
         .get("https://next.json-generator.com/api/json/get/EyGudVOhu");
     List<dynamic> json_data = jsonDecode(data_server.body);
-    List<Submission> data = json_data.map((json_data) => Submission.fromJson(json_data)).toList();
+    List<Submission> data =
+        json_data.map((json_data) => Submission.fromJson(json_data)).toList();
 
     setState(() {
       itemsData = data;
@@ -146,7 +147,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return data;
   }
-
 
   Future<List<NationFootballClub>> _getNationListReload() async {
     var data = await http
@@ -277,63 +277,137 @@ class _MyHomePageState extends State<MyHomePage> {
                                   }
                                   return Container(
                                       width: double.infinity,
-                                      height: 150,
-                                      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 20, vertical: 10),
                                       decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20.0)),
                                           color: Colors.white,
                                           boxShadow: [
-                                            BoxShadow(color: Colors.black.withAlpha(100), blurRadius: 10.0),
+                                            BoxShadow(
+                                                color:
+                                                    Colors.black.withAlpha(100),
+                                                blurRadius: 10.0),
                                           ]),
                                       child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        padding:
+                                            const EdgeInsets.only(bottom: 10),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: <Widget>[
                                             Container(
-                                                width: 120,
-                                                height: 120,
+                                                height: 300,
                                                 decoration: BoxDecoration(
                                                   image: DecorationImage(
                                                       fit: BoxFit.cover,
-                                                      image: NetworkImage(itemSub.URL_img_id)),
-                                                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                                                      image: NetworkImage(
+                                                          itemSub.URL_img_id)),
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  8.0),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  8.0)),
                                                 )),
                                             SizedBox(width: 10),
-                                            Expanded(
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
                                               child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                mainAxisSize: MainAxisSize.max,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: <Widget>[
+                                                  Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    children: <Widget>[
+                                                      CircleAvatar(
+                                                          radius: 20,
+                                                          backgroundImage:
+                                                              NetworkImage(itemSub
+                                                                  .portrait_url),
+                                                          backgroundColor:
+                                                              Colors
+                                                                  .transparent),
+                                                      SizedBox(width: 5),
+                                                      Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: <Widget>[
+                                                            Text(
+                                                              itemSub.user_name,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              maxLines: 1,
+                                                              style: const TextStyle(
+                                                                  fontSize: 15,
+                                                                  fontFamily:
+                                                                      'RobotoMedium',
+                                                                  color: Colors
+                                                                      .black),
+                                                            ),
+                                                            SizedBox(height: 5),
+                                                            Text(
+                                                              itemSub.rank_desc,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              maxLines: 1,
+                                                              style: const TextStyle(
+                                                                  fontSize: 12,
+                                                                  fontFamily:
+                                                                      'RobotoRegular',
+                                                                  color: Colors
+                                                                      .black),
+                                                            )
+                                                          ]),
+                                                    ],
+                                                  ),
                                                   Text(
                                                     itemSub.class_desc,
-                                                    overflow: TextOverflow.ellipsis,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                     maxLines: 2,
                                                     style: const TextStyle(
-                                                        fontSize: 20, fontWeight: FontWeight.bold),
+                                                        fontFamily:
+                                                            'RobotoMedium',
+                                                        fontSize: 20),
                                                   ),
                                                   SizedBox(
                                                     height: 5,
                                                   ),
                                                   Text(
                                                     itemSub.extra_desc,
-                                                    overflow: TextOverflow.ellipsis,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                     maxLines: 2,
-                                                    style:
-                                                    const TextStyle(fontSize: 15, color: Colors.grey),
+                                                    style: const TextStyle(
+                                                        fontSize: 13,
+                                                        fontFamily:
+                                                            'RobotoRegular',
+                                                        color: Colors.black),
                                                   ),
                                                   SizedBox(
                                                     height: 5,
                                                   ),
-                                                  Text(
-                                                    itemSub.extra_desc,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    maxLines: 1,
-                                                    style: const TextStyle(
-                                                        fontSize: 15,
-                                                        color: Colors.black,
-                                                        fontWeight: FontWeight.bold),
-                                                  )
+//                                                  Text(
+//                                                    itemSub.extra_desc,
+//                                                    overflow: TextOverflow.ellipsis,
+//                                                    maxLines: 1,
+//                                                    style: const TextStyle(
+//                                                        fontSize: 15,
+//                                                        fontFamily: 'RobotoRegular',
+//                                                        color: Colors.black),
+//                                                  )
                                                 ],
                                               ),
                                             )

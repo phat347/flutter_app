@@ -77,6 +77,24 @@ flutter:
     - assets/launcher/menu_khoqua.png
     - assets/launcher/combinedshape.png
 
+  fonts:
+    - family: RobotoBold
+      fonts:
+        - asset: fonts/roboto_bold.ttf
+    - family: RobotoRegular
+      fonts:
+        - asset: fonts/roboto_regular.ttf
+    - family: RobotoMedium
+      fonts:
+        - asset: fonts/roboto_medium.ttf
+    - family: RobotoItalic
+      fonts:
+        - asset: fonts/roboto_italic.ttf
+    - family: RobotoThin
+      fonts:
+        - asset: fonts/roboto_thin.ttf
+
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
