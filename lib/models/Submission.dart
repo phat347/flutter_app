@@ -4,7 +4,6 @@ import 'package:json_annotation/json_annotation.dart';
 part 'Submission.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-@JsonSerializable(nullable: true)
 class Submission {
   String class_desc,
       extra_desc,
@@ -99,7 +98,6 @@ class Submission {
   double min_order_FREE_ship;
 
 
-   bool isVip = false;
    bool isVIP_normal = false;
    bool isVIP_chef = false;
    bool isVIP_loc = false;
@@ -128,9 +126,11 @@ class Submission {
 
   Map<String,dynamic> toJson() => _$SubmissionToJson(this);
 
-  static int _stringToInt(String number) => number == null ? null : int.parse(number);
-  static String _stringFromInt(int number) => number?.toString();
-
-
-
+  bool isVipCheck(){
+    bool isVip = false;
+    if (SVIP_chef != 0 || SVIP_loc != 0 || VIP != 0 || SVIP_special!=0) {
+      isVip = true;
+    }
+    return isVip;
+  }
 }

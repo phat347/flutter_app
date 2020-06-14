@@ -201,16 +201,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   CircleAvatar getAvatarUser(Submission items) {
-    bool isVIP_normal = false;
-
-    if (items.SVIP_chef != 0 ||
-        items.SVIP_loc != 0 ||
-        items.VIP != 0 ||
-        items.SVIP_special != 0) {
-      isVIP_normal = true;
-    }
-
-    if (isVIP_normal) {
+    if (items.isVipCheck()) {
       return CircleAvatar(
           radius: 20,
           backgroundImage: NetworkImage(items.portrait_url),
@@ -307,7 +298,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           horizontal: 20, vertical: 10),
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.all(
-                                              Radius.circular(20.0)),
+                                              Radius.circular(10.0)),
                                           color: Colors.white,
                                           boxShadow: [
                                             BoxShadow(
@@ -333,10 +324,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                                       BorderRadius.only(
                                                           topLeft:
                                                               Radius.circular(
-                                                                  8.0),
+                                                                  10.0),
                                                           topRight:
                                                               Radius.circular(
-                                                                  8.0)),
+                                                                  10.0)),
                                                 )),
                                             SizedBox(width: 10),
                                             Padding(
@@ -367,12 +358,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                   TextOverflow
                                                                       .ellipsis,
                                                               maxLines: 1,
-                                                              style: const TextStyle(
+                                                              style: TextStyle(
                                                                   fontSize: 15,
                                                                   fontFamily:
                                                                       'RobotoMedium',
-                                                                  color: Colors
-                                                                      .black),
+                                                                  color: itemSub
+                                                                          .isVipCheck()
+                                                                      ? Colors
+                                                                          .black
+                                                                      : colorPrimary),
                                                             ),
                                                             SizedBox(height: 5),
                                                             Text(
