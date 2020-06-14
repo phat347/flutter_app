@@ -200,6 +200,32 @@ class _MyHomePageState extends State<MyHomePage> {
         fontSize: 16.0);
   }
 
+  CircleAvatar getAvatarUser(Submission items) {
+    bool isVIP_normal = false;
+
+    if (items.SVIP_chef != 0 ||
+        items.SVIP_loc != 0 ||
+        items.VIP != 0 ||
+        items.SVIP_special != 0) {
+      isVIP_normal = true;
+    }
+
+    if (isVIP_normal) {
+      return CircleAvatar(
+          radius: 20,
+          backgroundImage: NetworkImage(items.portrait_url),
+          backgroundColor: Colors.transparent);
+    } else {
+      return CircleAvatar(
+          radius: 20,
+          child: CircleAvatar(
+              radius: 19,
+              backgroundImage: NetworkImage(items.portrait_url),
+              backgroundColor: Colors.transparent),
+          backgroundColor: colorPrimary);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -328,14 +354,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     mainAxisSize:
                                                         MainAxisSize.max,
                                                     children: <Widget>[
-                                                      CircleAvatar(
-                                                          radius: 20,
-                                                          backgroundImage:
-                                                              NetworkImage(itemSub
-                                                                  .portrait_url),
-                                                          backgroundColor:
-                                                              Colors
-                                                                  .transparent),
+                                                      getAvatarUser(itemSub),
                                                       SizedBox(width: 5),
                                                       Column(
                                                           crossAxisAlignment:
