@@ -82,6 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Submission> itemsData = [];
 
   int _counter = 0;
+  Future myFuture;
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       new GlobalKey<RefreshIndicatorState>();
 
@@ -120,6 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
 //        closeTopContainer = controller.offset > 50;
 //      });
 //    });
+    myFuture = getListSub();
   }
 
   Future<List<NationFootballClub>> _getNationList() async {
@@ -250,7 +252,7 @@ class _MyHomePageState extends State<MyHomePage> {
           key: _refreshIndicatorKey,
           onRefresh: getListSub,
           child: FutureBuilder(
-              future: getListSub(),
+              future: myFuture,
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.data == null) {
                   return Container(
