@@ -16,6 +16,8 @@ import 'package:flutter/services.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
+import 'HattoColors.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -80,7 +82,6 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Submission> itemsData = [];
 
   int _counter = 0;
-  Color colorPrimary = HexColor("#c12026");
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       new GlobalKey<RefreshIndicatorState>();
 
@@ -213,7 +214,7 @@ class _MyHomePageState extends State<MyHomePage> {
               radius: 19,
               backgroundImage: NetworkImage(items.portrait_url),
               backgroundColor: Colors.transparent),
-          backgroundColor: colorPrimary);
+          backgroundColor: HattoColors.colorPrimary);
     }
   }
 
@@ -366,21 +367,54 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                           .isVipCheck()
                                                                       ? Colors
                                                                           .black
-                                                                      : colorPrimary),
+                                                                      : HattoColors
+                                                                          .colorPrimary),
                                                             ),
                                                             SizedBox(height: 5),
-                                                            Text(
-                                                              itemSub.rank_desc,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              maxLines: 1,
-                                                              style: const TextStyle(
-                                                                  fontSize: 12,
-                                                                  fontFamily:
-                                                                      'RobotoRegular',
-                                                                  color: Colors
-                                                                      .black),
+                                                            Row(
+                                                              children: <
+                                                                  Widget>[
+                                                                Visibility(
+                                                                  visible:
+                                                                      itemSub.isVipCheck()?false:true,
+                                                                  child:
+                                                                      Container(
+                                                                          decoration: new BoxDecoration(
+                                                                              color: HattoColors.colorPrimary,
+                                                                              borderRadius: new BorderRadius.all(Radius.circular(8))),
+                                                                          child: Padding(
+                                                                            padding: const EdgeInsets.only(
+                                                                                left: 2,
+                                                                                right: 2,
+                                                                                top: 2,
+                                                                                bottom: 2),
+                                                                            child:
+                                                                                Center(
+                                                                              child: Text(
+                                                                                "Super VIP".toUpperCase(),
+                                                                                style: TextStyle(fontSize: 7, fontFamily: 'RobotoBold', color: Colors.white),
+                                                                              ),
+                                                                            ),
+                                                                          )),
+                                                                ),
+                                                                SizedBox(
+                                                                    width: 5),
+                                                                Text(
+                                                                  itemSub
+                                                                      .rank_desc,
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  maxLines: 1,
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          11,
+                                                                      fontFamily:
+                                                                          'RobotoRegular',
+                                                                      color: HattoColors
+                                                                          .colorTimeLine),
+                                                                ),
+                                                              ],
                                                             )
                                                           ]),
                                                     ],
@@ -520,7 +554,7 @@ class _MyHomePageState extends State<MyHomePage> {
             BottomNavigationBarItem(
               activeIcon: ImageIcon(
                   AssetImage("assets/launcher/combinedshape.png"),
-                  color: colorPrimary),
+                  color: HattoColors.colorPrimary),
               icon: ImageIcon(AssetImage("assets/launcher/combinedshape.png"),
                   color: Colors.grey),
               title: Padding(
@@ -531,7 +565,7 @@ class _MyHomePageState extends State<MyHomePage> {
             BottomNavigationBarItem(
               activeIcon: ImageIcon(
                   AssetImage("assets/launcher/menu_khoqua.png"),
-                  color: colorPrimary),
+                  color: HattoColors.colorPrimary),
               icon: ImageIcon(AssetImage("assets/launcher/menu_khoqua.png"),
                   color: Colors.grey),
               title: Padding(
@@ -540,7 +574,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             BottomNavigationBarItem(
-              activeIcon: Icon(Icons.camera, color: colorPrimary),
+              activeIcon: Icon(Icons.camera, color: HattoColors.colorPrimary),
               icon: Icon(Icons.camera, color: Colors.grey),
               title: Padding(
                 padding: EdgeInsets.all(0),
@@ -549,7 +583,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             BottomNavigationBarItem(
               activeIcon: ImageIcon(AssetImage("assets/launcher/ic_bell_2.png"),
-                  color: colorPrimary),
+                  color: HattoColors.colorPrimary),
               icon: ImageIcon(AssetImage("assets/launcher/ic_bell_2.png"),
                   color: Colors.grey),
               title: Padding(
@@ -558,7 +592,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             BottomNavigationBarItem(
-              activeIcon: Icon(Icons.menu, color: colorPrimary),
+              activeIcon: Icon(Icons.menu, color: HattoColors.colorPrimary),
               icon: Icon(Icons.menu, color: Colors.grey),
               title: Padding(
                 padding: EdgeInsets.all(0),
@@ -571,7 +605,7 @@ class _MyHomePageState extends State<MyHomePage> {
           showUnselectedLabels: true,
           unselectedItemColor: Colors.grey,
           currentIndex: _selectedIndex,
-          selectedItemColor: colorPrimary,
+          selectedItemColor: HattoColors.colorPrimary,
           onTap: _onItemTapped,
         )
 //      floatingActionButton: FloatingActionButton(
