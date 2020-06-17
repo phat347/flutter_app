@@ -313,8 +313,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                         padding:
                                             const EdgeInsets.only(bottom: 10),
                                         child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+//                                          crossAxisAlignment:
+//                                              CrossAxisAlignment.start,
                                           children: <Widget>[
                                             Container(
                                                 height: 300,
@@ -337,88 +337,116 @@ class _MyHomePageState extends State<MyHomePage> {
                                               padding:
                                                   const EdgeInsets.all(8.0),
                                               child: Column(
-                                                mainAxisSize: MainAxisSize.max,
+                                                mainAxisSize: MainAxisSize.min,
+//                                                mainAxisSize: MainAxisSize.max,
                                                 crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                    CrossAxisAlignment.stretch,
                                                 children: <Widget>[
                                                   Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
+//                                                    crossAxisAlignment:
+//                                                        CrossAxisAlignment
+//                                                            .start,
                                                     mainAxisSize:
                                                         MainAxisSize.max,
+                                                    mainAxisAlignment: MainAxisAlignment.start,
                                                     children: <Widget>[
                                                       getAvatarUser(itemSub),
                                                       SizedBox(width: 5),
-                                                      Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: <Widget>[
-                                                            Text(
-                                                              itemSub.user_name,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              maxLines: 1,
-                                                              style: TextStyle(
-                                                                  fontSize: 15,
-                                                                  fontFamily:
-                                                                      'RobotoMedium',
-                                                                  color: itemSub
-                                                                          .isVipCheck()
-                                                                      ? Colors
-                                                                          .black
-                                                                      : HattoColors
-                                                                          .colorPrimary),
-                                                            ),
-                                                            SizedBox(height: 5),
-                                                            Row(
-                                                              children: <
-                                                                  Widget>[
-                                                                Visibility(
-                                                                  visible:
-                                                                      itemSub.isVipCheck()?false:true,
-                                                                  child:
-                                                                      Container(
-                                                                          decoration: new BoxDecoration(
-                                                                              color: HattoColors.colorPrimary,
-                                                                              borderRadius: new BorderRadius.all(Radius.circular(8))),
-                                                                          child: Padding(
-                                                                            padding: const EdgeInsets.only(
-                                                                                left: 2,
-                                                                                right: 2,
-                                                                                top: 2,
-                                                                                bottom: 2),
-                                                                            child:
-                                                                                Center(
-                                                                              child: Text(
-                                                                                "Super VIP".toUpperCase(),
-                                                                                style: TextStyle(fontSize: 7, fontFamily: 'RobotoBold', color: Colors.white),
-                                                                              ),
-                                                                            ),
-                                                                          )),
-                                                                ),
-                                                                SizedBox(
-                                                                    width: 5),
-                                                                Text(
-                                                                  itemSub
-                                                                      .rank_desc,
-                                                                  overflow:
+                                                      Flexible(
+                                                        child: Container(
+                                                          child: Column(
+                                                            mainAxisSize: MainAxisSize.min,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .stretch,
+                                                              children: <Widget>[
+                                                                Row(
+                                                                  children: [
+                                                                    Flexible(
+                                                                      child: Container(
+                                                                        child: Text(
+                                                                          itemSub.user_name,
+                                                                          overflow:
+                                                                              TextOverflow
+                                                                                  .ellipsis,
+                                                                          maxLines: 1,
+                                                                          style: TextStyle(
+                                                                              fontSize: 15,
+                                                                              fontFamily:
+                                                                                  'RobotoMedium',
+                                                                              color: itemSub
+                                                                                      .isVipCheck()
+                                                                                  ? Colors
+                                                                                      .black
+                                                                                  : HattoColors
+                                                                                      .colorPrimary),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    Text(
+                                                                      itemSub.remain_rewards.toString(),
+                                                                      overflow:
                                                                       TextOverflow
                                                                           .ellipsis,
-                                                                  maxLines: 1,
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          11,
-                                                                      fontFamily:
-                                                                          'RobotoRegular',
-                                                                      color: HattoColors
-                                                                          .colorTimeLine),
+                                                                      maxLines: 1,
+                                                                      style: TextStyle(
+                                                                          fontSize: 15,
+                                                                          fontFamily:
+                                                                          'RobotoMedium',
+                                                                          color: HattoColors
+                                                                              .colorPrimary),
+                                                                    ),
+                                                                  ],
+                                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                                 ),
-                                                              ],
-                                                            )
-                                                          ]),
+                                                                SizedBox(height: 5),
+                                                                Row(
+                                                                  children: <Widget>[
+                                                                    Visibility(
+                                                                      visible:
+                                                                          itemSub.isVipCheck()?false:true,
+                                                                      child:
+                                                                          Container(
+                                                                              decoration: new BoxDecoration(
+                                                                                  color: HattoColors.colorPrimary,
+                                                                                  borderRadius: new BorderRadius.all(Radius.circular(8))),
+                                                                              child: Padding(
+                                                                                padding: const EdgeInsets.only(
+                                                                                    left: 2,
+                                                                                    right: 2,
+                                                                                    top: 2,
+                                                                                    bottom: 2),
+                                                                                child:
+                                                                                    Center(
+                                                                                  child: Text(
+                                                                                    "Super VIP".toUpperCase(),
+                                                                                    style: TextStyle(fontSize: 7, fontFamily: 'RobotoBold', color: Colors.white),
+                                                                                  ),
+                                                                                ),
+                                                                              )),
+                                                                    ),
+                                                                    SizedBox(
+                                                                        width: 5),
+                                                                    Text(
+                                                                      itemSub
+                                                                          .rank_desc,
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                      maxLines: 1,
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              11,
+                                                                          fontFamily:
+                                                                              'RobotoRegular',
+                                                                          color: HattoColors
+                                                                              .colorTimeLine),
+                                                                    ),
+                                                                  ],
+                                                                )
+                                                              ]),
+                                                        ),
+                                                      ),
                                                     ],
                                                   ),
                                                   Text(
