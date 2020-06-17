@@ -76,6 +76,8 @@ flutter:
     - assets/launcher/ic_bell_2.png
     - assets/launcher/menu_khoqua.png
     - assets/launcher/combinedshape.png
+    - assets/launcher/ic_dua.png
+
 
   fonts:
     - family: RobotoBold
