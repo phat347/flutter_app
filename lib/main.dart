@@ -7,6 +7,7 @@ import 'package:flutterapp/loaders/color_loader_5.dart';
 import 'package:flutterapp/loaders/dot_type.dart';
 import 'package:flutterapp/models/Submission.dart';
 import 'package:flutterapp/rank_master.dart';
+import 'package:flutterapp/screens/DetailSubmission.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -305,222 +306,229 @@ class _MyHomePageState extends State<MyHomePage> {
                                       scale = 1;
                                     }
                                   }
-                                  return Container(
-                                      width: double.infinity,
-                                      margin: const EdgeInsets.symmetric(
-                                          horizontal: 20, vertical: 10),
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(10.0)),
-                                          color: Colors.white,
-                                          boxShadow: [
-                                            BoxShadow(
-                                                color:
-                                                    Colors.black.withAlpha(100),
-                                                blurRadius: 10.0),
-                                          ]),
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 10),
-                                        child: Column(
+                                  return GestureDetector(
+                                    onTap: (){
+                                      Navigator.push(context, new MaterialPageRoute(builder: (context) => DetailSubmission(itemSub)));
+                                    },
+                                    child: Container(
+                                        width: double.infinity,
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 20, vertical: 10),
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(10.0)),
+                                            color: Colors.white,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color:
+                                                      Colors.black.withAlpha(100),
+                                                  blurRadius: 10.0),
+                                            ]),
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(bottom: 10),
+                                          child: Column(
 //                                          crossAxisAlignment:
 //                                              CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Container(
-                                                height: 300,
-                                                decoration: BoxDecoration(
-                                                  image: DecorationImage(
-                                                      fit: BoxFit.cover,
-                                                      image:
-                                                          CachedNetworkImageProvider(
-                                                              itemSub
-                                                                  .URL_img_id)),
-                                                  borderRadius:
-                                                      BorderRadius.only(
-                                                          topLeft:
-                                                              Radius.circular(
-                                                                  10.0),
-                                                          topRight:
-                                                              Radius.circular(
-                                                                  10.0)),
-                                                )),
-                                            SizedBox(width: 10),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              Hero(
+                                                child: Container(
+                                                    height: 300,
+                                                    decoration: BoxDecoration(
+                                                      image: DecorationImage(
+                                                          fit: BoxFit.cover,
+                                                          image:
+                                                              CachedNetworkImageProvider(
+                                                                  itemSub
+                                                                      .URL_img_id)),
+                                                      borderRadius:
+                                                          BorderRadius.only(
+                                                              topLeft:
+                                                                  Radius.circular(
+                                                                      10.0),
+                                                              topRight:
+                                                                  Radius.circular(
+                                                                      10.0)),
+                                                    )),
+                                                tag: itemSub.forum_id,
+                                              ),
+                                              SizedBox(width: 10),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Column(
+                                                  mainAxisSize: MainAxisSize.min,
 //                                                mainAxisSize: MainAxisSize.max,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.stretch,
-                                                children: <Widget>[
-                                                  Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.stretch,
+                                                  children: <Widget>[
+                                                    Row(
 //                                                    crossAxisAlignment:
 //                                                        CrossAxisAlignment
 //                                                            .start,
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    children: <Widget>[
-                                                      getAvatarUser(itemSub),
-                                                      SizedBox(width: 5),
-                                                      Flexible(
-                                                        child: Container(
-                                                          child: Column(
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .min,
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .stretch,
-                                                              children: <
-                                                                  Widget>[
-                                                                Row(
-                                                                  children: [
-                                                                    Flexible(
-                                                                      child:
-                                                                          Container(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.start,
+                                                      children: <Widget>[
+                                                        getAvatarUser(itemSub),
+                                                        SizedBox(width: 5),
+                                                        Flexible(
+                                                          child: Container(
+                                                            child: Column(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .min,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .stretch,
+                                                                children: <
+                                                                    Widget>[
+                                                                  Row(
+                                                                    children: [
+                                                                      Flexible(
                                                                         child:
-                                                                            Text(
-                                                                          itemSub
-                                                                              .user_name,
-                                                                          overflow:
-                                                                              TextOverflow.ellipsis,
-                                                                          maxLines:
-                                                                              1,
-                                                                          style: TextStyle(
-                                                                              fontSize: 15,
-                                                                              fontFamily: 'RobotoMedium',
-                                                                              color: itemSub.isVipCheck() ? Colors.black : HattoColors.colorPrimary),
+                                                                            Container(
+                                                                          child:
+                                                                              Text(
+                                                                            itemSub
+                                                                                .user_name,
+                                                                            overflow:
+                                                                                TextOverflow.ellipsis,
+                                                                            maxLines:
+                                                                                1,
+                                                                            style: TextStyle(
+                                                                                fontSize: 15,
+                                                                                fontFamily: 'RobotoMedium',
+                                                                                color: itemSub.isVipCheck() ? Colors.black : HattoColors.colorPrimary),
+                                                                          ),
                                                                         ),
                                                                       ),
-                                                                    ),
-                                                                    Row(
-                                                                      children: [
-                                                                        Text(
-                                                                          itemSub
-                                                                              .remain_rewards
-                                                                              .toString(),
-                                                                          overflow:
-                                                                              TextOverflow.ellipsis,
-                                                                          maxLines:
-                                                                              1,
-                                                                          style: TextStyle(
-                                                                              fontSize: 15,
-                                                                              fontFamily: 'RobotoMedium',
-                                                                              color: HattoColors.colorPrimary),
-                                                                        ),
-                                                                        SizedBox(width: 1),
-                                                                        Container(
-                                                                          width: 15,
-                                                                            height: 15,
-                                                                            child:
-                                                                                Image.asset("assets/launcher/ic_dua.png"))
-                                                                      ],
-                                                                    ),
-                                                                  ],
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .spaceBetween,
-                                                                ),
-                                                                SizedBox(
-                                                                    height: 5),
-                                                                Row(
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .center,
-                                                                  children: <
-                                                                      Widget>[
-                                                                    Visibility(
-                                                                      visible: itemSub
-                                                                              .isVipCheck()
-                                                                          ? false
-                                                                          : true,
-                                                                      child: Container(
-                                                                          decoration: new BoxDecoration(color: HattoColors.colorPrimary, borderRadius: new BorderRadius.all(Radius.circular(8))),
-                                                                          child: Padding(
-                                                                            padding: const EdgeInsets.only(
-                                                                                left: 2,
-                                                                                right: 2,
-                                                                                top: 2,
-                                                                                bottom: 2),
-                                                                            child:
-                                                                                Center(
-                                                                              child: Text(
-                                                                                "Super VIP".toUpperCase(),
-                                                                                style: TextStyle(fontSize: 7, fontFamily: 'RobotoBold', color: Colors.white),
+                                                                      Row(
+                                                                        children: [
+                                                                          Text(
+                                                                            itemSub
+                                                                                .remain_rewards
+                                                                                .toString(),
+                                                                            overflow:
+                                                                                TextOverflow.ellipsis,
+                                                                            maxLines:
+                                                                                1,
+                                                                            style: TextStyle(
+                                                                                fontSize: 15,
+                                                                                fontFamily: 'RobotoMedium',
+                                                                                color: HattoColors.colorPrimary),
+                                                                          ),
+                                                                          SizedBox(width: 1),
+                                                                          Container(
+                                                                            width: 15,
+                                                                              height: 15,
+                                                                              child:
+                                                                                  Image.asset("assets/launcher/ic_dua.png"))
+                                                                        ],
+                                                                      ),
+                                                                    ],
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceBetween,
+                                                                  ),
+                                                                  SizedBox(
+                                                                      height: 5),
+                                                                  Row(
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .center,
+                                                                    children: <
+                                                                        Widget>[
+                                                                      Visibility(
+                                                                        visible: itemSub
+                                                                                .isVipCheck()
+                                                                            ? false
+                                                                            : true,
+                                                                        child: Container(
+                                                                            decoration: new BoxDecoration(color: HattoColors.colorPrimary, borderRadius: new BorderRadius.all(Radius.circular(8))),
+                                                                            child: Padding(
+                                                                              padding: const EdgeInsets.only(
+                                                                                  left: 2,
+                                                                                  right: 2,
+                                                                                  top: 2,
+                                                                                  bottom: 2),
+                                                                              child:
+                                                                                  Center(
+                                                                                child: Text(
+                                                                                  "Super VIP".toUpperCase(),
+                                                                                  style: TextStyle(fontSize: 7, fontFamily: 'RobotoBold', color: Colors.white),
+                                                                                ),
                                                                               ),
-                                                                            ),
+                                                                            )),
+                                                                      ),
+                                                                      SizedBox(
+                                                                          width:
+                                                                              3),
+                                                                      Container(
+                                                                          height:
+                                                                              15,
+                                                                          width:
+                                                                              15,
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            image: DecorationImage(
+                                                                                fit: BoxFit.cover,
+                                                                                image: CachedNetworkImageProvider(getRankIcon(itemSub.rank_id))),
                                                                           )),
-                                                                    ),
-                                                                    SizedBox(
-                                                                        width:
-                                                                            3),
-                                                                    Container(
-                                                                        height:
-                                                                            15,
-                                                                        width:
-                                                                            15,
-                                                                        decoration:
-                                                                            BoxDecoration(
-                                                                          image: DecorationImage(
-                                                                              fit: BoxFit.cover,
-                                                                              image: CachedNetworkImageProvider(getRankIcon(itemSub.rank_id))),
-                                                                        )),
-                                                                    SizedBox(
-                                                                        width:
-                                                                            3),
-                                                                    Text(
-                                                                      itemSub
-                                                                          .rank_desc,
-                                                                      overflow:
-                                                                          TextOverflow
-                                                                              .ellipsis,
-                                                                      maxLines:
-                                                                          1,
-                                                                      style: TextStyle(
-                                                                          fontSize:
-                                                                              11,
-                                                                          fontFamily:
-                                                                              'RobotoRegular',
-                                                                          color:
-                                                                              HattoColors.colorTimeLine),
-                                                                    ),
-                                                                  ],
-                                                                )
-                                                              ]),
+                                                                      SizedBox(
+                                                                          width:
+                                                                              3),
+                                                                      Text(
+                                                                        itemSub
+                                                                            .rank_desc,
+                                                                        overflow:
+                                                                            TextOverflow
+                                                                                .ellipsis,
+                                                                        maxLines:
+                                                                            1,
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                11,
+                                                                            fontFamily:
+                                                                                'RobotoRegular',
+                                                                            color:
+                                                                                HattoColors.colorTimeLine),
+                                                                      ),
+                                                                    ],
+                                                                  )
+                                                                ]),
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Text(
-                                                    itemSub.class_desc,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    maxLines: 2,
-                                                    style: const TextStyle(
-                                                        fontFamily:
-                                                            'RobotoMedium',
-                                                        fontSize: 20),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  Text(
-                                                    itemSub.extra_desc,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    maxLines: 2,
-                                                    style: const TextStyle(
-                                                        fontSize: 12,
-                                                        fontFamily:
-                                                            'RobotoRegular',
-                                                        color: Colors.black),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 5,
-                                                  ),
+                                                      ],
+                                                    ),
+                                                    Text(
+                                                      itemSub.class_desc,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      maxLines: 2,
+                                                      style: const TextStyle(
+                                                          fontFamily:
+                                                              'RobotoMedium',
+                                                          fontSize: 20),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    Text(
+                                                      itemSub.extra_desc,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      maxLines: 2,
+                                                      style: const TextStyle(
+                                                          fontSize: 12,
+                                                          fontFamily:
+                                                              'RobotoRegular',
+                                                          color: Colors.black),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 5,
+                                                    ),
 //                                                  Text(
 //                                                    itemSub.extra_desc,
 //                                                    overflow: TextOverflow.ellipsis,
@@ -530,12 +538,13 @@ class _MyHomePageState extends State<MyHomePage> {
 //                                                        fontFamily: 'RobotoRegular',
 //                                                        color: Colors.black),
 //                                                  )
-                                                ],
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ));
+                                                  ],
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        )),
+                                  );
                                 })),
                       ],
                     ),
