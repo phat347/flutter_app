@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutterapp/HattoColors.dart';
 import 'package:flutterapp/models/Submission.dart';
 import 'package:flutterapp/rank_master.dart';
@@ -10,7 +11,7 @@ class DetailSubmission extends StatelessWidget {
   int index;
   List<dynamic> rank = rank_master;
 
-  DetailSubmission(this.items,this.index);
+  DetailSubmission(this.items, this.index);
 
   CircleAvatar getAvatarUser(Submission items) {
     if (items.isVipCheck()) {
@@ -55,7 +56,9 @@ class DetailSubmission extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Hero(tag: index.toString()+items.portrait_url,child: getAvatarUser(items)),
+            Hero(
+                tag: index.toString() + items.portrait_url,
+                child: getAvatarUser(items)),
             SizedBox(width: 5),
             Flexible(
               child: Container(
@@ -150,8 +153,7 @@ class DetailSubmission extends StatelessWidget {
                   Container(
                       width: 15,
                       height: 15,
-                      child:
-                      Image.asset("assets/launcher/ic_dua.png"))
+                      child: Image.asset("assets/launcher/ic_dua.png"))
                 ],
               ),
             )
@@ -159,20 +161,78 @@ class DetailSubmission extends StatelessWidget {
         ),
       ),
       body: Container(
+        color: Colors.black,
         width: size.width,
         height: size.height,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: [
-            Container(
-              width: double.infinity,
-              height: 300,
-              child: Hero(
-                tag: items.forum_id,
-                child: CachedNetworkImage(
-                    imageUrl: items.URL_img_id, fit: BoxFit.cover),
+            Stack(
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 300,
+                  child: Hero(
+                    tag: items.forum_id,
+                    child: CachedNetworkImage(
+                        imageUrl: items.URL_img_id, fit: BoxFit.cover),
+                  ),
+                ),
+                Positioned(
+                    child: Image.asset("assets/launcher/ic_rectangle_green.png",
+                        width: 35, height: 45),
+                    left: 10),
+                Positioned(
+                  child: Image.asset("assets/launcher/ic_buaan.png",
+                      width: 20, height: 20, color: Colors.white),
+                  left: 17.5,
+                  top: 10,
+                )
+              ],
+            ),
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20)),color: Colors.white),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20,right: 20,top: 10),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        items.class_desc,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: TextStyle(
+                            fontSize: 30,
+                            fontFamily: 'RobotoMedium',
+                            color: Colors.black),
+                      ),
+                      Text(
+                        "1 lượt xem",
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontFamily: 'RobotoMedium',
+                            color: Colors.black),
+                      ),
+                      SizedBox(height: 10),
+                      Container(width: double.infinity,height: 0.7,color: HattoColors.colorTimeLine),
+                      SizedBox(height: 10),
+                      Text(
+                        items.extra_desc,
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontFamily: 'RobotoRegular',
+                            color: Colors.black),
+                      )
+
+                    ],
+                  ),
+                ),
               ),
-            )
+            ),
           ],
         ),
       ),

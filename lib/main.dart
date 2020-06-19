@@ -307,8 +307,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                     }
                                   }
                                   return GestureDetector(
-                                    onTap: (){
-                                      Navigator.push(context, new MaterialPageRoute(builder: (context) => DetailSubmission(itemSub,index)));
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          new MaterialPageRoute(
+                                              builder: (context) =>
+                                                  DetailSubmission(
+                                                      itemSub, index)));
                                     },
                                     child: Container(
                                         width: double.infinity,
@@ -320,8 +325,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                             color: Colors.white,
                                             boxShadow: [
                                               BoxShadow(
-                                                  color:
-                                                      Colors.black.withAlpha(100),
+                                                  color: Colors.black
+                                                      .withAlpha(100),
                                                   blurRadius: 10.0),
                                             ]),
                                         child: Padding(
@@ -332,24 +337,36 @@ class _MyHomePageState extends State<MyHomePage> {
 //                                              CrossAxisAlignment.start,
                                             children: <Widget>[
                                               Hero(
-                                                child: Container(
-                                                    height: 300,
-                                                    decoration: BoxDecoration(
-                                                      image: DecorationImage(
-                                                          fit: BoxFit.cover,
-                                                          image:
-                                                              CachedNetworkImageProvider(
+                                                child: Stack(
+                                                  children: [
+                                                    Container(
+                                                        height: 300,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          image: DecorationImage(
+                                                              fit: BoxFit.cover,
+                                                              image: CachedNetworkImageProvider(
                                                                   itemSub
                                                                       .URL_img_id)),
-                                                      borderRadius:
-                                                          BorderRadius.only(
-                                                              topLeft:
-                                                                  Radius.circular(
-                                                                      10.0),
-                                                              topRight:
-                                                                  Radius.circular(
-                                                                      10.0)),
-                                                    )),
+                                                          borderRadius:
+                                                              BorderRadius.only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          10.0),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          10.0)),
+                                                        )),
+                                                    Positioned(
+                                                        child:
+                                                            Image.asset("assets/launcher/ic_rectangle_green.png",width: 35,height: 45),
+                                                        left: 10),
+                                                    Positioned(
+                                                        child:
+                                                        Image.asset("assets/launcher/ic_buaan.png",width: 20,height: 20,color: Colors.white),
+                                                        left: 17.5,top: 10,)
+                                                  ],
+                                                ),
                                                 tag: itemSub.forum_id,
                                               ),
                                               SizedBox(width: 10),
@@ -357,10 +374,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 padding:
                                                     const EdgeInsets.all(8.0),
                                                 child: Column(
-                                                  mainAxisSize: MainAxisSize.min,
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
 //                                                mainAxisSize: MainAxisSize.max,
                                                   crossAxisAlignment:
-                                                      CrossAxisAlignment.stretch,
+                                                      CrossAxisAlignment
+                                                          .stretch,
                                                   children: <Widget>[
                                                     Row(
 //                                                    crossAxisAlignment:
@@ -369,9 +388,17 @@ class _MyHomePageState extends State<MyHomePage> {
                                                       mainAxisSize:
                                                           MainAxisSize.max,
                                                       mainAxisAlignment:
-                                                          MainAxisAlignment.start,
+                                                          MainAxisAlignment
+                                                              .start,
                                                       children: <Widget>[
-                                                        Hero(tag: index.toString()+itemSub.portrait_url,child: getAvatarUser(itemSub)),
+                                                        Hero(
+                                                            tag: index
+                                                                    .toString() +
+                                                                itemSub
+                                                                    .portrait_url,
+                                                            child:
+                                                                getAvatarUser(
+                                                                    itemSub)),
                                                         SizedBox(width: 5),
                                                         Flexible(
                                                           child: Container(
@@ -391,8 +418,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                             Container(
                                                                           child:
                                                                               Text(
-                                                                            itemSub
-                                                                                .user_name,
+                                                                            itemSub.user_name,
                                                                             overflow:
                                                                                 TextOverflow.ellipsis,
                                                                             maxLines:
@@ -407,9 +433,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                       Row(
                                                                         children: [
                                                                           Text(
-                                                                            itemSub
-                                                                                .remain_rewards
-                                                                                .toString(),
+                                                                            itemSub.remain_rewards.toString(),
                                                                             overflow:
                                                                                 TextOverflow.ellipsis,
                                                                             maxLines:
@@ -419,12 +443,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                                 fontFamily: 'RobotoMedium',
                                                                                 color: HattoColors.colorPrimary),
                                                                           ),
-                                                                          SizedBox(width: 1),
+                                                                          SizedBox(
+                                                                              width: 1),
                                                                           Container(
-                                                                            width: 15,
+                                                                              width: 15,
                                                                               height: 15,
-                                                                              child:
-                                                                                  Image.asset("assets/launcher/ic_dua.png"))
+                                                                              child: Image.asset("assets/launcher/ic_dua.png"))
                                                                         ],
                                                                       ),
                                                                     ],
@@ -433,7 +457,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                             .spaceBetween,
                                                                   ),
                                                                   SizedBox(
-                                                                      height: 5),
+                                                                      height:
+                                                                          5),
                                                                   Row(
                                                                     crossAxisAlignment:
                                                                         CrossAxisAlignment
@@ -441,20 +466,14 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                     children: <
                                                                         Widget>[
                                                                       Visibility(
-                                                                        visible: itemSub
-                                                                                .isVipCheck()
+                                                                        visible: itemSub.isVipCheck()
                                                                             ? false
                                                                             : true,
                                                                         child: Container(
                                                                             decoration: new BoxDecoration(color: HattoColors.colorPrimary, borderRadius: new BorderRadius.all(Radius.circular(8))),
                                                                             child: Padding(
-                                                                              padding: const EdgeInsets.only(
-                                                                                  left: 2,
-                                                                                  right: 2,
-                                                                                  top: 2,
-                                                                                  bottom: 2),
-                                                                              child:
-                                                                                  Center(
+                                                                              padding: const EdgeInsets.only(left: 2, right: 2, top: 2, bottom: 2),
+                                                                              child: Center(
                                                                                 child: Text(
                                                                                   "Super VIP".toUpperCase(),
                                                                                   style: TextStyle(fontSize: 7, fontFamily: 'RobotoBold', color: Colors.white),
@@ -472,9 +491,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                               15,
                                                                           decoration:
                                                                               BoxDecoration(
-                                                                            image: DecorationImage(
-                                                                                fit: BoxFit.cover,
-                                                                                image: CachedNetworkImageProvider(getRankIcon(itemSub.rank_id))),
+                                                                            image:
+                                                                                DecorationImage(fit: BoxFit.cover, image: CachedNetworkImageProvider(getRankIcon(itemSub.rank_id))),
                                                                           )),
                                                                       SizedBox(
                                                                           width:
@@ -483,8 +501,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                         itemSub
                                                                             .rank_desc,
                                                                         overflow:
-                                                                            TextOverflow
-                                                                                .ellipsis,
+                                                                            TextOverflow.ellipsis,
                                                                         maxLines:
                                                                             1,
                                                                         style: TextStyle(

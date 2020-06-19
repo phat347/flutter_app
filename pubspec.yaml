@@ -77,6 +77,8 @@ flutter:
     - assets/launcher/menu_khoqua.png
     - assets/launcher/combinedshape.png
     - assets/launcher/ic_dua.png
+    - assets/launcher/ic_rectangle_green.png
+    - assets/launcher/ic_buaan.png
 
 
   fonts:
