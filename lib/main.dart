@@ -308,7 +308,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   }
                                   return GestureDetector(
                                     onTap: (){
-                                      Navigator.push(context, new MaterialPageRoute(builder: (context) => DetailSubmission(itemSub)));
+                                      Navigator.push(context, new MaterialPageRoute(builder: (context) => DetailSubmission(itemSub,index)));
                                     },
                                     child: Container(
                                         width: double.infinity,
@@ -371,7 +371,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                       mainAxisAlignment:
                                                           MainAxisAlignment.start,
                                                       children: <Widget>[
-                                                        getAvatarUser(itemSub),
+                                                        Hero(tag: index.toString()+itemSub.portrait_url,child: getAvatarUser(itemSub)),
                                                         SizedBox(width: 5),
                                                         Flexible(
                                                           child: Container(

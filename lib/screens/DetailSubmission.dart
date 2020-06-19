@@ -7,9 +7,10 @@ import 'package:flutterapp/rank_master.dart';
 
 class DetailSubmission extends StatelessWidget {
   final Submission items;
+  int index;
   List<dynamic> rank = rank_master;
 
-  DetailSubmission(this.items);
+  DetailSubmission(this.items,this.index);
 
   CircleAvatar getAvatarUser(Submission items) {
     if (items.isVipCheck()) {
@@ -54,7 +55,7 @@ class DetailSubmission extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            getAvatarUser(items),
+            Hero(tag: index.toString()+items.portrait_url,child: getAvatarUser(items)),
             SizedBox(width: 5),
             Flexible(
               child: Container(
@@ -77,28 +78,6 @@ class DetailSubmission extends StatelessWidget {
                                         ? Colors.black
                                         : HattoColors.colorPrimary),
                               ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 10),
-                            child: Row(
-                              children: [
-                                Text(
-                                  items.remain_rewards.toString(),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontFamily: 'RobotoMedium',
-                                      color: HattoColors.colorPrimary),
-                                ),
-                                SizedBox(width: 1),
-                                Container(
-                                    width: 15,
-                                    height: 15,
-                                    child:
-                                        Image.asset("assets/launcher/ic_dua.png"))
-                              ],
                             ),
                           ),
                         ],
@@ -154,6 +133,28 @@ class DetailSubmission extends StatelessWidget {
                     ]),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: Row(
+                children: [
+                  Text(
+                    items.remain_rewards.toString(),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontFamily: 'RobotoMedium',
+                        color: HattoColors.colorPrimary),
+                  ),
+                  SizedBox(width: 1),
+                  Container(
+                      width: 15,
+                      height: 15,
+                      child:
+                      Image.asset("assets/launcher/ic_dua.png"))
+                ],
+              ),
+            )
           ],
         ),
       ),
