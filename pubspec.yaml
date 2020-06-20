@@ -84,6 +84,11 @@ flutter:
     - assets/launcher/ic_option_user.png
     - assets/launcher/ic_friends.png
     - assets/launcher/ic_clock.png
+    - assets/launcher/emote_chicken.png
+    - assets/launcher/emote_clap.png
+    - assets/launcher/emote_rose.png
+    - assets/launcher/emote_suprise.png
+    - assets/launcher/emote_troll.png
 
 
   fonts:

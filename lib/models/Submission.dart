@@ -97,6 +97,7 @@ class Submission {
 
   double min_order_FREE_ship;
 
+  int replies_count;
 
    bool isVIP_normal = false;
    bool isVIP_chef = false;
@@ -118,7 +119,7 @@ class Submission {
       this.SVIP_special, this.role_active, this.role_id, this.role_icon,
       this.recipe_or_cooking, this.location_ownership, this.sharing_option,
       this.location_gps_lat, this.location_gps_long, this.distance,
-      this.FREE_ship_chinhdanh, this.min_order_FREE_ship);
+      this.FREE_ship_chinhdanh, this.min_order_FREE_ship,this.replies_count);
 
 
 

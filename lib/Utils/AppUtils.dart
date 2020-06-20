@@ -122,14 +122,14 @@ class AppUtils {
     return timeStamp;
   }
 
-  static Image getSharingOptionIcon(int sharing_option) {
+  static Image getSharingOptionIcon(int sharing_option,double width,double height) {
     switch (sharing_option) {
       case 1:
-        return Image.asset("assets/launcher/ic_friends.png",width: 10,height: 10);
+        return Image.asset("assets/launcher/ic_friends.png",width: width,height: height,);
       case 2:
-        return Image.asset("assets/launcher/ic_option_user.png",width: 10,height: 10);
+        return Image.asset("assets/launcher/ic_option_user.png",width: width,height: height);
       default:
-        return Image.asset("assets/launcher/ic_public.png",width: 10,height: 10);
+        return Image.asset("assets/launcher/ic_public.png",width: width,height: height);
     }
   }
 
