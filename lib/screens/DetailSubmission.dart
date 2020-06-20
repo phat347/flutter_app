@@ -6,6 +6,7 @@ import 'package:flutterapp/HattoColors.dart';
 import 'package:flutterapp/Utils/AppUtils.dart';
 import 'package:flutterapp/models/Submission.dart';
 import 'package:flutterapp/rank_master.dart';
+import 'package:flutterapp/screens/GalleryPhotoZoom.dart';
 
 class DetailSubmission extends StatelessWidget {
   final Submission items;
@@ -167,85 +168,95 @@ class DetailSubmission extends StatelessWidget {
         height: size.height,
         child: Stack(
           children: [
-            Stack(
-              children: [
-                Container(
-                  width: double.infinity,
-                  height: size.height/2,
-                  child: Hero(
-                    tag: items.forum_id,
-                    child: CachedNetworkImage(
-                        imageUrl: items.URL_img_id, fit: BoxFit.cover),
+            GestureDetector(
+              onTap: (){
+
+                List<String> url = [];
+                url.add(items.URL_img_id);
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (context) =>
+                            GalleryPhotoZoom(url)));
+              },
+              child: Stack(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: size.height/2,
+                    child: Hero(
+                      tag: items.forum_id,
+                      child: CachedNetworkImage(
+                          imageUrl: items.URL_img_id, fit: BoxFit.cover),
+                    ),
                   ),
-                ),
-                Positioned(
-                    child: Image.asset("assets/launcher/ic_rectangle_green.png",
-                        width: 35, height: 45),
-                    left: 10),
-                Positioned(
-                  child: Image.asset("assets/launcher/ic_buaan.png",
-                      width: 20, height: 20, color: Colors.white),
-                  left: 17.5,
-                  top: 10,
-                ),
-                Positioned(
-                  child: Container(
-                    width: size.width,
-                    height: 100,
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [HattoColors.gradientBlackStart, HattoColors.gradientBlackEnd])),
+                  Positioned(
+                      child: Image.asset("assets/launcher/ic_rectangle_green.png",
+                          width: 35, height: 45),
+                      left: 10),
+                  Positioned(
+                    child: Image.asset("assets/launcher/ic_buaan.png",
+                        width: 20, height: 20, color: Colors.white),
+                    left: 17.5,
+                    top: 10,
                   ),
-                  top: size.height/2-100,
-                ),
-              ],
+                  Positioned(
+                    child: Container(
+                      width: size.width,
+                      height: 100,
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [HattoColors.gradientBlackStart, HattoColors.gradientBlackEnd])),
+                    ),
+                    top: size.height/2-100,
+                  ),
+                ],
+              ),
             ),
-            Expanded(
-              child: Container(
-                margin: EdgeInsets.only(top: size.height/2-10),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20)),
-                    color: Colors.white),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        items.class_desc,
-                        style: TextStyle(
-                            fontSize: 30,
-                            fontFamily: 'RobotoMedium',
-                            color: Colors.black),
-                      ),
-                      Text(
-                        "1 lượt xem",
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontFamily: 'RobotoMedium',
-                            color: Colors.black),
-                      ),
-                      SizedBox(height: 10),
-                      Container(
-                          width: double.infinity,
-                          height: 0.7,
-                          color: HattoColors.colorTimeLine),
-                      SizedBox(height: 10),
-                      Text(
-                        items.extra_desc,
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontFamily: 'RobotoRegular',
-                            color: Colors.black),
-                      )
-                    ],
-                  ),
+            Container(
+              margin: EdgeInsets.only(top: size.height/2-10),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20)),
+                  color: Colors.white),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      items.class_desc,
+                      style: TextStyle(
+                          fontSize: 30,
+                          fontFamily: 'RobotoMedium',
+                          color: Colors.black),
+                    ),
+                    Text(
+                      "1 lượt xem",
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontFamily: 'RobotoMedium',
+                          color: Colors.black),
+                    ),
+                    SizedBox(height: 10),
+                    Container(
+                        width: double.infinity,
+                        height: 0.7,
+                        color: HattoColors.colorTimeLine),
+                    SizedBox(height: 10),
+                    Text(
+                      items.extra_desc,
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontFamily: 'RobotoRegular',
+                          color: Colors.black),
+                    )
+                  ],
                 ),
               ),
             ),
