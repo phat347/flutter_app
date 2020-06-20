@@ -62,6 +62,8 @@ Submission _$SubmissionFromJson(Map<String, dynamic> json) {
     json['FREE_ship_chinhdanh'] as int,
     (json['min_order_FREE_ship'] as num)?.toDouble(),
     json['replies_count'] as int,
+    json['favorite_count'] as int,
+    json['total_unique_views'] as int,
   )
     ..isVIP_normal = json['isVIP_normal'] as bool
     ..isVIP_chef = json['isVIP_chef'] as bool
@@ -125,6 +127,8 @@ Map<String, dynamic> _$SubmissionToJson(Submission instance) =>
       'FREE_ship_chinhdanh': instance.FREE_ship_chinhdanh,
       'min_order_FREE_ship': instance.min_order_FREE_ship,
       'replies_count': instance.replies_count,
+      'favorite_count': instance.favorite_count,
+      'total_unique_views': instance.total_unique_views,
       'isVIP_normal': instance.isVIP_normal,
       'isVIP_chef': instance.isVIP_chef,
       'isVIP_loc': instance.isVIP_loc,

@@ -89,6 +89,8 @@ flutter:
     - assets/launcher/emote_rose.png
     - assets/launcher/emote_suprise.png
     - assets/launcher/emote_troll.png
+    - assets/launcher/ic_favorite_2x.png
+    - assets/launcher/ic_chat_2x.png
 
 
   fonts:

@@ -171,7 +171,7 @@ class DetailSubmission extends StatelessWidget {
               children: [
                 Container(
                   width: double.infinity,
-                  height: 300,
+                  height: size.height/2,
                   child: Hero(
                     tag: items.forum_id,
                     child: CachedNetworkImage(
@@ -198,13 +198,13 @@ class DetailSubmission extends StatelessWidget {
                             end: Alignment.bottomCenter,
                             colors: [HattoColors.gradientBlackStart, HattoColors.gradientBlackEnd])),
                   ),
-                  top: 200,
+                  top: size.height/2-100,
                 ),
               ],
             ),
             Expanded(
               child: Container(
-                margin: EdgeInsets.only(top: 290),
+                margin: EdgeInsets.only(top: size.height/2-10),
                 width: double.infinity,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
