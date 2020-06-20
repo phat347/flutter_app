@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterapp/Utils/AppUtils.dart';
 import 'package:flutterapp/list_submission.dart';
 import 'package:flutterapp/loaders/color_loader_3.dart';
 import 'package:flutterapp/loaders/color_loader_5.dart';
@@ -358,13 +359,20 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                           10.0)),
                                                         )),
                                                     Positioned(
-                                                        child:
-                                                            Image.asset("assets/launcher/ic_rectangle_green.png",width: 35,height: 45),
+                                                        child: Image.asset(
+                                                            "assets/launcher/ic_rectangle_green.png",
+                                                            width: 35,
+                                                            height: 45),
                                                         left: 10),
                                                     Positioned(
-                                                        child:
-                                                        Image.asset("assets/launcher/ic_buaan.png",width: 20,height: 20,color: Colors.white),
-                                                        left: 17.5,top: 10,)
+                                                      child: Image.asset(
+                                                          "assets/launcher/ic_buaan.png",
+                                                          width: 20,
+                                                          height: 20,
+                                                          color: Colors.white),
+                                                      left: 17.5,
+                                                      top: 10,
+                                                    )
                                                   ],
                                                 ),
                                                 tag: itemSub.forum_id,
@@ -433,7 +441,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                       Row(
                                                                         children: [
                                                                           Text(
-                                                                            itemSub.remain_rewards.toString(),
+                                                                            AppUtils.formatNumber(itemSub.remain_rewards),
                                                                             overflow:
                                                                                 TextOverflow.ellipsis,
                                                                             maxLines:
@@ -536,8 +544,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                       itemSub.extra_desc,
                                                       overflow:
                                                           TextOverflow.ellipsis,
-                                                      maxLines: 2,
-                                                      style: const TextStyle(
+                                                      maxLines: 3,
+                                                      style: TextStyle(
                                                           fontSize: 12,
                                                           fontFamily:
                                                               'RobotoRegular',
@@ -546,15 +554,34 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     SizedBox(
                                                       height: 5,
                                                     ),
-//                                                  Text(
-//                                                    itemSub.extra_desc,
-//                                                    overflow: TextOverflow.ellipsis,
-//                                                    maxLines: 1,
-//                                                    style: const TextStyle(
-//                                                        fontSize: 15,
-//                                                        fontFamily: 'RobotoRegular',
-//                                                        color: Colors.black),
-//                                                  )
+                                                    Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Image.asset(
+                                                            "assets/launcher/ic_clock.png",
+                                                            width: 10,
+                                                            height: 10),
+                                                        SizedBox(width: 2),
+                                                        Text(
+                                                          AppUtils.getDateTimeAgo(
+                                                              itemSub
+                                                                  .timestamp),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          maxLines: 1,
+                                                          style: TextStyle(
+                                                              fontSize: 12,
+                                                              fontFamily:
+                                                                  'RobotoRegular',
+                                                              color: HattoColors
+                                                                  .colorTimeLine),
+                                                        ),
+                                                        SizedBox(width: 5),
+                                                        AppUtils.getSharingOptionIcon(itemSub.sharing_option)
+                                                      ],
+                                                    )
                                                   ],
                                                 ),
                                               )

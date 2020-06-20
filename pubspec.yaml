@@ -23,6 +23,7 @@ environment:
 dependencies:
   json_annotation: ^3.0.1
   cached_network_image: ^2.2.0
+  intl: ^0.16.1
   fluttertoast: ^4.0.0
   flutter:
     sdk: flutter
@@ -79,6 +80,10 @@ flutter:
     - assets/launcher/ic_dua.png
     - assets/launcher/ic_rectangle_green.png
     - assets/launcher/ic_buaan.png
+    - assets/launcher/ic_public.png
+    - assets/launcher/ic_option_user.png
+    - assets/launcher/ic_friends.png
+    - assets/launcher/ic_clock.png
 
 
   fonts:

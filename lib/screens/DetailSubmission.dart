@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutterapp/HattoColors.dart';
+import 'package:flutterapp/Utils/AppUtils.dart';
 import 'package:flutterapp/models/Submission.dart';
 import 'package:flutterapp/rank_master.dart';
 
@@ -141,7 +142,7 @@ class DetailSubmission extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    items.remain_rewards.toString(),
+                    AppUtils.formatNumber(items.remain_rewards),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                     style: TextStyle(
@@ -164,9 +165,7 @@ class DetailSubmission extends StatelessWidget {
         color: Colors.black,
         width: size.width,
         height: size.height,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.max,
+        child: Stack(
           children: [
             Stack(
               children: [
@@ -188,23 +187,38 @@ class DetailSubmission extends StatelessWidget {
                       width: 20, height: 20, color: Colors.white),
                   left: 17.5,
                   top: 10,
-                )
+                ),
+                Positioned(
+                  child: Container(
+                    width: size.width,
+                    height: 100,
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [HattoColors.gradientBlackStart, HattoColors.gradientBlackEnd])),
+                  ),
+                  top: 200,
+                ),
               ],
             ),
             Expanded(
               child: Container(
+                margin: EdgeInsets.only(top: 290),
                 width: double.infinity,
-                decoration: BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20)),color: Colors.white),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20)),
+                    color: Colors.white),
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 20,right: 20,top: 10),
+                  padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         items.class_desc,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
                         style: TextStyle(
                             fontSize: 30,
                             fontFamily: 'RobotoMedium',
@@ -218,7 +232,10 @@ class DetailSubmission extends StatelessWidget {
                             color: Colors.black),
                       ),
                       SizedBox(height: 10),
-                      Container(width: double.infinity,height: 0.7,color: HattoColors.colorTimeLine),
+                      Container(
+                          width: double.infinity,
+                          height: 0.7,
+                          color: HattoColors.colorTimeLine),
                       SizedBox(height: 10),
                       Text(
                         items.extra_desc,
@@ -227,7 +244,6 @@ class DetailSubmission extends StatelessWidget {
                             fontFamily: 'RobotoRegular',
                             color: Colors.black),
                       )
-
                     ],
                   ),
                 ),
