@@ -23,9 +23,26 @@ class _DetailSubmissionState extends State<DetailSubmission> {
 
 
 
-  void voteID1() {
+  void voteFunction(int voteID) {
     setState(() {
-      widget.items.voted_id_1++;
+      switch(voteID){
+        case 1:
+          widget.items.voted_id_1++; 
+          break;
+        case 2:
+          widget.items.voted_id_2++;
+          break;
+        case 3:
+          widget.items.voted_id_3++;
+          break;
+        case 4:
+          widget.items.voted_id_4++;
+          break;
+        case 5:
+          widget.items.voted_id_5++;
+          break;
+      }
+      
     });
   }
 
@@ -468,96 +485,105 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                                       ],
                                     ),
                                   ),onTap: (){
-                                  voteID1();
+                                  voteFunction(1);
                                 },
                                 ),
                                 SizedBox(
                                   width: 20,
                                 ),
-                                Container(
-                                  width: 50,
-                                  height: 50,
-                                  padding: EdgeInsets.only(left: 5, right: 5),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(100),
-                                      color: Colors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                            blurRadius: 10,
-                                            spreadRadius: 2,
-                                            color: Colors.black.withOpacity(0.1),
-                                            offset: Offset(0, 10))
-                                      ]),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Image.asset(
-                                        "assets/launcher/emote_rose.png",
-                                        width: 20,
-                                        height: 20,
-                                      ),
-                                      SizedBox(
-                                        height: 2,
-                                      ),
-                                      Flexible(
-                                          child: Text(
-                                        "${widget.items.voted_id_2}",
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            fontFamily: "RobotoMedium",
-                                            color: Colors.black),
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                      ))
-                                    ],
+                                GestureDetector(
+                                  onTap: (){
+                                    voteFunction(2);
+                                  },
+                                  child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    padding: EdgeInsets.only(left: 5, right: 5),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(100),
+                                        color: Colors.white,
+                                        boxShadow: [
+                                          BoxShadow(
+                                              blurRadius: 10,
+                                              spreadRadius: 2,
+                                              color: Colors.black.withOpacity(0.1),
+                                              offset: Offset(0, 10))
+                                        ]),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Image.asset(
+                                          "assets/launcher/emote_rose.png",
+                                          width: 20,
+                                          height: 20,
+                                        ),
+                                        SizedBox(
+                                          height: 2,
+                                        ),
+                                        Flexible(
+                                            child: Text(
+                                          "${widget.items.voted_id_2}",
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              fontFamily: "RobotoMedium",
+                                              color: Colors.black),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                        ))
+                                      ],
+                                    ),
                                   ),
                                 ),
                                 SizedBox(
                                   width: 20,
                                 ),
-                                Container(
-                                  width: 50,
-                                  height: 50,
-                                  padding: EdgeInsets.only(left: 5, right: 5),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(100),
-                                      color: Colors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                            blurRadius: 10,
-                                            spreadRadius: 2,
-                                            color: Colors.black.withOpacity(0.1),
-                                            offset: Offset(0, 10))
-                                      ]),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Image.asset(
-                                        "assets/launcher/emote_suprise.png",
-                                        width: 20,
-                                        height: 20,
-                                      ),
-                                      SizedBox(
-                                        height: 2,
-                                      ),
-                                      Flexible(
-                                          child: Text(
-                                        "${widget.items.voted_id_3}",
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            fontFamily: "RobotoMedium",
-                                            color: Colors.black),
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                      ))
-                                    ],
+                                GestureDetector(
+                                  onTap: (){
+                                    voteFunction(3);
+                                  },
+                                  child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    padding: EdgeInsets.only(left: 5, right: 5),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(100),
+                                        color: Colors.white,
+                                        boxShadow: [
+                                          BoxShadow(
+                                              blurRadius: 10,
+                                              spreadRadius: 2,
+                                              color: Colors.black.withOpacity(0.1),
+                                              offset: Offset(0, 10))
+                                        ]),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Image.asset(
+                                          "assets/launcher/emote_suprise.png",
+                                          width: 20,
+                                          height: 20,
+                                        ),
+                                        SizedBox(
+                                          height: 2,
+                                        ),
+                                        Flexible(
+                                            child: Text(
+                                          "${widget.items.voted_id_3}",
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              fontFamily: "RobotoMedium",
+                                              color: Colors.black),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                        ))
+                                      ],
+                                    ),
                                   ),
                                 )
                               ],
                             ),
                             GestureDetector(
                               onTap: (){
-//                              Navigator.pop(context,widget.items);
                               },
                               child: Row(
                                 children: [
