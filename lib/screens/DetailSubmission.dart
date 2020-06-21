@@ -8,12 +8,26 @@ import 'package:flutterapp/models/Submission.dart';
 import 'package:flutterapp/rank_master.dart';
 import 'package:flutterapp/screens/GalleryPhotoZoom.dart';
 
-class DetailSubmission extends StatelessWidget {
+class DetailSubmission extends StatefulWidget {
   final Submission items;
   int index;
-  List<dynamic> rank = rank_master;
 
   DetailSubmission(this.items, this.index);
+
+  @override
+  _DetailSubmissionState createState() => _DetailSubmissionState();
+}
+
+class _DetailSubmissionState extends State<DetailSubmission> {
+  List<dynamic> rank = rank_master;
+
+
+
+  void voteID1() {
+    setState(() {
+      widget.items.voted_id_1++;
+    });
+  }
 
   CircleAvatar getAvatarUser(Submission items) {
     if (items.isVipCheck()) {
@@ -59,8 +73,8 @@ class DetailSubmission extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Hero(
-                tag: index.toString() + items.portrait_url,
-                child: getAvatarUser(items)),
+                tag: widget.index.toString() + widget.items.portrait_url,
+                child: getAvatarUser(widget.items)),
             SizedBox(width: 5),
             Flexible(
               child: Container(
@@ -73,13 +87,13 @@ class DetailSubmission extends StatelessWidget {
                           Flexible(
                             child: Container(
                               child: Text(
-                                items.user_name,
+                                widget.items.user_name,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                                 style: TextStyle(
                                     fontSize: 15,
                                     fontFamily: 'RobotoMedium',
-                                    color: items.isVipCheck()
+                                    color: widget.items.isVipCheck()
                                         ? Colors.black
                                         : HattoColors.colorPrimary),
                               ),
@@ -93,7 +107,7 @@ class DetailSubmission extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Visibility(
-                            visible: items.isVipCheck() ? false : true,
+                            visible: widget.items.isVipCheck() ? false : true,
                             child: Container(
                                 decoration: new BoxDecoration(
                                     color: HattoColors.colorPrimary,
@@ -121,11 +135,11 @@ class DetailSubmission extends StatelessWidget {
                                 image: DecorationImage(
                                     fit: BoxFit.cover,
                                     image: CachedNetworkImageProvider(
-                                        getRankIcon(items.rank_id))),
+                                        getRankIcon(widget.items.rank_id))),
                               )),
                           SizedBox(width: 3),
                           Text(
-                            items.rank_desc,
+                            widget.items.rank_desc,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                             style: TextStyle(
@@ -143,7 +157,7 @@ class DetailSubmission extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    AppUtils.formatNumber(items.remain_rewards),
+                    AppUtils.formatNumber(widget.items.remain_rewards),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                     style: TextStyle(
@@ -164,426 +178,441 @@ class DetailSubmission extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
-        child: Container(
-          color: Colors.black,
-          width: size.width,
-          child: Stack(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  List<String> url = [];
-                  url.add(items.URL_img_id);
-                  Navigator.push(
-                      context,
-                      new MaterialPageRoute(
-                          builder: (context) => GalleryPhotoZoom(url)));
-                },
-                child: Stack(
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      height: size.height / 2,
-                      child: Hero(
-                        tag: items.forum_id,
-                        child: CachedNetworkImage(
-                            imageUrl: items.URL_img_id, fit: BoxFit.cover),
-                      ),
-                    ),
-                    Positioned(
-                        child: Image.asset(
-                            "assets/launcher/ic_rectangle_green.png",
-                            width: 35,
-                            height: 45),
-                        left: 10),
-                    Positioned(
-                      child: Image.asset("assets/launcher/ic_buaan.png",
-                          width: 20, height: 20, color: Colors.white),
-                      left: 17.5,
-                      top: 10,
-                    ),
-                    Positioned(
-                      child: Container(
-                        width: size.width,
-                        height: 100,
-                        decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [
-                              HattoColors.gradientBlackStart,
-                              HattoColors.gradientBlackEnd
-                            ])),
-                      ),
-                      top: size.height / 2 - 100,
-                    ),
-                    Positioned(
-                      child: Container(
-                          height: 55,
-                          padding: EdgeInsets.only(left: 20,right: 20),
-                          width: size.width,
-                          child: Row(
-                            children: [
-                              Flexible(
-                                flex: 1,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      width: 30,
-                                      height: 30,
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(30),
-                                          color: Colors.white),
-                                      child: Container(
-                                        alignment: Alignment.center,
-                                        child: Image.asset(
-                                            "assets/launcher/ic_couple.png",width: 20,height: 20),
-                                      ),
-                                    ),
-                                    SizedBox(width: 5),
-                                    Flexible(
-                                      child: Column(children: [
-                                        Text(
-                                          "${items.NUM_CHOICE_MATCHES}",
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
-                                          style: TextStyle(fontFamily: "RobotoMedium",fontSize: 16,color: Colors.white),
-                                        ),
-                                        Text(
-                                          "món hạp gu",
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
-                                          style: TextStyle(fontFamily: "RobotoItalic",fontSize: 12,color: Colors.white),
-                                        )
-                                      ],mainAxisSize: MainAxisSize.max,mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.start,),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Flexible(
-                                flex: 1,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      width: 30,
-                                      height: 30,
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(30),
-                                          color: HattoColors.colorPrimary),
-                                      child: Container(
-                                        alignment: Alignment.center,
-                                        child: Image.asset(
-                                            "assets/launcher/ic_connections_2x.png",width: 20,height: 20),
-                                      ),
-                                    ),
-                                    SizedBox(width: 5),
-                                    Flexible(
-                                      child: Column(children: [
-                                        Text(
-                                          "${items.NUM_MATCHES+items.i_found}",
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
-                                          style: TextStyle(fontFamily: "RobotoMedium",fontSize: 16,color: Colors.white),
-                                        ),
-                                        Text(
-                                          "món tương tự",
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
-                                          style: TextStyle(fontFamily: "RobotoItalic",fontSize: 12,color: Colors.white),
-                                        )
-                                      ],mainAxisSize: MainAxisSize.max,mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.start,),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Flexible(
-                                flex: 1,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      width: 30,
-                                      height: 30,
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(30),
-                                          color: Colors.white),
-                                      child: Container(
-                                        alignment: Alignment.center,
-                                        child: Image.asset(
-                                            "assets/launcher/ic_dua.png",width: 20,height: 20),
-                                      ),
-                                    ),
-                                    SizedBox(width: 5),
-                                    Flexible(
-                                      child: Column(children: [
-                                        Text(
-                                          "+${items.forum_rewards}",
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
-                                          style: TextStyle(fontFamily: "RobotoMedium",fontSize: 16,color: Colors.white),
-                                        ),
-                                        Text(
-                                          "Dưa thưởng",
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
-                                          style: TextStyle(fontFamily: "RobotoItalic",fontSize: 12,color: Colors.white),
-                                        )
-                                      ],mainAxisSize: MainAxisSize.max,mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.start),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          mainAxisSize: MainAxisSize.max)),
-                      top: size.height / 2 - 65,
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: size.height / 2 - 10),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20)),
-                    color: HattoColors.whiteGrey),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+        child: WillPopScope(
+          onWillPop: ()async{
+            Navigator.pop(context,widget.items);
+            return true;
+          },
+          child: Container(
+            color: Colors.black,
+            width: size.width,
+            child: Stack(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    List<String> url = [];
+                    url.add(widget.items.URL_img_id);
+                    Navigator.push(
+                        context,
+                        new MaterialPageRoute(
+                            builder: (context) => GalleryPhotoZoom(url)));
+                  },
+                  child: Stack(
                     children: [
-                      Text(
-                        items.class_desc,
-                        style: TextStyle(
-                            fontSize: 30,
-                            fontFamily: 'RobotoMedium',
-                            color: Colors.black),
-                      ),
-                      Text(
-                        "${items.total_unique_views} lượt xem",
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontFamily: 'RobotoMedium',
-                            color: Colors.black),
-                      ),
-                      SizedBox(height: 10),
                       Container(
-                          width: double.infinity,
-                          height: 0.7,
-                          color: HattoColors.colorTimeLine),
-                      SizedBox(height: 10),
-                      Text(
-                        items.extra_desc,
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontFamily: 'RobotoRegular',
-                            color: Colors.black),
+                        width: double.infinity,
+                        height: size.height / 2,
+                        child: Hero(
+                          tag: widget.items.forum_id,
+                          child: CachedNetworkImage(
+                              imageUrl: widget.items.URL_img_id, fit: BoxFit.cover),
+                        ),
                       ),
-                      SizedBox(
-                        height: 10,
+                      Positioned(
+                          child: Image.asset(
+                              "assets/launcher/ic_rectangle_green.png",
+                              width: 35,
+                              height: 45),
+                          left: 10),
+                      Positioned(
+                        child: Image.asset("assets/launcher/ic_buaan.png",
+                            width: 20, height: 20, color: Colors.white),
+                        left: 17.5,
+                        top: 10,
                       ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Image.asset("assets/launcher/ic_clock.png",
-                              width: 10, height: 10),
-                          SizedBox(width: 2),
-                          Flexible(
-                            child: Text(
-                              AppUtils.getDateTimeAgo(items.timestamp),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  fontFamily: 'RobotoRegular',
-                                  color: HattoColors.colorTimeLine),
-                            ),
-                          ),
-                          SizedBox(width: 5),
-                          AppUtils.getSharingOptionIcon(
-                              items.sharing_option, 10, 10)
-                        ],
+                      Positioned(
+                        child: Container(
+                          width: size.width,
+                          height: 100,
+                          decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                HattoColors.gradientBlackStart,
+                                HattoColors.gradientBlackEnd
+                              ])),
+                        ),
+                        top: size.height / 2 - 100,
                       ),
-                      SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                width: 50,
-                                height: 50,
-                                padding: EdgeInsets.only(left: 5, right: 5),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(100),
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                          blurRadius: 10,
-                                          spreadRadius: 2,
-                                          color: Colors.black.withOpacity(0.1),
-                                          offset: Offset(0, 10))
-                                    ]),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset(
-                                      "assets/launcher/emote_clap.png",
-                                      width: 20,
-                                      height: 20,
-                                    ),
-                                    SizedBox(
-                                      height: 2,
-                                    ),
-                                    Flexible(
-                                        child: Text(
-                                      "${items.voted_id_1}",
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          fontFamily: "RobotoMedium",
-                                          color: Colors.black),
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                    ))
-                                  ],
+                      Positioned(
+                        child: Container(
+                            height: 55,
+                            padding: EdgeInsets.only(left: 20,right: 20),
+                            width: size.width,
+                            child: Row(
+                              children: [
+                                Flexible(
+                                  flex: 1,
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        width: 30,
+                                        height: 30,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(30),
+                                            color: Colors.white),
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          child: Image.asset(
+                                              "assets/launcher/ic_couple.png",width: 20,height: 20),
+                                        ),
+                                      ),
+                                      SizedBox(width: 5),
+                                      Flexible(
+                                        child: Column(children: [
+                                          Text(
+                                            "${widget.items.NUM_CHOICE_MATCHES}",
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                            style: TextStyle(fontFamily: "RobotoMedium",fontSize: 16,color: Colors.white),
+                                          ),
+                                          Text(
+                                            "món hạp gu",
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                            style: TextStyle(fontFamily: "RobotoItalic",fontSize: 12,color: Colors.white),
+                                          )
+                                        ],mainAxisSize: MainAxisSize.max,mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.start,),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              Container(
-                                width: 50,
-                                height: 50,
-                                padding: EdgeInsets.only(left: 5, right: 5),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(100),
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                          blurRadius: 10,
-                                          spreadRadius: 2,
-                                          color: Colors.black.withOpacity(0.1),
-                                          offset: Offset(0, 10))
-                                    ]),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset(
-                                      "assets/launcher/emote_rose.png",
-                                      width: 20,
-                                      height: 20,
-                                    ),
-                                    SizedBox(
-                                      height: 2,
-                                    ),
-                                    Flexible(
-                                        child: Text(
-                                      "${items.voted_id_2}",
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          fontFamily: "RobotoMedium",
-                                          color: Colors.black),
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                    ))
-                                  ],
+                                Flexible(
+                                  flex: 1,
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        width: 30,
+                                        height: 30,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(30),
+                                            color: HattoColors.colorPrimary),
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          child: Image.asset(
+                                              "assets/launcher/ic_connections_2x.png",width: 20,height: 20),
+                                        ),
+                                      ),
+                                      SizedBox(width: 5),
+                                      Flexible(
+                                        child: Column(children: [
+                                          Text(
+                                            "${widget.items.NUM_MATCHES+widget.items.i_found}",
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                            style: TextStyle(fontFamily: "RobotoMedium",fontSize: 16,color: Colors.white),
+                                          ),
+                                          Text(
+                                            "món tương tự",
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                            style: TextStyle(fontFamily: "RobotoItalic",fontSize: 12,color: Colors.white),
+                                          )
+                                        ],mainAxisSize: MainAxisSize.max,mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.start,),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              Container(
-                                width: 50,
-                                height: 50,
-                                padding: EdgeInsets.only(left: 5, right: 5),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(100),
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                          blurRadius: 10,
-                                          spreadRadius: 2,
-                                          color: Colors.black.withOpacity(0.1),
-                                          offset: Offset(0, 10))
-                                    ]),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset(
-                                      "assets/launcher/emote_suprise.png",
-                                      width: 20,
-                                      height: 20,
-                                    ),
-                                    SizedBox(
-                                      height: 2,
-                                    ),
-                                    Flexible(
-                                        child: Text(
-                                      "${items.voted_id_3}",
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          fontFamily: "RobotoMedium",
-                                          color: Colors.black),
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                    ))
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Container(
-                                width: 50,
-                                height: 50,
-                                padding: EdgeInsets.only(left: 5, right: 5),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(100),
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                          blurRadius: 10,
-                                          spreadRadius: 2,
-                                          color: Colors.black.withOpacity(0.1),
-                                          offset: Offset(0, 10))
-                                    ]),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset(
-                                      "assets/launcher/ic_chat_2x.png",
-                                      width: 20,
-                                      height: 20,
-                                    ),
-                                    SizedBox(
-                                      height: 2,
-                                    ),
-                                    Flexible(
-                                        child: Text(
-                                      "${items.replies_count}",
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          fontFamily: "RobotoMedium",
-                                          color: Colors.black),
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                    ))
-                                  ],
-                                ),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: 20,
+                                Flexible(
+                                  flex: 1,
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        width: 30,
+                                        height: 30,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(30),
+                                            color: Colors.white),
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          child: Image.asset(
+                                              "assets/launcher/ic_dua.png",width: 20,height: 20),
+                                        ),
+                                      ),
+                                      SizedBox(width: 5),
+                                      Flexible(
+                                        child: Column(children: [
+                                          Text(
+                                            "+${widget.items.forum_rewards}",
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                            style: TextStyle(fontFamily: "RobotoMedium",fontSize: 16,color: Colors.white),
+                                          ),
+                                          Text(
+                                            "Dưa thưởng",
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                            style: TextStyle(fontFamily: "RobotoItalic",fontSize: 12,color: Colors.white),
+                                          )
+                                        ],mainAxisSize: MainAxisSize.max,mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.start),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            mainAxisSize: MainAxisSize.max)),
+                        top: size.height / 2 - 65,
                       )
                     ],
                   ),
                 ),
-              ),
-            ],
+                Container(
+                  margin: EdgeInsets.only(top: size.height / 2 - 10),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20)),
+                      color: HattoColors.whiteGrey),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.items.class_desc,
+                          style: TextStyle(
+                              fontSize: 30,
+                              fontFamily: 'RobotoMedium',
+                              color: Colors.black),
+                        ),
+                        Text(
+                          "${widget.items.total_unique_views} lượt xem",
+                          style: TextStyle(
+                              fontSize: 15,
+                              fontFamily: 'RobotoMedium',
+                              color: Colors.black),
+                        ),
+                        SizedBox(height: 10),
+                        Container(
+                            width: double.infinity,
+                            height: 0.7,
+                            color: HattoColors.colorTimeLine),
+                        SizedBox(height: 10),
+                        Text(
+                          widget.items.extra_desc,
+                          style: TextStyle(
+                              fontSize: 15,
+                              fontFamily: 'RobotoRegular',
+                              color: Colors.black),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Image.asset("assets/launcher/ic_clock.png",
+                                width: 10, height: 10),
+                            SizedBox(width: 2),
+                            Flexible(
+                              child: Text(
+                                AppUtils.getDateTimeAgo(widget.items.timestamp),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    fontFamily: 'RobotoRegular',
+                                    color: HattoColors.colorTimeLine),
+                              ),
+                            ),
+                            SizedBox(width: 5),
+                            AppUtils.getSharingOptionIcon(
+                                widget.items.sharing_option, 10, 10)
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                GestureDetector(
+                                  child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    padding: EdgeInsets.only(left: 5, right: 5),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(100),
+                                        color: Colors.white,
+                                        boxShadow: [
+                                          BoxShadow(
+                                              blurRadius: 10,
+                                              spreadRadius: 2,
+                                              color: Colors.black.withOpacity(0.1),
+                                              offset: Offset(0, 10))
+                                        ]),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Image.asset(
+                                          "assets/launcher/emote_clap.png",
+                                          width: 20,
+                                          height: 20,
+                                        ),
+                                        SizedBox(
+                                          height: 2,
+                                        ),
+                                        Flexible(
+                                            child: Text(
+                                          "${widget.items.voted_id_1}",
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              fontFamily: "RobotoMedium",
+                                              color: Colors.black),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                        ))
+                                      ],
+                                    ),
+                                  ),onTap: (){
+                                  voteID1();
+                                },
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Container(
+                                  width: 50,
+                                  height: 50,
+                                  padding: EdgeInsets.only(left: 5, right: 5),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(100),
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                            blurRadius: 10,
+                                            spreadRadius: 2,
+                                            color: Colors.black.withOpacity(0.1),
+                                            offset: Offset(0, 10))
+                                      ]),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image.asset(
+                                        "assets/launcher/emote_rose.png",
+                                        width: 20,
+                                        height: 20,
+                                      ),
+                                      SizedBox(
+                                        height: 2,
+                                      ),
+                                      Flexible(
+                                          child: Text(
+                                        "${widget.items.voted_id_2}",
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            fontFamily: "RobotoMedium",
+                                            color: Colors.black),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                      ))
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Container(
+                                  width: 50,
+                                  height: 50,
+                                  padding: EdgeInsets.only(left: 5, right: 5),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(100),
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                            blurRadius: 10,
+                                            spreadRadius: 2,
+                                            color: Colors.black.withOpacity(0.1),
+                                            offset: Offset(0, 10))
+                                      ]),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image.asset(
+                                        "assets/launcher/emote_suprise.png",
+                                        width: 20,
+                                        height: 20,
+                                      ),
+                                      SizedBox(
+                                        height: 2,
+                                      ),
+                                      Flexible(
+                                          child: Text(
+                                        "${widget.items.voted_id_3}",
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            fontFamily: "RobotoMedium",
+                                            color: Colors.black),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                      ))
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                            GestureDetector(
+                              onTap: (){
+//                              Navigator.pop(context,widget.items);
+                              },
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 50,
+                                    height: 50,
+                                    padding: EdgeInsets.only(left: 5, right: 5),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(100),
+                                        color: Colors.white,
+                                        boxShadow: [
+                                          BoxShadow(
+                                              blurRadius: 10,
+                                              spreadRadius: 2,
+                                              color: Colors.black.withOpacity(0.1),
+                                              offset: Offset(0, 10))
+                                        ]),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Image.asset(
+                                          "assets/launcher/ic_chat_2x.png",
+                                          width: 20,
+                                          height: 20,
+                                        ),
+                                        SizedBox(
+                                          height: 2,
+                                        ),
+                                        Flexible(
+                                            child: Text(
+                                          "${widget.items.replies_count}",
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              fontFamily: "RobotoMedium",
+                                              color: Colors.black),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                        ))
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: 20,
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

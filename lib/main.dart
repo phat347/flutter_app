@@ -310,11 +310,20 @@ class _MyHomePageState extends State<MyHomePage> {
                                   return GestureDetector(
                                     onTap: () {
                                       Navigator.push(
-                                          context,
-                                          new MaterialPageRoute(
-                                              builder: (context) =>
-                                                  DetailSubmission(
-                                                      itemSub, index)));
+                                              context,
+                                              new MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      DetailSubmission(
+                                                          itemSub, index)))
+                                          .then((value) {
+                                        if (value != null) {
+                                          Submission itemsDetailBack = value as Submission;
+                                          setState(() {
+                                            itemSub = itemsDetailBack;
+                                          });
+                                        }
+                                      });
+
                                     },
                                     child: Container(
                                         width: double.infinity,
