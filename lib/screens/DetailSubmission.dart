@@ -216,6 +216,125 @@ class DetailSubmission extends StatelessWidget {
                       ),
                       top: size.height / 2 - 100,
                     ),
+                    Positioned(
+                      child: Container(
+                          height: 55,
+                          padding: EdgeInsets.only(left: 20,right: 20),
+                          width: size.width,
+                          child: Row(
+                            children: [
+                              Flexible(
+                                flex: 1,
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      width: 30,
+                                      height: 30,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(30),
+                                          color: Colors.white),
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        child: Image.asset(
+                                            "assets/launcher/ic_couple.png",width: 20,height: 20),
+                                      ),
+                                    ),
+                                    SizedBox(width: 5),
+                                    Flexible(
+                                      child: Column(children: [
+                                        Text(
+                                          "${items.NUM_CHOICE_MATCHES}",
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                          style: TextStyle(fontFamily: "RobotoMedium",fontSize: 16,color: Colors.white),
+                                        ),
+                                        Text(
+                                          "món hạp gu",
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                          style: TextStyle(fontFamily: "RobotoItalic",fontSize: 12,color: Colors.white),
+                                        )
+                                      ],mainAxisSize: MainAxisSize.max,mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.start,),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Flexible(
+                                flex: 1,
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      width: 30,
+                                      height: 30,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(30),
+                                          color: HattoColors.colorPrimary),
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        child: Image.asset(
+                                            "assets/launcher/ic_connections_2x.png",width: 20,height: 20),
+                                      ),
+                                    ),
+                                    SizedBox(width: 5),
+                                    Flexible(
+                                      child: Column(children: [
+                                        Text(
+                                          "${items.NUM_MATCHES+items.i_found}",
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                          style: TextStyle(fontFamily: "RobotoMedium",fontSize: 16,color: Colors.white),
+                                        ),
+                                        Text(
+                                          "món tương tự",
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                          style: TextStyle(fontFamily: "RobotoItalic",fontSize: 12,color: Colors.white),
+                                        )
+                                      ],mainAxisSize: MainAxisSize.max,mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.start,),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Flexible(
+                                flex: 1,
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      width: 30,
+                                      height: 30,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(30),
+                                          color: Colors.white),
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        child: Image.asset(
+                                            "assets/launcher/ic_dua.png",width: 20,height: 20),
+                                      ),
+                                    ),
+                                    SizedBox(width: 5),
+                                    Flexible(
+                                      child: Column(children: [
+                                        Text(
+                                          "+${items.forum_rewards}",
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                          style: TextStyle(fontFamily: "RobotoMedium",fontSize: 16,color: Colors.white),
+                                        ),
+                                        Text(
+                                          "Dưa thưởng",
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                          style: TextStyle(fontFamily: "RobotoItalic",fontSize: 12,color: Colors.white),
+                                        )
+                                      ],mainAxisSize: MainAxisSize.max,mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.start),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          mainAxisSize: MainAxisSize.max)),
+                      top: size.height / 2 - 65,
+                    )
                   ],
                 ),
               ),
@@ -313,7 +432,9 @@ class DetailSubmission extends StatelessWidget {
                                       width: 20,
                                       height: 20,
                                     ),
-                                    SizedBox(height: 2,),
+                                    SizedBox(
+                                      height: 2,
+                                    ),
                                     Flexible(
                                         child: Text(
                                       "${items.voted_id_1}",
@@ -327,7 +448,9 @@ class DetailSubmission extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              SizedBox(width: 20,),
+                              SizedBox(
+                                width: 20,
+                              ),
                               Container(
                                 width: 50,
                                 height: 50,
@@ -350,21 +473,25 @@ class DetailSubmission extends StatelessWidget {
                                       width: 20,
                                       height: 20,
                                     ),
-                                    SizedBox(height: 2,),
+                                    SizedBox(
+                                      height: 2,
+                                    ),
                                     Flexible(
                                         child: Text(
-                                          "${items.voted_id_2}",
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontFamily: "RobotoMedium",
-                                              color: Colors.black),
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
-                                        ))
+                                      "${items.voted_id_2}",
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontFamily: "RobotoMedium",
+                                          color: Colors.black),
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ))
                                   ],
                                 ),
                               ),
-                              SizedBox(width: 20,),
+                              SizedBox(
+                                width: 20,
+                              ),
                               Container(
                                 width: 50,
                                 height: 50,
@@ -387,17 +514,19 @@ class DetailSubmission extends StatelessWidget {
                                       width: 20,
                                       height: 20,
                                     ),
-                                    SizedBox(height: 2,),
+                                    SizedBox(
+                                      height: 2,
+                                    ),
                                     Flexible(
                                         child: Text(
-                                          "${items.voted_id_3}",
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontFamily: "RobotoMedium",
-                                              color: Colors.black),
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
-                                        ))
+                                      "${items.voted_id_3}",
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontFamily: "RobotoMedium",
+                                          color: Colors.black),
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ))
                                   ],
                                 ),
                               )
@@ -427,17 +556,19 @@ class DetailSubmission extends StatelessWidget {
                                       width: 20,
                                       height: 20,
                                     ),
-                                    SizedBox(height: 2,),
+                                    SizedBox(
+                                      height: 2,
+                                    ),
                                     Flexible(
                                         child: Text(
-                                          "${items.replies_count}",
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontFamily: "RobotoMedium",
-                                              color: Colors.black),
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
-                                        ))
+                                      "${items.replies_count}",
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontFamily: "RobotoMedium",
+                                          color: Colors.black),
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ))
                                   ],
                                 ),
                               )
@@ -445,7 +576,9 @@ class DetailSubmission extends StatelessWidget {
                           )
                         ],
                       ),
-                      SizedBox(height: 20,)
+                      SizedBox(
+                        height: 20,
+                      )
                     ],
                   ),
                 ),

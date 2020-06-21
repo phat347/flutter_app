@@ -64,6 +64,8 @@ Submission _$SubmissionFromJson(Map<String, dynamic> json) {
     json['replies_count'] as int,
     json['favorite_count'] as int,
     json['total_unique_views'] as int,
+    json['i_found'] as int,
+    json['forum_rewards'] as int,
   )
     ..isVIP_normal = json['isVIP_normal'] as bool
     ..isVIP_chef = json['isVIP_chef'] as bool
@@ -129,6 +131,8 @@ Map<String, dynamic> _$SubmissionToJson(Submission instance) =>
       'replies_count': instance.replies_count,
       'favorite_count': instance.favorite_count,
       'total_unique_views': instance.total_unique_views,
+      'i_found': instance.i_found,
+      'forum_rewards': instance.forum_rewards,
       'isVIP_normal': instance.isVIP_normal,
       'isVIP_chef': instance.isVIP_chef,
       'isVIP_loc': instance.isVIP_loc,

@@ -91,6 +91,8 @@ flutter:
     - assets/launcher/emote_troll.png
     - assets/launcher/ic_favorite_2x.png
     - assets/launcher/ic_chat_2x.png
+    - assets/launcher/ic_couple.png
+    - assets/launcher/ic_connections_2x.png
 
 
   fonts:
