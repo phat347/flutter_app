@@ -28,8 +28,8 @@ class GalleryPhotoZoom extends StatelessWidget {
               itemCount: urlPhoto.length,
               loadingBuilder: (context, event) => Center(
                 child: Container(
-                  width: 20.0,
-                  height: 20.0,
+                  width: 50.0,
+                  height: 50.0,
                   child: CircularProgressIndicator(
                     value: event == null
                         ? 0
@@ -40,21 +40,30 @@ class GalleryPhotoZoom extends StatelessWidget {
               ),
             ),
             Positioned(
-                right: 20,
-                top: 80,
+                right: 0,
+                top: 50,
                 child: GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     Navigator.pop(context);
                   },
                   child: Container(
-                    decoration: BoxDecoration(color: Colors.black.withOpacity(0.5),borderRadius: BorderRadius.circular(20)),
-                      width: 40,
-                      height: 40,
-                      child: Center(
-                          child: Icon(
-                        Icons.close,
-                        color: Colors.white,
-                      ))),
+                    width: 100,
+                    height: 100,
+                    color: Colors.transparent,
+                    alignment: Alignment.center,
+                    child: Container(
+                        margin: EdgeInsets.only(right: 0),
+                        decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(50)),
+                        width: 50,
+                        height: 50,
+                        child: Center(
+                            child: Icon(
+                          Icons.close,
+                          color: Colors.white,
+                        ))),
+                  ),
                 ))
           ],
         ));
