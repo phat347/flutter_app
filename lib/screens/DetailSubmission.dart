@@ -7,6 +7,7 @@ import 'package:flutterapp/Utils/AppUtils.dart';
 import 'package:flutterapp/models/Submission.dart';
 import 'package:flutterapp/rank_master.dart';
 import 'package:flutterapp/screens/GalleryPhotoZoom.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class DetailSubmission extends StatefulWidget {
   final Submission items;
@@ -21,6 +22,20 @@ class DetailSubmission extends StatefulWidget {
 class _DetailSubmissionState extends State<DetailSubmission> {
   List<dynamic> rank = rank_master;
 
+  TextEditingController boxCommentController;
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    boxCommentController.dispose();
+    super.dispose();
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    boxCommentController = TextEditingController();
+    super.initState();
+  }
   void voteFunction(int voteID) {
     setState(() {
       switch (voteID) {
@@ -745,6 +760,7 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                   children: [
                     Flexible(
                       child: TextField(
+                        controller: boxCommentController,
                         textCapitalization: TextCapitalization.sentences,
                         keyboardType: TextInputType.multiline,
                         maxLines: 3,
@@ -759,9 +775,27 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                                 fontSize: 15, fontFamily: 'RobotoRegular'),
                             border: InputBorder.none),
                       ),
-                    ),Padding(
-                      padding: const EdgeInsets.only(left: 5),
-                      child: Image.asset("assets/launcher/ic_right_arrow.png",color: HattoColors.colorTimeLine,width: 20,height: 20,),
+                    ),GestureDetector(
+                      onTap: (){
+                        Fluttertoast.showToast(
+                            msg: boxCommentController.text,
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.black45,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
+                        boxCommentController.clear();
+                        FocusScopeNode currentFocus = FocusScope.of(context);
+
+                        if (!currentFocus.hasPrimaryFocus) {
+                          currentFocus.unfocus();
+                        }
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 5),
+                        child: Image.asset("assets/launcher/ic_right_arrow.png",color: HattoColors.colorTimeLine,width: 20,height: 20,),
+                      ),
                     )
                   ],
                 ),
