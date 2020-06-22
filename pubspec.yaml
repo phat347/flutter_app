@@ -93,6 +93,7 @@ flutter:
     - assets/launcher/ic_chat_2x.png
     - assets/launcher/ic_couple.png
     - assets/launcher/ic_connections_2x.png
+    - assets/launcher/ic_right_arrow.png
 
 
   fonts:
