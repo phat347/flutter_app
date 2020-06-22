@@ -12,6 +12,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 class DetailSubmission extends StatefulWidget {
   final Submission items;
   int index;
+  bool boxCommentTextChange = false;
 
   DetailSubmission(this.items, this.index);
 
@@ -30,12 +31,14 @@ class _DetailSubmissionState extends State<DetailSubmission> {
     boxCommentController.dispose();
     super.dispose();
   }
+
   @override
   void initState() {
     // TODO: implement initState
     boxCommentController = TextEditingController();
     super.initState();
   }
+
   void voteFunction(int voteID) {
     setState(() {
       switch (voteID) {
@@ -215,7 +218,7 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                   return true;
                 },
                 child: GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     FocusScopeNode currentFocus = FocusScope.of(context);
 
                     if (!currentFocus.hasPrimaryFocus) {
@@ -234,7 +237,8 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                             Navigator.push(
                                 context,
                                 new MaterialPageRoute(
-                                    builder: (context) => GalleryPhotoZoom(url)));
+                                    builder: (context) =>
+                                        GalleryPhotoZoom(url)));
                           },
                           child: Stack(
                             children: [
@@ -255,8 +259,11 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                                       height: 45),
                                   left: 10),
                               Positioned(
-                                child: Image.asset("assets/launcher/ic_buaan.png",
-                                    width: 20, height: 20, color: Colors.white),
+                                child: Image.asset(
+                                    "assets/launcher/ic_buaan.png",
+                                    width: 20,
+                                    height: 20,
+                                    color: Colors.white),
                                 left: 17.5,
                                 top: 10,
                               ),
@@ -278,7 +285,8 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                               Positioned(
                                 child: Container(
                                     height: 55,
-                                    padding: EdgeInsets.only(left: 20, right: 20),
+                                    padding:
+                                        EdgeInsets.only(left: 20, right: 20),
                                     width: size.width,
                                     child: Row(children: [
                                       Flexible(
@@ -440,7 +448,8 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                                                           color: Colors.white),
                                                     )
                                                   ],
-                                                  mainAxisSize: MainAxisSize.max,
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
                                                   crossAxisAlignment:
@@ -565,9 +574,11 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                                                   "${widget.items.voted_id_1}",
                                                   style: TextStyle(
                                                       fontSize: 12,
-                                                      fontFamily: "RobotoMedium",
+                                                      fontFamily:
+                                                          "RobotoMedium",
                                                       color: Colors.black),
-                                                  overflow: TextOverflow.ellipsis,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                   maxLines: 1,
                                                 ))
                                               ],
@@ -618,9 +629,11 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                                                   "${widget.items.voted_id_2}",
                                                   style: TextStyle(
                                                       fontSize: 12,
-                                                      fontFamily: "RobotoMedium",
+                                                      fontFamily:
+                                                          "RobotoMedium",
                                                       color: Colors.black),
-                                                  overflow: TextOverflow.ellipsis,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                   maxLines: 1,
                                                 ))
                                               ],
@@ -668,9 +681,11 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                                                   "${widget.items.voted_id_3}",
                                                   style: TextStyle(
                                                       fontSize: 12,
-                                                      fontFamily: "RobotoMedium",
+                                                      fontFamily:
+                                                          "RobotoMedium",
                                                       color: Colors.black),
-                                                  overflow: TextOverflow.ellipsis,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                   maxLines: 1,
                                                 ))
                                               ],
@@ -717,9 +732,11 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                                                   "${widget.items.replies_count}",
                                                   style: TextStyle(
                                                       fontSize: 12,
-                                                      fontFamily: "RobotoMedium",
+                                                      fontFamily:
+                                                          "RobotoMedium",
                                                       color: Colors.black),
-                                                  overflow: TextOverflow.ellipsis,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                   maxLines: 1,
                                                 ))
                                               ],
@@ -760,6 +777,15 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                   children: [
                     Flexible(
                       child: TextField(
+                        onChanged: (text) {
+                          setState(() {
+                            if (text.isEmpty) {
+                              widget.boxCommentTextChange = false;
+                            } else {
+                              widget.boxCommentTextChange = true;
+                            }
+                          });
+                        },
                         controller: boxCommentController,
                         textCapitalization: TextCapitalization.sentences,
                         keyboardType: TextInputType.multiline,
@@ -775,26 +801,33 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                                 fontSize: 15, fontFamily: 'RobotoRegular'),
                             border: InputBorder.none),
                       ),
-                    ),GestureDetector(
-                      onTap: (){
-                        Fluttertoast.showToast(
-                            msg: boxCommentController.text,
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.BOTTOM,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: Colors.black45,
-                            textColor: Colors.white,
-                            fontSize: 16.0);
-                        boxCommentController.clear();
-                        FocusScopeNode currentFocus = FocusScope.of(context);
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        if (boxCommentController.text.isNotEmpty) {
+                          Fluttertoast.showToast(
+                              msg: boxCommentController.text,
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.black45,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                          boxCommentController.clear();
+                          FocusScopeNode currentFocus = FocusScope.of(context);
 
-                        if (!currentFocus.hasPrimaryFocus) {
-                          currentFocus.unfocus();
+                          setState(() {
+                            widget.boxCommentTextChange = false;
+                          });
+                          if (!currentFocus.hasPrimaryFocus) {
+                            currentFocus.unfocus();
+                          }
                         }
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(left: 5),
-                        child: Image.asset("assets/launcher/ic_right_arrow.png",color: HattoColors.colorTimeLine,width: 20,height: 20,),
+                        child:
+                            buildImageOntextChange(widget.boxCommentTextChange),
                       ),
                     )
                   ],
@@ -804,4 +837,18 @@ class _DetailSubmissionState extends State<DetailSubmission> {
           ],
         ));
   }
+
+  Image buildImageOntextChange(bool value) => value
+      ? Image.asset(
+          "assets/launcher/ic_right_arrow.png",
+          color: Colors.blue,
+          width: 20,
+          height: 20,
+        )
+      : Image.asset(
+          "assets/launcher/ic_right_arrow.png",
+          color: HattoColors.colorTimeLine,
+          width: 20,
+          height: 20,
+        );
 }
