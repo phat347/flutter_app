@@ -13,8 +13,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_gifimage/flutter_gifimage.dart';
 
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:async';
+
 class DetailSubmission extends StatefulWidget {
-  final Submission items;
+  Submission items;
   int index;
   bool boxCommentTextChange = false;
 
@@ -90,6 +94,18 @@ class _DetailSubmissionState extends State<DetailSubmission> {
       rankIcon.add(element["icon_url"]);
     });
     return rankIcon[rankId];
+  }
+
+  Future<void> getSubItemDetail() async {
+    var data_server = await http
+        .get("https://next.json-generator.com/api/json/get/41TUyej6d");
+    List<dynamic> json_data = jsonDecode(data_server.body);
+    List<Submission> data =
+    json_data.map((json_data) => Submission.fromJson(json_data)).toList();
+
+    setState(() {
+      widget.items = data[0];
+    });
   }
 
   @override
@@ -268,7 +284,7 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                                     width: double.infinity,
                                     height: size.height / 2,
                                     child: Hero(
-                                      tag: widget.items.forum_id,
+                                      tag: widget.index.toString()+widget.items.forum_id,
                                       child: CachedNetworkImage(
                                           imageUrl: widget.items.URL_img_id,
                                           fit: BoxFit.cover),

@@ -320,7 +320,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                         if (value != null) {
                                           Submission itemsDetailBack = value as Submission;
                                           setState(() {
-                                            itemSub = itemsDetailBack;
+                                            itemsData[index] = itemsDetailBack;
+//                                            itemSub = itemsDetailBack;
                                           });
                                         }
                                       });
@@ -385,7 +386,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     )
                                                   ],
                                                 ),
-                                                tag: itemSub.forum_id,
+                                                tag: index.toString()+itemSub.forum_id,
                                               ),
                                               SizedBox(width: 10),
                                               Padding(
