@@ -233,6 +233,14 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  CircleAvatar getAvatarLocation(Submission items) {
+    return CircleAvatar(
+        radius: 18,
+        backgroundImage:
+            CachedNetworkImageProvider(items.location_img_header_url),
+        backgroundColor: Colors.transparent);
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -318,14 +326,14 @@ class _MyHomePageState extends State<MyHomePage> {
                                                           itemSub, index)))
                                           .then((value) {
                                         if (value != null) {
-                                          Submission itemsDetailBack = value as Submission;
+                                          Submission itemsDetailBack =
+                                              value as Submission;
                                           setState(() {
                                             itemsData[index] = itemsDetailBack;
 //                                            itemSub = itemsDetailBack;
                                           });
                                         }
                                       });
-
                                     },
                                     child: Container(
                                         width: double.infinity,
@@ -386,7 +394,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     )
                                                   ],
                                                 ),
-                                                tag: index.toString()+itemSub.forum_id,
+                                                tag: index.toString() +
+                                                    itemSub.forum_id,
                                               ),
                                               SizedBox(width: 10),
                                               Padding(
@@ -547,6 +556,101 @@ class _MyHomePageState extends State<MyHomePage> {
                                                           fontFamily:
                                                               'RobotoMedium',
                                                           fontSize: 20),
+                                                    ),
+                                                    Visibility(
+                                                      visible:
+                                                          itemSub.location_name !=
+                                                                  null
+                                                              ? true
+                                                              : false,
+                                                      child: Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                top: 2),
+                                                        child: Row(
+//                                                    crossAxisAlignment:
+//                                                        CrossAxisAlignment
+//                                                            .start,
+                                                          mainAxisSize:
+                                                              MainAxisSize.max,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          children: <Widget>[
+                                                            getAvatarLocation(
+                                                                itemSub),
+                                                            SizedBox(width: 5),
+                                                            Flexible(
+                                                              child: Container(
+                                                                child: Column(
+                                                                    mainAxisSize:
+                                                                        MainAxisSize
+                                                                            .min,
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .stretch,
+                                                                    children: <
+                                                                        Widget>[
+                                                                      Row(
+                                                                        children: [
+                                                                          Flexible(
+                                                                            child:
+                                                                                Container(
+                                                                              child: Text(
+                                                                                itemSub.location_name ?? "",
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                                maxLines: 1,
+                                                                                style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          Visibility(
+                                                                            visible: itemSub.location_home_delivery != 0
+                                                                                ? true
+                                                                                : false,
+                                                                            child:
+                                                                                Row(
+                                                                              children: [
+                                                                                Container(width: 15, height: 15, child: Image.asset("assets/launcher/ic_bike_delivery_2x.png")),
+                                                                                SizedBox(width: 1),
+                                                                                Text(
+                                                                                  "Có giao hàng qua Hatto",
+                                                                                  overflow: TextOverflow.ellipsis,
+                                                                                  maxLines: 1,
+                                                                                  style: TextStyle(fontSize: 11, fontFamily: 'RobotoMedium', color: Colors.black),
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceBetween,
+                                                                      ),
+                                                                      SizedBox(
+                                                                          height:
+                                                                              5),
+                                                                      Row(
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.center,
+                                                                        children: <
+                                                                            Widget>[
+                                                                          Flexible(
+                                                                            child:
+                                                                                Text(
+                                                                              itemSub.location_address ?? "",
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                              maxLines: 2,
+                                                                              style: TextStyle(fontSize: 11, fontFamily: 'RobotoRegular', color: HattoColors.colorTimeLine),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      )
+                                                                    ]),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
                                                     ),
                                                     SizedBox(
                                                       height: 5,

@@ -97,6 +97,7 @@ flutter:
     - assets/launcher/ic_connections_2x.png
     - assets/launcher/ic_right_arrow.png
     - assets/launcher/indicatorloader.gif
+    - assets/launcher/ic_bike_delivery_2x.png
 
 
   fonts:
