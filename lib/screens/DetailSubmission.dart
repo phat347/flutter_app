@@ -240,7 +240,7 @@ class _DetailSubmissionState extends State<DetailSubmission> {
             enablePullDown: true,
             header: GifHeader1(),
             onRefresh: () async {
-              await Future.delayed(Duration(milliseconds: 1000));
+              await getSubItemDetail();
               _controller.refreshCompleted();
             },
             onLoading: () async {
