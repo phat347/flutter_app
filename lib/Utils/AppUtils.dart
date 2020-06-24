@@ -125,11 +125,11 @@ class AppUtils {
   static Image getSharingOptionIcon(int sharing_option,double width,double height) {
     switch (sharing_option) {
       case 1:
-        return Image.asset("assets/launcher/ic_friends.png",width: width,height: height,);
+        return Image.asset("assets/images/ic_friends.png",width: width,height: height,);
       case 2:
-        return Image.asset("assets/launcher/ic_option_user.png",width: width,height: height);
+        return Image.asset("assets/images/ic_option_user.png",width: width,height: height);
       default:
-        return Image.asset("assets/launcher/ic_public.png",width: width,height: height);
+        return Image.asset("assets/images/ic_public.png",width: width,height: height);
     }
   }
 

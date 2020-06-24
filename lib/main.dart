@@ -36,21 +36,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         fontFamily: 'Roboto',
         primarySwatch: Colors.red,
         primaryTextTheme: TextTheme(headline6: TextStyle(color: Colors.black)),
-        // This makes the visual density adapt to the platform that you run
-        // the app on. For desktop platforms, the controls will be smaller and
-        // closer together (more dense) than on mobile platforms.
         scaffoldBackgroundColor: Colors.white,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
@@ -78,7 +66,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final CategoriesScroller categoriesScroller = CategoriesScroller();
   ScrollController controller = ScrollController();
   bool closeTopContainer = false;
   double topContainer = 0;
@@ -137,18 +124,6 @@ class _MyHomePageState extends State<MyHomePage> {
     myFuture = getListSub();
   }
 
-  Future<List<NationFootballClub>> _getNationList() async {
-    var data = await http
-        .get("https://next.json-generator.com/api/json/get/4ykF0L9AH");
-    var json_data = jsonDecode(data.body);
-    List<NationFootballClub> listClub = [];
-    for (var i in json_data) {
-      NationFootballClub nationFootballClub = new NationFootballClub(
-          i["id"], i["name"], i["img"], i["df"], i["mf"], i["fw"]);
-      listClub.add(nationFootballClub);
-    }
-    return listClub;
-  }
 
   Future<List<Submission>> getListSub() async {
     var data_server = await http
@@ -164,20 +139,6 @@ class _MyHomePageState extends State<MyHomePage> {
     return data;
   }
 
-  Future<List<NationFootballClub>> _getNationListReload() async {
-    var data = await http
-        .get("https://next.json-generator.com/api/json/get/4ykF0L9AH");
-    var json_data = jsonDecode(data.body);
-    List<NationFootballClub> listClub = [];
-    for (var i in json_data) {
-      NationFootballClub nationFootballClub = new NationFootballClub(
-          i["id"], i["name"], i["img"], i["df"], i["mf"], i["fw"]);
-      listClub.add(nationFootballClub);
-    }
-    setState(() {
-      return listClub;
-    });
-  }
 
   void _incrementCounter() {
     setState(() {
@@ -234,11 +195,18 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   CircleAvatar getAvatarLocation(Submission items) {
-    return CircleAvatar(
-        radius: 18,
-        backgroundImage:
-            CachedNetworkImageProvider(items.location_img_header_url),
-        backgroundColor: Colors.transparent);
+    if (items.location_ownership != 0) {
+      return CircleAvatar(
+          radius: 18,
+          backgroundImage: AssetImage("assets/images/ic_stamp_geniune.png"),
+          backgroundColor: Colors.transparent);
+    } else {
+      return CircleAvatar(
+          radius: 18,
+          backgroundImage:
+              CachedNetworkImageProvider(items.location_img_header_url),
+          backgroundColor: Colors.transparent);
+    }
   }
 
   @override
@@ -290,19 +258,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     height: size.height,
                     child: Column(
                       children: <Widget>[
-//                        AnimatedOpacity(
-//                          duration: const Duration(milliseconds: 200),
-//                          opacity: closeTopContainer ? 0 : 1,
-//                          child: AnimatedContainer(
-//                              duration: const Duration(milliseconds: 200),
-//                              width: size.width,
-//                              alignment: Alignment.topCenter,
-//                              height: closeTopContainer ? 0 : categoryHeight,
-//                              child: categoriesScroller),
-//                        ),
                         Expanded(
                             child: ListView.builder(
-//                                controller: controller,
                                 itemCount: itemsData.length,
                                 physics: BouncingScrollPhysics(),
                                 itemBuilder: (context, index) {
@@ -379,13 +336,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                                         )),
                                                     Positioned(
                                                         child: Image.asset(
-                                                            "assets/launcher/ic_rectangle_green.png",
+                                                            "assets/images/ic_rectangle_green.png",
                                                             width: 35,
                                                             height: 45),
                                                         left: 10),
                                                     Positioned(
                                                       child: Image.asset(
-                                                          "assets/launcher/ic_buaan.png",
+                                                          "assets/images/ic_buaan.png",
                                                           width: 20,
                                                           height: 20,
                                                           color: Colors.white),
@@ -476,7 +433,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                           Container(
                                                                               width: 15,
                                                                               height: 15,
-                                                                              child: Image.asset("assets/launcher/ic_dua.png"))
+                                                                              child: Image.asset("assets/images/ic_dua.png"))
                                                                         ],
                                                                       ),
                                                                     ],
@@ -611,7 +568,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                             child:
                                                                                 Row(
                                                                               children: [
-                                                                                Container(width: 15, height: 15, child: Image.asset("assets/launcher/ic_bike_delivery_2x.png")),
+                                                                                Container(width: 15, height: 15, child: Image.asset("assets/images/ic_bike_delivery_2x.png")),
                                                                                 SizedBox(width: 1),
                                                                                 Text(
                                                                                   "Có giao hàng qua Hatto",
@@ -620,6 +577,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                                   style: TextStyle(fontSize: 11, fontFamily: 'RobotoMedium', color: Colors.black),
                                                                                 ),
                                                                               ],
+                                                                              crossAxisAlignment: CrossAxisAlignment.end,
                                                                             ),
                                                                           ),
                                                                         ],
@@ -681,7 +639,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                     .center,
                                                             children: [
                                                               Image.asset(
-                                                                  "assets/launcher/ic_clock.png",
+                                                                  "assets/images/ic_clock.png",
                                                                   width: 10,
                                                                   height: 10),
                                                               SizedBox(
@@ -768,7 +726,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                     children: [
                                                                       Image
                                                                           .asset(
-                                                                        "assets/launcher/emote_clap.png",
+                                                                        "assets/images/emote_clap.png",
                                                                         width:
                                                                             16,
                                                                         height:
@@ -804,7 +762,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                     children: [
                                                                       Image
                                                                           .asset(
-                                                                        "assets/launcher/emote_rose.png",
+                                                                        "assets/images/emote_rose.png",
                                                                         width:
                                                                             16,
                                                                         height:
@@ -840,7 +798,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                     children: [
                                                                       Image
                                                                           .asset(
-                                                                        "assets/launcher/emote_suprise.png",
+                                                                        "assets/images/emote_suprise.png",
                                                                         width:
                                                                             16,
                                                                         height:
@@ -876,7 +834,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                   .end,
                                                           children: [
                                                             Image.asset(
-                                                              "assets/launcher/ic_favorite_2x.png",
+                                                              "assets/images/ic_favorite_2x.png",
                                                               width: 16,
                                                               height: 16,
                                                               color:
@@ -896,7 +854,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                         .black)),
                                                             SizedBox(width: 5),
                                                             Image.asset(
-                                                              "assets/launcher/ic_chat_2x.png",
+                                                              "assets/images/ic_chat_2x.png",
                                                               width: 16,
                                                               height: 16,
                                                               color:
@@ -946,95 +904,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                 }
               }),
-//        child: _myListView(context),
-          // Center is a layout widget. It takes a single child and positions it
-          // in the middle of the parent.
-//        child: Column(
-//          // Column is also a layout widget. It takes a list of children and
-//          // arranges them vertically. By default, it sizes itself to fit its
-//          // children horizontally, and tries to be as tall as its parent.
-//          //
-//          // Invoke "debug painting" (press "p" in the console, choose the
-//          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-//          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-//          // to see the wireframe for each widget.
-//          //
-//          // Column has various properties to control how it sizes itself and
-//          // how it positions its children. Here we use mainAxisAlignment to
-//          // center the children vertically; the main axis here is the vertical
-//          // axis because Columns are vertical (the cross axis would be
-//          // horizontal).
-//          mainAxisAlignment: MainAxisAlignment.center,
-//          children: <Widget>[
-//            Text(
-//              'Số chẵn màu xanh, Số lẻ màu đỏ',
-//            ),
-//            Text.rich(
-//              TextSpan(
-//                text: 'Số đếm hiện tại: ', // default text style
-//                children: <TextSpan>[
-//                  TextSpan(text: ' $_counter ',
-//                  style: TextStyle(fontStyle: FontStyle.italic,
-//                      color: getMyColor(_counter),fontSize: 20,
-//                      fontWeight: FontWeight.bold)),
-//                ],
-//              ),
-//            ),
-//            SizedBox(height: 20),
-//            Column(mainAxisAlignment: MainAxisAlignment.center,children: <Widget>[
-//              Row(
-//                mainAxisAlignment: MainAxisAlignment.center,
-//                children: <Widget>[
-//                  RaisedButton(
-//                    shape: RoundedRectangleBorder(
-//                        borderRadius: BorderRadius.circular(18.0),
-//                        side: BorderSide(color: Colors.red)),
-//                    onPressed: () {_decreaseCounter();},
-//                    color: Colors.red,
-//                    textColor: Colors.white,
-//                    child: Text("TRỪ".toUpperCase(),
-//                        style: TextStyle(fontSize: 14)),
-//                  ),
-//                  SizedBox(width: 10),
-//                  RaisedButton(
-//                    shape: RoundedRectangleBorder(
-//                        borderRadius: BorderRadius.circular(18.0),
-//                        side: BorderSide(color: Colors.red)),
-//                    onPressed: () {_incrementCounter();},
-//                    color: Colors.red,
-//                    textColor: Colors.white,
-//                    child: Text("Cộng".toUpperCase(),
-//                        style: TextStyle(fontSize: 14)),
-//                  )
-//                ],
-//              ),
-//              FlatButton(
-//                shape: RoundedRectangleBorder(
-//                    borderRadius: BorderRadius.circular(18.0),
-//                    side: BorderSide(color: Colors.red)),
-//                color: Colors.white,
-//                textColor: Colors.red,
-//                padding: EdgeInsets.only(left: 30,top: 8,right: 30,bottom: 8),
-//                onPressed: () {_resetCounter();},
-//                child: Text(
-//                  "RESET".toUpperCase(),
-//                  style: TextStyle(
-//                    fontSize: 14.0,
-//                  ),
-//                ),
-//              ),
-//            ])
-//
-//          ],
-//        ),
         ),
         bottomNavigationBar: BottomNavigationBar(
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               activeIcon: ImageIcon(
-                  AssetImage("assets/launcher/combinedshape.png"),
+                  AssetImage("assets/images/combinedshape.png"),
                   color: HattoColors.colorPrimary),
-              icon: ImageIcon(AssetImage("assets/launcher/combinedshape.png"),
+              icon: ImageIcon(AssetImage("assets/images/combinedshape.png"),
                   color: Colors.grey),
               title: Padding(
                 padding: EdgeInsets.all(0),
@@ -1043,9 +920,9 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             BottomNavigationBarItem(
               activeIcon: ImageIcon(
-                  AssetImage("assets/launcher/menu_khoqua.png"),
+                  AssetImage("assets/images/menu_khoqua.png"),
                   color: HattoColors.colorPrimary),
-              icon: ImageIcon(AssetImage("assets/launcher/menu_khoqua.png"),
+              icon: ImageIcon(AssetImage("assets/images/menu_khoqua.png"),
                   color: Colors.grey),
               title: Padding(
                 padding: EdgeInsets.all(0),
@@ -1061,9 +938,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             BottomNavigationBarItem(
-              activeIcon: ImageIcon(AssetImage("assets/launcher/ic_bell_2.png"),
+              activeIcon: ImageIcon(AssetImage("assets/images/ic_bell_2.png"),
                   color: HattoColors.colorPrimary),
-              icon: ImageIcon(AssetImage("assets/launcher/ic_bell_2.png"),
+              icon: ImageIcon(AssetImage("assets/images/ic_bell_2.png"),
                   color: Colors.grey),
               title: Padding(
                 padding: EdgeInsets.all(0),
@@ -1086,163 +963,8 @@ class _MyHomePageState extends State<MyHomePage> {
           currentIndex: _selectedIndex,
           selectedItemColor: HattoColors.colorPrimary,
           onTap: _onItemTapped,
-        )
-//      floatingActionButton: FloatingActionButton(
-//        onPressed: _incrementCounter,
-//        tooltip: 'Tăng số đếm',
-//        child: Icon(Icons.add),
-//      ), // This trailing comma makes auto-formatting nicer for build methods.
-        );
+        ));
   }
-
-  Widget _myListView(BuildContext context) {
-    // backing data
-    final europeanCountries = [
-      'Albania',
-      'Andorra',
-      'Armenia',
-      'Austria',
-      'Azerbaijan',
-      'Belarus',
-      'Belgium',
-      'Bosnia and Herzegovina',
-      'Bulgaria',
-      'Croatia',
-      'Cyprus',
-      'Czech Republic',
-      'Denmark',
-      'Estonia',
-      'Finland',
-      'France',
-      'Georgia',
-      'Germany',
-      'Greece',
-      'Hungary',
-      'Iceland',
-      'Ireland',
-      'Italy',
-      'Kazakhstan',
-      'Kosovo',
-      'Latvia',
-      'Liechtenstein',
-      'Lithuania',
-      'Luxembourg',
-      'Macedonia',
-      'Malta',
-      'Moldova',
-      'Monaco',
-      'Montenegro',
-      'Netherlands',
-      'Norway',
-      'Poland',
-      'Portugal',
-      'Romania',
-      'Russia',
-      'San Marino',
-      'Serbia',
-      'Slovakia',
-      'Slovenia',
-      'Spain',
-      'Sweden',
-      'Switzerland',
-      'Turkey',
-      'Ukraine',
-      'United Kingdom',
-      'Vatican City'
-    ];
-
-    return ListView.separated(
-        itemCount: europeanCountries.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            leading: Icon(Icons.wb_sunny),
-            trailing: Icon(Icons.keyboard_arrow_right),
-            onTap: () {
-              Fluttertoast.showToast(
-                  msg: europeanCountries[index],
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.BOTTOM,
-                  timeInSecForIosWeb: 1,
-                  backgroundColor: Colors.black45,
-                  textColor: Colors.white,
-                  fontSize: 16.0);
-            },
-            title: Text(europeanCountries[index]),
-          );
-        },
-        separatorBuilder: (context, index) {
-          return Divider(
-            thickness: 0.5,
-            height: 1,
-          );
-        });
-  }
-}
-
-class DetailNation extends StatelessWidget {
-  final NationFootballClub items;
-
-  DetailNation(this.items);
-
-  void showToast(String msg) {
-    Fluttertoast.showToast(
-        msg: msg,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.black45,
-        textColor: Colors.white,
-        fontSize: 16.0);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        iconTheme: IconThemeData(
-          color: Colors.black, //change your color here
-        ),
-        brightness: Brightness.light,
-        backgroundColor: Colors.white,
-        title: Text(items.name),
-      ),
-      body: Center(
-        child: Hero(
-            tag: items.id,
-            child: CircleAvatar(
-                radius: 100,
-                backgroundImage: NetworkImage(items.img_url),
-                backgroundColor: Colors.transparent)),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showToast(items.name.toString() +
-              "\n" +
-              "Tấn công: " +
-              items.attack.toString() +
-              ", Tiền vệ: " +
-              items.midfield.toString() +
-              ", Phòng thủ: " +
-              items.defend.toString());
-        },
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
-  }
-}
-
-class NationFootballClub {
-  final int id;
-  final String name;
-  final String img_url;
-  final int defend;
-  final int midfield;
-  final int attack;
-
-  NationFootballClub(this.id, this.name, this.img_url, this.defend,
-      this.midfield, this.attack);
 }
 
 class HexColor extends Color {
@@ -1255,121 +977,4 @@ class HexColor extends Color {
   }
 
   HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
-}
-
-class CategoriesScroller extends StatelessWidget {
-  const CategoriesScroller();
-
-  @override
-  Widget build(BuildContext context) {
-    final double categoryHeight =
-        MediaQuery.of(context).size.height * 0.30 - 50;
-    return SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
-      scrollDirection: Axis.horizontal,
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-        child: FittedBox(
-          fit: BoxFit.fill,
-          alignment: Alignment.topCenter,
-          child: Row(
-            children: <Widget>[
-              Container(
-                width: 150,
-                margin: EdgeInsets.only(right: 20),
-                height: categoryHeight,
-                decoration: BoxDecoration(
-                    color: Colors.orange.shade400,
-                    borderRadius: BorderRadius.all(Radius.circular(20.0))),
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        "Most\nFavorites",
-                        style: TextStyle(
-                            fontSize: 25,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        "20 Items",
-                        style: TextStyle(fontSize: 16, color: Colors.white),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                width: 150,
-                margin: EdgeInsets.only(right: 20),
-                height: categoryHeight,
-                decoration: BoxDecoration(
-                    color: Colors.blue.shade400,
-                    borderRadius: BorderRadius.all(Radius.circular(20.0))),
-                child: Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          "Newest",
-                          style: TextStyle(
-                              fontSize: 25,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          "20 Items",
-                          style: TextStyle(fontSize: 16, color: Colors.white),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-                width: 150,
-                margin: EdgeInsets.only(right: 20),
-                height: categoryHeight,
-                decoration: BoxDecoration(
-                    color: Colors.lightBlueAccent.shade400,
-                    borderRadius: BorderRadius.all(Radius.circular(20.0))),
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        "Super\nSaving",
-                        style: TextStyle(
-                            fontSize: 25,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        "20 Items",
-                        style: TextStyle(fontSize: 16, color: Colors.white),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 }

@@ -223,7 +223,7 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                     Container(
                         width: 15,
                         height: 15,
-                        child: Image.asset("assets/launcher/ic_dua.png"))
+                        child: Image.asset("assets/images/ic_dua.png"))
                   ],
                 ),
               )
@@ -292,13 +292,13 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                                   ),
                                   Positioned(
                                       child: Image.asset(
-                                          "assets/launcher/ic_rectangle_green.png",
+                                          "assets/images/ic_rectangle_green.png",
                                           width: 35,
                                           height: 45),
                                       left: 10),
                                   Positioned(
                                     child: Image.asset(
-                                        "assets/launcher/ic_buaan.png",
+                                        "assets/images/ic_buaan.png",
                                         width: 20,
                                         height: 20,
                                         color: Colors.white),
@@ -342,7 +342,7 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                                                   child: Container(
                                                     alignment: Alignment.center,
                                                     child: Image.asset(
-                                                        "assets/launcher/ic_couple.png",
+                                                        "assets/images/ic_couple.png",
                                                         width: 20,
                                                         height: 20),
                                                   ),
@@ -405,7 +405,7 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                                                   child: Container(
                                                     alignment: Alignment.center,
                                                     child: Image.asset(
-                                                        "assets/launcher/ic_connections_2x.png",
+                                                        "assets/images/ic_connections_2x.png",
                                                         width: 20,
                                                         height: 20),
                                                   ),
@@ -467,7 +467,7 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                                                   child: Container(
                                                     alignment: Alignment.center,
                                                     child: Image.asset(
-                                                        "assets/launcher/ic_dua.png",
+                                                        "assets/images/ic_dua.png",
                                                         width: 20,
                                                         height: 20),
                                                   ),
@@ -570,7 +570,7 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                                           CrossAxisAlignment.center,
                                       children: [
                                         Image.asset(
-                                            "assets/launcher/ic_clock.png",
+                                            "assets/images/ic_clock.png",
                                             width: 10,
                                             height: 10),
                                         SizedBox(width: 2),
@@ -623,7 +623,7 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                                                       MainAxisAlignment.center,
                                                   children: [
                                                     Image.asset(
-                                                      "assets/launcher/emote_clap.png",
+                                                      "assets/images/emote_clap.png",
                                                       width: 20,
                                                       height: 20,
                                                     ),
@@ -679,7 +679,7 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                                                       MainAxisAlignment.center,
                                                   children: [
                                                     Image.asset(
-                                                      "assets/launcher/emote_rose.png",
+                                                      "assets/images/emote_rose.png",
                                                       width: 20,
                                                       height: 20,
                                                     ),
@@ -732,7 +732,7 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                                                       MainAxisAlignment.center,
                                                   children: [
                                                     Image.asset(
-                                                      "assets/launcher/emote_suprise.png",
+                                                      "assets/images/emote_suprise.png",
                                                       width: 20,
                                                       height: 20,
                                                     ),
@@ -784,7 +784,7 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                                                       MainAxisAlignment.center,
                                                   children: [
                                                     Image.asset(
-                                                      "assets/launcher/ic_chat_2x.png",
+                                                      "assets/images/ic_chat_2x.png",
                                                       width: 20,
                                                       height: 20,
                                                     ),
@@ -907,13 +907,13 @@ class _DetailSubmissionState extends State<DetailSubmission> {
 
   Image buildImageOntextChange(bool value) => value
       ? Image.asset(
-          "assets/launcher/ic_right_arrow.png",
+          "assets/images/ic_right_arrow.png",
           color: Colors.blue,
           width: 20,
           height: 20,
         )
       : Image.asset(
-          "assets/launcher/ic_right_arrow.png",
+          "assets/images/ic_right_arrow.png",
           color: HattoColors.colorTimeLine,
           width: 20,
           height: 20,
@@ -975,7 +975,7 @@ class GifHeader1State extends RefreshIndicatorState<GifHeader1>
     final Size size = MediaQuery.of(context).size;
     // TODO: implement buildContent
     return GifImage(
-      image: AssetImage("assets/launcher/indicatorloader.gif"),
+      image: AssetImage("assets/images/indicatorloader.gif"),
       controller: _gifController,
       height: 80.0,
       width: size.width,
@@ -1024,7 +1024,7 @@ class _GifFooter1State extends State<GifFooter1>
       height: 80,
       builder: (context, mode) {
         return GifImage(
-          image: AssetImage("assets/launcher/indicatorloader.gif"),
+          image: AssetImage("assets/images/indicatorloader.gif"),
           controller: _gifController,
           height: 80.0,
           width: 537,

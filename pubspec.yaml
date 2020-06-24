@@ -76,28 +76,29 @@ flutter:
 
 
   assets:
-    - assets/launcher/ic_bell_2.png
-    - assets/launcher/menu_khoqua.png
-    - assets/launcher/combinedshape.png
-    - assets/launcher/ic_dua.png
-    - assets/launcher/ic_rectangle_green.png
-    - assets/launcher/ic_buaan.png
-    - assets/launcher/ic_public.png
-    - assets/launcher/ic_option_user.png
-    - assets/launcher/ic_friends.png
-    - assets/launcher/ic_clock.png
-    - assets/launcher/emote_chicken.png
-    - assets/launcher/emote_clap.png
-    - assets/launcher/emote_rose.png
-    - assets/launcher/emote_suprise.png
-    - assets/launcher/emote_troll.png
-    - assets/launcher/ic_favorite_2x.png
-    - assets/launcher/ic_chat_2x.png
-    - assets/launcher/ic_couple.png
-    - assets/launcher/ic_connections_2x.png
-    - assets/launcher/ic_right_arrow.png
-    - assets/launcher/indicatorloader.gif
-    - assets/launcher/ic_bike_delivery_2x.png
+    - assets/images/ic_bell_2.png
+    - assets/images/menu_khoqua.png
+    - assets/images/combinedshape.png
+    - assets/images/ic_dua.png
+    - assets/images/ic_rectangle_green.png
+    - assets/images/ic_buaan.png
+    - assets/images/ic_public.png
+    - assets/images/ic_option_user.png
+    - assets/images/ic_friends.png
+    - assets/images/ic_clock.png
+    - assets/images/emote_chicken.png
+    - assets/images/emote_clap.png
+    - assets/images/emote_rose.png
+    - assets/images/emote_suprise.png
+    - assets/images/emote_troll.png
+    - assets/images/ic_favorite_2x.png
+    - assets/images/ic_chat_2x.png
+    - assets/images/ic_couple.png
+    - assets/images/ic_connections_2x.png
+    - assets/images/ic_right_arrow.png
+    - assets/images/indicatorloader.gif
+    - assets/images/ic_bike_delivery_2x.png
+    - assets/images/ic_stamp_geniune.png
 
 
   fonts:
