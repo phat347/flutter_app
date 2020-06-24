@@ -15,5 +15,5 @@ abstract class ApiService {
     return ApiService(dio);
   }
   @GET("/api/json/get/41TUyej6d")
-  Future<List<Submission>> getDetailSubmission();
+  Future<Submission> getDetailSubmission();
 }

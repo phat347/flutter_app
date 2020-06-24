@@ -21,7 +21,7 @@ class _ApiService implements ApiService {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    final Response<List<dynamic>> _result = await _dio.request(
+    final Response<Map<String, dynamic>> _result = await _dio.request(
         '/api/json/get/41TUyej6d',
         queryParameters: queryParameters,
         options: RequestOptions(
@@ -30,9 +30,7 @@ class _ApiService implements ApiService {
             extra: _extra,
             baseUrl: baseUrl),
         data: _data);
-    var value = _result.data
-        .map((dynamic i) => Submission.fromJson(i as Map<String, dynamic>))
-        .toList();
+    final value = Submission.fromJson(_result.data);
     return value;
   }
 }

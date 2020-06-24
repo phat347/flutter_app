@@ -114,11 +114,11 @@ class _DetailSubmissionState extends State<DetailSubmission> {
     });
   }
 
-  getSubmissionDetail()  {
-    widget.apiService.getDetailSubmission().then((submissionItem){
+  getSubmissionDetail() async{
+    await widget.apiService.getDetailSubmission().then((submissionItem){
       widget.logger.i(submissionItem);
       setState(() {
-        widget.items = submissionItem[0];
+        widget.items = submissionItem;
       });
     });
   }
