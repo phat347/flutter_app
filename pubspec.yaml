@@ -31,6 +31,7 @@ dependencies:
   pretty_dio_logger: ^1.1.1
   retrofit_generator: ^1.3.7+2
   dio: ^3.0.9
+  bubble_tab_indicator: ^0.1.4
   intl: ^0.16.1
   fluttertoast: ^4.0.0
   flutter:
@@ -105,6 +106,9 @@ flutter:
     - assets/images/indicatorloader.gif
     - assets/images/ic_bike_delivery_2x.png
     - assets/images/ic_stamp_geniune.png
+    - assets/images/ic_tab_special_black.png
+    - assets/images/ic_tab_location_black.png
+    - assets/images/ic_tab_submission_black.png
 
 
   fonts:
