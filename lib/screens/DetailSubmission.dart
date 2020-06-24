@@ -8,7 +8,9 @@ import 'package:flutterapp/Utils/AppUtils.dart';
 import 'package:flutterapp/models/Submission.dart';
 import 'package:flutterapp/rank_master.dart';
 import 'package:flutterapp/screens/GalleryPhotoZoom.dart';
+import 'package:flutterapp/services/ApiService.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:logger/logger.dart';
 
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_gifimage/flutter_gifimage.dart';
@@ -21,6 +23,10 @@ class DetailSubmission extends StatefulWidget {
   Submission items;
   int index;
   bool boxCommentTextChange = false;
+  Logger logger = Logger();
+
+  ApiService apiService = ApiService.create();
+
 
   DetailSubmission(this.items, this.index);
 
@@ -105,6 +111,15 @@ class _DetailSubmissionState extends State<DetailSubmission> {
 
     setState(() {
       widget.items = data[0];
+    });
+  }
+
+  getSubmissionDetail()  {
+    widget.apiService.getDetailSubmission().then((submissionItem){
+      widget.logger.i(submissionItem);
+      setState(() {
+        widget.items = submissionItem[0];
+      });
     });
   }
 
@@ -240,7 +255,7 @@ class _DetailSubmissionState extends State<DetailSubmission> {
             enablePullDown: true,
             header: GifHeader1(),
             onRefresh: () async {
-              await getSubItemDetail();
+              await getSubmissionDetail();
               _controller.refreshCompleted();
             },
             onLoading: () async {
