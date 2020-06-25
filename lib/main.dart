@@ -22,6 +22,7 @@ import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'HattoColors.dart';
+import 'package:loadmore/loadmore.dart';
 
 void main() {
   runApp(MyApp());
@@ -70,11 +71,14 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin{
+class _MyHomePageState extends State<MyHomePage>
+    with SingleTickerProviderStateMixin {
   ScrollController controller = ScrollController();
   TabController tabBarController;
   bool closeTopContainer = false;
   double topContainer = 0;
+
+  bool flagLoadmore = false;
 
   List<Submission> listSpecialSubmission = [];
   List<Submission> listSubmission = [];
@@ -133,22 +137,22 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   @override
   void initState() {
     super.initState();
-//    controller.addListener(() {
-//      double value = controller.offset / 119;
-//
-//      setState(() {
-//        topContainer = value;
-//        closeTopContainer = controller.offset > 50;
-//      });
-//    });
+    controller.addListener(() {
+      if (controller.position.pixels == controller.position.maxScrollExtent) {
+        //sự kiện kéo xuống cuối listview
+//        loadMoreSubmission();
+      }
+    });
+
     specialSubmissionFuture = getListSpecialSubmission();
     submissionFuture = getListSubmission();
-    tabBarController = new TabController(initialIndex: 1,length: 3, vsync: this);
+    tabBarController =
+        new TabController(initialIndex: 1, length: 3, vsync: this);
     tabBarController.addListener(_handleTabSelection);
   }
 
-  Future<List<Submission>> getListSubmission() async{
-    await widget.apiService.getListSubmission().then((submissionItem){
+  Future<List<Submission>> getListSubmission() async {
+    await widget.apiService.getListSubmission().then((submissionItem) {
       widget.logger.i(submissionItem);
       setState(() {
         listSubmission = submissionItem;
@@ -157,8 +161,8 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     return listSubmission;
   }
 
-  Future<List<Submission>> getListSpecialSubmission() async{
-    await widget.apiService.getListSpecialSubmission().then((submissionItem){
+  Future<List<Submission>> getListSpecialSubmission() async {
+    await widget.apiService.getListSpecialSubmission().then((submissionItem) {
       widget.logger.i(submissionItem);
       setState(() {
         listSpecialSubmission = submissionItem;
@@ -167,11 +171,21 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     return listSpecialSubmission;
   }
 
+  Future<bool> loadMoreSubmission() async {
+    await widget.apiService.getListSpecialSubmission().then((submissionItem) {
+      widget.logger.i(submissionItem);
+      setState(() {
+        listSubmission.addAll(submissionItem);
+      });
+    });
+    return true;
+  }
 
   @override
   void dispose() {
     // TODO: implement dispose
     tabBarController.dispose();
+    controller.dispose();
     super.dispose();
   }
 
@@ -301,14 +315,18 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Image.asset("assets/images/ic_tab_special_black.png",color: tabBarController.index == 0
-                        ? Colors.white
-                        : HattoColors.colorTimeLine,width: 20,height: 20,),
+                    Image.asset(
+                      "assets/images/ic_tab_special_black.png",
+                      color: tabBarController.index == 0
+                          ? Colors.white
+                          : HattoColors.colorTimeLine,
+                      width: 20,
+                      height: 20,
+                    ),
                     SizedBox(width: 5),
                     Text(
                       "Đặc sắc    ".toUpperCase(),
-                      style:
-                          TextStyle(fontFamily: "RobotoBold", fontSize: 14),
+                      style: TextStyle(fontFamily: "RobotoBold", fontSize: 14),
                     )
                   ],
                 ),
@@ -316,16 +334,20 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
               Tab(
                 child: Row(
                   children: [
-                    Image.asset("assets/images/ic_tab_submission_black.png",color: tabBarController.index == 1
-                        ? Colors.white
-                        : HattoColors.colorTimeLine,width: 20,height: 20,),
+                    Image.asset(
+                      "assets/images/ic_tab_submission_black.png",
+                      color: tabBarController.index == 1
+                          ? Colors.white
+                          : HattoColors.colorTimeLine,
+                      width: 20,
+                      height: 20,
+                    ),
                     SizedBox(
                       width: 5,
                     ),
                     Text(
                       "Món ăn    ".toUpperCase(),
-                      style:
-                          TextStyle(fontFamily: "RobotoBold", fontSize: 14),
+                      style: TextStyle(fontFamily: "RobotoBold", fontSize: 14),
                     )
                   ],
                 ),
@@ -333,16 +355,20 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
               Tab(
                 child: Row(
                   children: [
-                    Image.asset("assets/images/ic_tab_location_black.png",color: tabBarController.index == 2
-                        ? Colors.white
-                        : HattoColors.colorTimeLine,width: 20,height: 20,),
+                    Image.asset(
+                      "assets/images/ic_tab_location_black.png",
+                      color: tabBarController.index == 2
+                          ? Colors.white
+                          : HattoColors.colorTimeLine,
+                      width: 20,
+                      height: 20,
+                    ),
                     SizedBox(
                       width: 5,
                     ),
                     Text(
                       "Địa điểm    ".toUpperCase(),
-                      style:
-                          TextStyle(fontFamily: "RobotoBold", fontSize: 14),
+                      style: TextStyle(fontFamily: "RobotoBold", fontSize: 14),
                     )
                   ],
                 ),
@@ -379,7 +405,8 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                     itemCount: listSpecialSubmission.length,
                                     physics: BouncingScrollPhysics(),
                                     itemBuilder: (context, index) {
-                                      var itemSub = listSpecialSubmission[index];
+                                      var itemSub =
+                                          listSpecialSubmission[index];
                                       double scale = 1.0;
                                       if (topContainer > 0.5) {
                                         scale = index + 0.5 - topContainer;
@@ -396,8 +423,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                   new MaterialPageRoute(
                                                       builder: (context) =>
                                                           DetailSubmission(
-                                                              itemSub,
-                                                              index)))
+                                                              itemSub, index)))
                                               .then((value) {
                                             if (value != null) {
                                               Submission itemsDetailBack =
@@ -412,15 +438,11 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                         },
                                         child: Container(
                                             width: double.infinity,
-                                            margin:
-                                                const EdgeInsets.symmetric(
-                                                    horizontal: 20,
-                                                    vertical: 10),
+                                            margin: const EdgeInsets.symmetric(
+                                                horizontal: 20, vertical: 10),
                                             decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.all(
-                                                        Radius.circular(
-                                                            10.0)),
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(10.0)),
                                                 color: Colors.white,
                                                 boxShadow: [
                                                   BoxShadow(
@@ -467,8 +489,8 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                               "assets/images/ic_buaan.png",
                                                               width: 20,
                                                               height: 20,
-                                                              color: Colors
-                                                                  .white),
+                                                              color:
+                                                                  Colors.white),
                                                           left: 17.5,
                                                           top: 10,
                                                         )
@@ -495,8 +517,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 //                                                        CrossAxisAlignment
 //                                                            .start,
                                                           mainAxisSize:
-                                                              MainAxisSize
-                                                                  .max,
+                                                              MainAxisSize.max,
                                                           mainAxisAlignment:
                                                               MainAxisAlignment
                                                                   .start,
@@ -506,13 +527,12 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                                         .toString() +
                                                                     itemSub
                                                                         .portrait_url,
-                                                                child: getAvatarUser(
-                                                                    itemSub)),
-                                                            SizedBox(
-                                                                width: 5),
+                                                                child:
+                                                                    getAvatarUser(
+                                                                        itemSub)),
+                                                            SizedBox(width: 5),
                                                             Flexible(
-                                                              child:
-                                                                  Container(
+                                                              child: Container(
                                                                 child: Column(
                                                                     mainAxisSize:
                                                                         MainAxisSize
@@ -525,7 +545,8 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                                       Row(
                                                                         children: [
                                                                           Flexible(
-                                                                            child: Container(
+                                                                            child:
+                                                                                Container(
                                                                               child: Text(
                                                                                 itemSub.user_name,
                                                                                 overflow: TextOverflow.ellipsis,
@@ -559,7 +580,9 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                                         children: <
                                                                             Widget>[
                                                                           Visibility(
-                                                                            visible: itemSub.isVipCheck() ? false : true,
+                                                                            visible: itemSub.isVipCheck()
+                                                                                ? false
+                                                                                : true,
                                                                             child: Container(
                                                                                 decoration: new BoxDecoration(color: HattoColors.colorPrimary, borderRadius: new BorderRadius.all(Radius.circular(8))),
                                                                                 child: Padding(
@@ -572,19 +595,26 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                                                   ),
                                                                                 )),
                                                                           ),
-                                                                          SizedBox(width: 3),
+                                                                          SizedBox(
+                                                                              width: 3),
                                                                           Container(
                                                                               height: 15,
                                                                               width: 15,
                                                                               decoration: BoxDecoration(
                                                                                 image: DecorationImage(fit: BoxFit.cover, image: CachedNetworkImageProvider(getRankIcon(itemSub.rank_id))),
                                                                               )),
-                                                                          SizedBox(width: 3),
+                                                                          SizedBox(
+                                                                              width: 3),
                                                                           Text(
                                                                             itemSub.rank_desc,
-                                                                            overflow: TextOverflow.ellipsis,
-                                                                            maxLines: 1,
-                                                                            style: TextStyle(fontSize: 11, fontFamily: 'RobotoRegular', color: HattoColors.colorTimeLine),
+                                                                            overflow:
+                                                                                TextOverflow.ellipsis,
+                                                                            maxLines:
+                                                                                1,
+                                                                            style: TextStyle(
+                                                                                fontSize: 11,
+                                                                                fontFamily: 'RobotoRegular',
+                                                                                color: HattoColors.colorTimeLine),
                                                                           ),
                                                                         ],
                                                                       )
@@ -595,9 +625,8 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                         ),
                                                         Text(
                                                           itemSub.class_desc,
-                                                          overflow:
-                                                              TextOverflow
-                                                                  .ellipsis,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
                                                           maxLines: 2,
                                                           style: const TextStyle(
                                                               fontFamily:
@@ -611,8 +640,9 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                                   ? true
                                                                   : false,
                                                           child: Padding(
-                                                            padding: EdgeInsets
-                                                                .only(top: 2),
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                                    top: 2),
                                                             child: Row(
 //                                                    crossAxisAlignment:
 //                                                        CrossAxisAlignment
@@ -633,10 +663,12 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                                   child:
                                                                       Container(
                                                                     child: Column(
-                                                                        mainAxisSize: MainAxisSize
-                                                                            .min,
-                                                                        crossAxisAlignment: CrossAxisAlignment
-                                                                            .stretch,
+                                                                        mainAxisSize:
+                                                                            MainAxisSize
+                                                                                .min,
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment
+                                                                                .stretch,
                                                                         children: <
                                                                             Widget>[
                                                                           Row(
@@ -668,11 +700,14 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                                                 ),
                                                                               ),
                                                                             ],
-                                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                            mainAxisAlignment:
+                                                                                MainAxisAlignment.spaceBetween,
                                                                           ),
-                                                                          SizedBox(height: 5),
+                                                                          SizedBox(
+                                                                              height: 5),
                                                                           Row(
-                                                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                                                            crossAxisAlignment:
+                                                                                CrossAxisAlignment.center,
                                                                             children: <Widget>[
                                                                               Flexible(
                                                                                 child: Text(
@@ -696,16 +731,15 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                         ),
                                                         Text(
                                                           itemSub.extra_desc,
-                                                          overflow:
-                                                              TextOverflow
-                                                                  .ellipsis,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
                                                           maxLines: 3,
                                                           style: TextStyle(
                                                               fontSize: 12,
                                                               fontFamily:
                                                                   'RobotoRegular',
-                                                              color: Colors
-                                                                  .black),
+                                                              color:
+                                                                  Colors.black),
                                                         ),
                                                         SizedBox(
                                                           height: 5,
@@ -723,13 +757,11 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                                 children: [
                                                                   Image.asset(
                                                                       "assets/images/ic_clock.png",
-                                                                      width:
-                                                                          10,
+                                                                      width: 10,
                                                                       height:
                                                                           10),
                                                                   SizedBox(
-                                                                      width:
-                                                                          2),
+                                                                      width: 2),
                                                                   Text(
                                                                     AppUtils.getDateTimeAgo(
                                                                         itemSub
@@ -737,19 +769,17 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                                     overflow:
                                                                         TextOverflow
                                                                             .ellipsis,
-                                                                    maxLines:
-                                                                        1,
+                                                                    maxLines: 1,
                                                                     style: TextStyle(
                                                                         fontSize:
                                                                             12,
                                                                         fontFamily:
                                                                             'RobotoRegular',
-                                                                        color:
-                                                                            HattoColors.colorTimeLine),
+                                                                        color: HattoColors
+                                                                            .colorTimeLine),
                                                                   ),
                                                                   SizedBox(
-                                                                      width:
-                                                                          5),
+                                                                      width: 5),
                                                                   AppUtils.getSharingOptionIcon(
                                                                       itemSub
                                                                           .sharing_option,
@@ -770,10 +800,14 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                                             .total_unique_views
                                                                             .toString(),
                                                                         style: TextStyle(
-                                                                            fontSize: 13,
-                                                                            fontFamily: 'RobotoBold',
-                                                                            color: Colors.black),
-                                                                        children: <TextSpan>[
+                                                                            fontSize:
+                                                                                13,
+                                                                            fontFamily:
+                                                                                'RobotoBold',
+                                                                            color: Colors
+                                                                                .black),
+                                                                        children: <
+                                                                            TextSpan>[
                                                                       TextSpan(
                                                                           text:
                                                                               " lượt xem",
@@ -795,8 +829,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                                   .spaceBetween,
                                                           children: [
                                                             Flexible(
-                                                              child:
-                                                                  Container(
+                                                              child: Container(
                                                                 child: Row(
                                                                   children: [
                                                                     Flexible(
@@ -805,16 +838,23 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                                         crossAxisAlignment:
                                                                             CrossAxisAlignment.end,
                                                                         children: [
-                                                                          Image.asset(
+                                                                          Image
+                                                                              .asset(
                                                                             "assets/images/emote_clap.png",
-                                                                            width: 16,
-                                                                            height: 16,
+                                                                            width:
+                                                                                16,
+                                                                            height:
+                                                                                16,
                                                                           ),
                                                                           SizedBox(
-                                                                            width: 2,
+                                                                            width:
+                                                                                2,
                                                                           ),
                                                                           Flexible(
-                                                                            child: Text(itemSub.voted_id_1.toString(), maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black)),
+                                                                            child: Text(itemSub.voted_id_1.toString(),
+                                                                                maxLines: 1,
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                                style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black)),
                                                                           )
                                                                         ],
                                                                       ),
@@ -828,16 +868,23 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                                         crossAxisAlignment:
                                                                             CrossAxisAlignment.end,
                                                                         children: [
-                                                                          Image.asset(
+                                                                          Image
+                                                                              .asset(
                                                                             "assets/images/emote_rose.png",
-                                                                            width: 16,
-                                                                            height: 16,
+                                                                            width:
+                                                                                16,
+                                                                            height:
+                                                                                16,
                                                                           ),
                                                                           SizedBox(
-                                                                            width: 2,
+                                                                            width:
+                                                                                2,
                                                                           ),
                                                                           Flexible(
-                                                                            child: Text(itemSub.voted_id_2.toString(), maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black)),
+                                                                            child: Text(itemSub.voted_id_2.toString(),
+                                                                                maxLines: 1,
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                                style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black)),
                                                                           )
                                                                         ],
                                                                       ),
@@ -851,15 +898,20 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                                         crossAxisAlignment:
                                                                             CrossAxisAlignment.end,
                                                                         children: [
-                                                                          Image.asset(
+                                                                          Image
+                                                                              .asset(
                                                                             "assets/images/emote_suprise.png",
-                                                                            width: 16,
-                                                                            height: 16,
+                                                                            width:
+                                                                                16,
+                                                                            height:
+                                                                                16,
                                                                           ),
                                                                           SizedBox(
-                                                                            width: 2,
+                                                                            width:
+                                                                                2,
                                                                           ),
-                                                                          Text(itemSub.voted_id_3.toString(),
+                                                                          Text(
+                                                                              itemSub.voted_id_3.toString(),
                                                                               maxLines: 1,
                                                                               overflow: TextOverflow.ellipsis,
                                                                               style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black))
@@ -894,8 +946,8 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                                             13,
                                                                         fontFamily:
                                                                             'RobotoBold',
-                                                                        color:
-                                                                            Colors.black)),
+                                                                        color: Colors
+                                                                            .black)),
                                                                 SizedBox(
                                                                     width: 5),
                                                                 Image.asset(
@@ -913,10 +965,14 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                                             .replies_count
                                                                             .toString(),
                                                                         style: TextStyle(
-                                                                            fontSize: 13,
-                                                                            fontFamily: 'RobotoBold',
-                                                                            color: Colors.black),
-                                                                        children: <TextSpan>[
+                                                                            fontSize:
+                                                                                13,
+                                                                            fontFamily:
+                                                                                'RobotoBold',
+                                                                            color: Colors
+                                                                                .black),
+                                                                        children: <
+                                                                            TextSpan>[
                                                                       TextSpan(
                                                                           text:
                                                                               " bình luận",
@@ -965,568 +1021,625 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                         child: Column(
                           children: <Widget>[
                             Expanded(
-                                child: ListView.builder(
-                                    itemCount: listSubmission.length,
-                                    physics: BouncingScrollPhysics(),
-                                    itemBuilder: (context, index) {
-                                      var itemSub = listSubmission[index];
-                                      double scale = 1.0;
-                                      if (topContainer > 0.5) {
-                                        scale = index + 0.5 - topContainer;
-                                        if (scale < 0) {
-                                          scale = 0;
-                                        } else if (scale > 1) {
-                                          scale = 1;
-                                        }
+                                child: LoadMore(
+                              onLoadMore: loadMoreSubmission,
+                              textBuilder: DefaultLoadMoreTextBuilder.english,
+                              child: ListView.builder(
+                                  itemCount: listSubmission.length,
+                                  physics: BouncingScrollPhysics(),
+                                  itemBuilder: (context, index) {
+                                    var itemSub = listSubmission[index];
+                                    double scale = 1.0;
+                                    if (topContainer > 0.5) {
+                                      scale = index + 0.5 - topContainer;
+                                      if (scale < 0) {
+                                        scale = 0;
+                                      } else if (scale > 1) {
+                                        scale = 1;
                                       }
-                                      return GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(
-                                                  context,
-                                                  new MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          DetailSubmission(
-                                                              itemSub,
-                                                              index)))
-                                              .then((value) {
-                                            if (value != null) {
-                                              Submission itemsDetailBack =
-                                                  value as Submission;
-                                              setState(() {
-                                                listSubmission[index] =
-                                                    itemsDetailBack;
+                                    }
+                                    return GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                                context,
+                                                new MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        DetailSubmission(
+                                                            itemSub, index)))
+                                            .then((value) {
+                                          if (value != null) {
+                                            Submission itemsDetailBack =
+                                                value as Submission;
+                                            setState(() {
+                                              listSubmission[index] =
+                                                  itemsDetailBack;
 //                                            itemSub = itemsDetailBack;
-                                              });
-                                            }
-                                          });
-                                        },
-                                        child: Container(
-                                            width: double.infinity,
-                                            margin:
-                                                const EdgeInsets.symmetric(
-                                                    horizontal: 20,
-                                                    vertical: 10),
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.all(
-                                                        Radius.circular(
-                                                            10.0)),
-                                                color: Colors.white,
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      color: Colors.black
-                                                          .withAlpha(100),
-                                                      blurRadius: 10.0),
-                                                ]),
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  bottom: 0),
-                                              child: Column(
+                                            });
+                                          }
+                                        });
+                                      },
+                                      child: Container(
+                                          width: double.infinity,
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 20, vertical: 10),
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(10.0)),
+                                              color: Colors.white,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    color: Colors.black
+                                                        .withAlpha(100),
+                                                    blurRadius: 10.0),
+                                              ]),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 0),
+                                            child: Column(
 //                                          crossAxisAlignment:
 //                                              CrossAxisAlignment.start,
-                                                children: <Widget>[
-                                                  Hero(
-                                                    child: Stack(
-                                                      children: [
-                                                        Container(
-                                                            height: 300,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              image: DecorationImage(
-                                                                  fit: BoxFit
-                                                                      .cover,
-                                                                  image: CachedNetworkImageProvider(
-                                                                      itemSub
-                                                                          .URL_img_id)),
-                                                              borderRadius: BorderRadius.only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          10.0),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          10.0)),
-                                                            )),
-                                                        Positioned(
-                                                            child: Image.asset(
-                                                                "assets/images/ic_rectangle_green.png",
-                                                                width: 35,
-                                                                height: 45),
-                                                            left: 10),
-                                                        Positioned(
+                                              children: <Widget>[
+                                                Hero(
+                                                  child: Stack(
+                                                    children: [
+                                                      Container(
+                                                          height: 300,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            image: DecorationImage(
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                                image: CachedNetworkImageProvider(
+                                                                    itemSub
+                                                                        .URL_img_id)),
+                                                            borderRadius: BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10.0),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        10.0)),
+                                                          )),
+                                                      Positioned(
                                                           child: Image.asset(
-                                                              "assets/images/ic_buaan.png",
-                                                              width: 20,
-                                                              height: 20,
-                                                              color: Colors
-                                                                  .white),
-                                                          left: 17.5,
-                                                          top: 10,
-                                                        )
-                                                      ],
-                                                    ),
-                                                    tag: index.toString() +
-                                                        itemSub.forum_id,
+                                                              "assets/images/ic_rectangle_green.png",
+                                                              width: 35,
+                                                              height: 45),
+                                                          left: 10),
+                                                      Positioned(
+                                                        child: Image.asset(
+                                                            "assets/images/ic_buaan.png",
+                                                            width: 20,
+                                                            height: 20,
+                                                            color:
+                                                                Colors.white),
+                                                        left: 17.5,
+                                                        top: 10,
+                                                      )
+                                                    ],
                                                   ),
-                                                  SizedBox(width: 10),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
+                                                  tag: index.toString() +
+                                                      itemSub.forum_id,
+                                                ),
+                                                SizedBox(width: 10),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
 //                                                mainAxisSize: MainAxisSize.max,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .stretch,
-                                                      children: <Widget>[
-                                                        Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .stretch,
+                                                    children: <Widget>[
+                                                      Row(
 //                                                    crossAxisAlignment:
 //                                                        CrossAxisAlignment
 //                                                            .start,
-                                                          mainAxisSize:
-                                                              MainAxisSize
-                                                                  .max,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          children: <Widget>[
-                                                            Hero(
-                                                                tag: index
-                                                                        .toString() +
-                                                                    itemSub
-                                                                        .portrait_url,
-                                                                child: getAvatarUser(
-                                                                    itemSub)),
-                                                            SizedBox(
-                                                                width: 5),
-                                                            Flexible(
+                                                        mainAxisSize:
+                                                            MainAxisSize.max,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        children: <Widget>[
+                                                          Hero(
+                                                              tag: index
+                                                                      .toString() +
+                                                                  itemSub
+                                                                      .portrait_url,
                                                               child:
-                                                                  Container(
-                                                                child: Column(
-                                                                    mainAxisSize:
-                                                                        MainAxisSize
-                                                                            .min,
-                                                                    crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .stretch,
-                                                                    children: <
-                                                                        Widget>[
-                                                                      Row(
-                                                                        children: [
-                                                                          Flexible(
-                                                                            child: Container(
-                                                                              child: Text(
-                                                                                itemSub.user_name,
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                maxLines: 1,
-                                                                                style: TextStyle(fontSize: 15, fontFamily: 'RobotoMedium', color: itemSub.isVipCheck() ? Colors.black : HattoColors.colorPrimary),
-                                                                              ),
+                                                                  getAvatarUser(
+                                                                      itemSub)),
+                                                          SizedBox(width: 5),
+                                                          Flexible(
+                                                            child: Container(
+                                                              child: Column(
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .min,
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .stretch,
+                                                                  children: <
+                                                                      Widget>[
+                                                                    Row(
+                                                                      children: [
+                                                                        Flexible(
+                                                                          child:
+                                                                              Container(
+                                                                            child:
+                                                                                Text(
+                                                                              itemSub.user_name,
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                              maxLines: 1,
+                                                                              style: TextStyle(fontSize: 15, fontFamily: 'RobotoMedium', color: itemSub.isVipCheck() ? Colors.black : HattoColors.colorPrimary),
                                                                             ),
                                                                           ),
-                                                                          Row(
-                                                                            children: [
-                                                                              Text(
-                                                                                AppUtils.formatNumber(itemSub.remain_rewards),
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                maxLines: 1,
-                                                                                style: TextStyle(fontSize: 15, fontFamily: 'RobotoMedium', color: HattoColors.colorPrimary),
-                                                                              ),
-                                                                              SizedBox(width: 1),
-                                                                              Container(width: 15, height: 15, child: Image.asset("assets/images/ic_dua.png"))
-                                                                            ],
-                                                                          ),
-                                                                        ],
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.spaceBetween,
-                                                                      ),
-                                                                      SizedBox(
-                                                                          height:
-                                                                              5),
-                                                                      Row(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.center,
-                                                                        children: <
-                                                                            Widget>[
-                                                                          Visibility(
-                                                                            visible: itemSub.isVipCheck() ? false : true,
-                                                                            child: Container(
-                                                                                decoration: new BoxDecoration(color: HattoColors.colorPrimary, borderRadius: new BorderRadius.all(Radius.circular(8))),
-                                                                                child: Padding(
-                                                                                  padding: const EdgeInsets.only(left: 2, right: 2, top: 2, bottom: 2),
-                                                                                  child: Center(
-                                                                                    child: Text(
-                                                                                      "Super VIP".toUpperCase(),
-                                                                                      style: TextStyle(fontSize: 7, fontFamily: 'RobotoBold', color: Colors.white),
-                                                                                    ),
+                                                                        ),
+                                                                        Row(
+                                                                          children: [
+                                                                            Text(
+                                                                              AppUtils.formatNumber(itemSub.remain_rewards),
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                              maxLines: 1,
+                                                                              style: TextStyle(fontSize: 15, fontFamily: 'RobotoMedium', color: HattoColors.colorPrimary),
+                                                                            ),
+                                                                            SizedBox(width: 1),
+                                                                            Container(
+                                                                                width: 15,
+                                                                                height: 15,
+                                                                                child: Image.asset("assets/images/ic_dua.png"))
+                                                                          ],
+                                                                        ),
+                                                                      ],
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .spaceBetween,
+                                                                    ),
+                                                                    SizedBox(
+                                                                        height:
+                                                                            5),
+                                                                    Row(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .center,
+                                                                      children: <
+                                                                          Widget>[
+                                                                        Visibility(
+                                                                          visible: itemSub.isVipCheck()
+                                                                              ? false
+                                                                              : true,
+                                                                          child: Container(
+                                                                              decoration: new BoxDecoration(color: HattoColors.colorPrimary, borderRadius: new BorderRadius.all(Radius.circular(8))),
+                                                                              child: Padding(
+                                                                                padding: const EdgeInsets.only(left: 2, right: 2, top: 2, bottom: 2),
+                                                                                child: Center(
+                                                                                  child: Text(
+                                                                                    "Super VIP".toUpperCase(),
+                                                                                    style: TextStyle(fontSize: 7, fontFamily: 'RobotoBold', color: Colors.white),
                                                                                   ),
-                                                                                )),
-                                                                          ),
-                                                                          SizedBox(width: 3),
-                                                                          Container(
-                                                                              height: 15,
-                                                                              width: 15,
-                                                                              decoration: BoxDecoration(
-                                                                                image: DecorationImage(fit: BoxFit.cover, image: CachedNetworkImageProvider(getRankIcon(itemSub.rank_id))),
+                                                                                ),
                                                                               )),
-                                                                          SizedBox(width: 3),
-                                                                          Text(
-                                                                            itemSub.rank_desc,
-                                                                            overflow: TextOverflow.ellipsis,
-                                                                            maxLines: 1,
-                                                                            style: TextStyle(fontSize: 11, fontFamily: 'RobotoRegular', color: HattoColors.colorTimeLine),
-                                                                          ),
-                                                                        ],
-                                                                      )
-                                                                    ]),
-                                                              ),
+                                                                        ),
+                                                                        SizedBox(
+                                                                            width:
+                                                                                3),
+                                                                        Container(
+                                                                            height:
+                                                                                15,
+                                                                            width:
+                                                                                15,
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              image: DecorationImage(fit: BoxFit.cover, image: CachedNetworkImageProvider(getRankIcon(itemSub.rank_id))),
+                                                                            )),
+                                                                        SizedBox(
+                                                                            width:
+                                                                                3),
+                                                                        Text(
+                                                                          itemSub
+                                                                              .rank_desc,
+                                                                          overflow:
+                                                                              TextOverflow.ellipsis,
+                                                                          maxLines:
+                                                                              1,
+                                                                          style: TextStyle(
+                                                                              fontSize: 11,
+                                                                              fontFamily: 'RobotoRegular',
+                                                                              color: HattoColors.colorTimeLine),
+                                                                        ),
+                                                                      ],
+                                                                    )
+                                                                  ]),
                                                             ),
-                                                          ],
-                                                        ),
-                                                        Text(
-                                                          itemSub.class_desc,
-                                                          overflow:
-                                                              TextOverflow
-                                                                  .ellipsis,
-                                                          maxLines: 2,
-                                                          style: const TextStyle(
-                                                              fontFamily:
-                                                                  'RobotoMedium',
-                                                              fontSize: 20),
-                                                        ),
-                                                        Visibility(
-                                                          visible:
-                                                              itemSub.location_name !=
-                                                                      null
-                                                                  ? true
-                                                                  : false,
-                                                          child: Padding(
-                                                            padding: EdgeInsets
-                                                                .only(top: 2),
-                                                            child: Row(
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Text(
+                                                        itemSub.class_desc,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        maxLines: 2,
+                                                        style: const TextStyle(
+                                                            fontFamily:
+                                                                'RobotoMedium',
+                                                            fontSize: 20),
+                                                      ),
+                                                      Visibility(
+                                                        visible:
+                                                            itemSub.location_name !=
+                                                                    null
+                                                                ? true
+                                                                : false,
+                                                        child: Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  top: 2),
+                                                          child: Row(
 //                                                    crossAxisAlignment:
 //                                                        CrossAxisAlignment
 //                                                            .start,
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .max,
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .start,
-                                                              children: <
-                                                                  Widget>[
-                                                                getAvatarLocation(
-                                                                    itemSub),
-                                                                SizedBox(
-                                                                    width: 5),
-                                                                Flexible(
-                                                                  child:
-                                                                      Container(
-                                                                    child: Column(
-                                                                        mainAxisSize: MainAxisSize
-                                                                            .min,
-                                                                        crossAxisAlignment: CrossAxisAlignment
-                                                                            .stretch,
-                                                                        children: <
-                                                                            Widget>[
-                                                                          Row(
-                                                                            children: [
-                                                                              Flexible(
-                                                                                child: Container(
-                                                                                  child: Text(
-                                                                                    itemSub.location_name ?? "",
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .max,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .start,
+                                                            children: <Widget>[
+                                                              getAvatarLocation(
+                                                                  itemSub),
+                                                              SizedBox(
+                                                                  width: 5),
+                                                              Flexible(
+                                                                child:
+                                                                    Container(
+                                                                  child: Column(
+                                                                      mainAxisSize:
+                                                                          MainAxisSize
+                                                                              .min,
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .stretch,
+                                                                      children: <
+                                                                          Widget>[
+                                                                        Row(
+                                                                          children: [
+                                                                            Flexible(
+                                                                              child: Container(
+                                                                                child: Text(
+                                                                                  itemSub.location_name ?? "",
+                                                                                  overflow: TextOverflow.ellipsis,
+                                                                                  maxLines: 1,
+                                                                                  style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            Visibility(
+                                                                              visible: itemSub.location_home_delivery != 0 ? true : false,
+                                                                              child: Row(
+                                                                                children: [
+                                                                                  Container(width: 15, height: 15, child: Image.asset("assets/images/ic_bike_delivery_2x.png")),
+                                                                                  SizedBox(width: 1),
+                                                                                  Text(
+                                                                                    "Có giao hàng qua Hatto",
                                                                                     overflow: TextOverflow.ellipsis,
                                                                                     maxLines: 1,
-                                                                                    style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black),
+                                                                                    style: TextStyle(fontSize: 11, fontFamily: 'RobotoMedium', color: Colors.black),
                                                                                   ),
-                                                                                ),
+                                                                                ],
+                                                                                crossAxisAlignment: CrossAxisAlignment.end,
                                                                               ),
-                                                                              Visibility(
-                                                                                visible: itemSub.location_home_delivery != 0 ? true : false,
-                                                                                child: Row(
-                                                                                  children: [
-                                                                                    Container(width: 15, height: 15, child: Image.asset("assets/images/ic_bike_delivery_2x.png")),
-                                                                                    SizedBox(width: 1),
-                                                                                    Text(
-                                                                                      "Có giao hàng qua Hatto",
-                                                                                      overflow: TextOverflow.ellipsis,
-                                                                                      maxLines: 1,
-                                                                                      style: TextStyle(fontSize: 11, fontFamily: 'RobotoMedium', color: Colors.black),
-                                                                                    ),
-                                                                                  ],
-                                                                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                                                                ),
+                                                                            ),
+                                                                          ],
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.spaceBetween,
+                                                                        ),
+                                                                        SizedBox(
+                                                                            height:
+                                                                                5),
+                                                                        Row(
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment.center,
+                                                                          children: <
+                                                                              Widget>[
+                                                                            Flexible(
+                                                                              child: Text(
+                                                                                itemSub.location_address ?? "",
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                                maxLines: 2,
+                                                                                style: TextStyle(fontSize: 11, fontFamily: 'RobotoRegular', color: HattoColors.colorTimeLine),
                                                                               ),
-                                                                            ],
-                                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                          ),
-                                                                          SizedBox(height: 5),
-                                                                          Row(
-                                                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                                                            children: <Widget>[
-                                                                              Flexible(
-                                                                                child: Text(
-                                                                                  itemSub.location_address ?? "",
-                                                                                  overflow: TextOverflow.ellipsis,
-                                                                                  maxLines: 2,
-                                                                                  style: TextStyle(fontSize: 11, fontFamily: 'RobotoRegular', color: HattoColors.colorTimeLine),
-                                                                                ),
-                                                                              ),
-                                                                            ],
-                                                                          )
-                                                                        ]),
-                                                                  ),
+                                                                            ),
+                                                                          ],
+                                                                        )
+                                                                      ]),
                                                                 ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Text(
+                                                        itemSub.extra_desc,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        maxLines: 3,
+                                                        style: TextStyle(
+                                                            fontSize: 12,
+                                                            fontFamily:
+                                                                'RobotoRegular',
+                                                            color:
+                                                                Colors.black),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Flexible(
+                                                            child: Row(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Image.asset(
+                                                                    "assets/images/ic_clock.png",
+                                                                    width: 10,
+                                                                    height: 10),
+                                                                SizedBox(
+                                                                    width: 2),
+                                                                Text(
+                                                                  AppUtils.getDateTimeAgo(
+                                                                      itemSub
+                                                                          .timestamp),
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  maxLines: 1,
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          12,
+                                                                      fontFamily:
+                                                                          'RobotoRegular',
+                                                                      color: HattoColors
+                                                                          .colorTimeLine),
+                                                                ),
+                                                                SizedBox(
+                                                                    width: 5),
+                                                                AppUtils.getSharingOptionIcon(
+                                                                    itemSub
+                                                                        .sharing_option,
+                                                                    10,
+                                                                    10)
                                                               ],
                                                             ),
                                                           ),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 5,
-                                                        ),
-                                                        Text(
-                                                          itemSub.extra_desc,
-                                                          overflow:
-                                                              TextOverflow
-                                                                  .ellipsis,
-                                                          maxLines: 3,
-                                                          style: TextStyle(
-                                                              fontSize: 12,
-                                                              fontFamily:
-                                                                  'RobotoRegular',
-                                                              color: Colors
-                                                                  .black),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 5,
-                                                        ),
-                                                        Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            Flexible(
+                                                          Flexible(
                                                               child: Row(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .center,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .end,
+                                                            children: [
+                                                              RichText(
+                                                                  text: TextSpan(
+                                                                      text: itemSub
+                                                                          .total_unique_views
+                                                                          .toString(),
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              13,
+                                                                          fontFamily:
+                                                                              'RobotoBold',
+                                                                          color: Colors
+                                                                              .black),
+                                                                      children: <
+                                                                          TextSpan>[
+                                                                    TextSpan(
+                                                                        text:
+                                                                            " lượt xem",
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                12,
+                                                                            fontFamily:
+                                                                                'RobotoRegular',
+                                                                            color:
+                                                                                HattoColors.colorTimeLine.withOpacity(0.7))),
+                                                                  ])),
+                                                            ],
+                                                          ))
+                                                        ],
+                                                      ),
+                                                      SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Flexible(
+                                                            child: Container(
+                                                              child: Row(
                                                                 children: [
-                                                                  Image.asset(
-                                                                      "assets/images/ic_clock.png",
-                                                                      width:
-                                                                          10,
-                                                                      height:
-                                                                          10),
-                                                                  SizedBox(
-                                                                      width:
-                                                                          2),
-                                                                  Text(
-                                                                    AppUtils.getDateTimeAgo(
-                                                                        itemSub
-                                                                            .timestamp),
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                    maxLines:
-                                                                        1,
-                                                                    style: TextStyle(
-                                                                        fontSize:
-                                                                            12,
-                                                                        fontFamily:
-                                                                            'RobotoRegular',
-                                                                        color:
-                                                                            HattoColors.colorTimeLine),
+                                                                  Flexible(
+                                                                    child: Row(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .end,
+                                                                      children: [
+                                                                        Image
+                                                                            .asset(
+                                                                          "assets/images/emote_clap.png",
+                                                                          width:
+                                                                              16,
+                                                                          height:
+                                                                              16,
+                                                                        ),
+                                                                        SizedBox(
+                                                                          width:
+                                                                              2,
+                                                                        ),
+                                                                        Flexible(
+                                                                          child: Text(
+                                                                              itemSub.voted_id_1.toString(),
+                                                                              maxLines: 1,
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                              style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black)),
+                                                                        )
+                                                                      ],
+                                                                    ),
                                                                   ),
                                                                   SizedBox(
-                                                                      width:
-                                                                          5),
-                                                                  AppUtils.getSharingOptionIcon(
-                                                                      itemSub
-                                                                          .sharing_option,
-                                                                      10,
-                                                                      10)
+                                                                      width: 5),
+                                                                  Flexible(
+                                                                    child: Row(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .end,
+                                                                      children: [
+                                                                        Image
+                                                                            .asset(
+                                                                          "assets/images/emote_rose.png",
+                                                                          width:
+                                                                              16,
+                                                                          height:
+                                                                              16,
+                                                                        ),
+                                                                        SizedBox(
+                                                                          width:
+                                                                              2,
+                                                                        ),
+                                                                        Flexible(
+                                                                          child: Text(
+                                                                              itemSub.voted_id_2.toString(),
+                                                                              maxLines: 1,
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                              style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black)),
+                                                                        )
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                  SizedBox(
+                                                                      width: 5),
+                                                                  Flexible(
+                                                                    child: Row(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .end,
+                                                                      children: [
+                                                                        Image
+                                                                            .asset(
+                                                                          "assets/images/emote_suprise.png",
+                                                                          width:
+                                                                              16,
+                                                                          height:
+                                                                              16,
+                                                                        ),
+                                                                        SizedBox(
+                                                                          width:
+                                                                              2,
+                                                                        ),
+                                                                        Text(
+                                                                            itemSub
+                                                                                .voted_id_3
+                                                                                .toString(),
+                                                                            maxLines:
+                                                                                1,
+                                                                            overflow: TextOverflow
+                                                                                .ellipsis,
+                                                                            style: TextStyle(
+                                                                                fontSize: 12,
+                                                                                fontFamily: 'RobotoMedium',
+                                                                                color: Colors.black))
+                                                                      ],
+                                                                    ),
+                                                                  )
                                                                 ],
                                                               ),
                                                             ),
-                                                            Flexible(
-                                                                child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .end,
-                                                              children: [
-                                                                RichText(
-                                                                    text: TextSpan(
-                                                                        text: itemSub
-                                                                            .total_unique_views
-                                                                            .toString(),
-                                                                        style: TextStyle(
-                                                                            fontSize: 13,
-                                                                            fontFamily: 'RobotoBold',
-                                                                            color: Colors.black),
-                                                                        children: <TextSpan>[
-                                                                      TextSpan(
-                                                                          text:
-                                                                              " lượt xem",
-                                                                          style: TextStyle(
-                                                                              fontSize: 12,
-                                                                              fontFamily: 'RobotoRegular',
-                                                                              color: HattoColors.colorTimeLine.withOpacity(0.7))),
-                                                                    ])),
-                                                              ],
-                                                            ))
-                                                          ],
-                                                        ),
-                                                        SizedBox(
-                                                          height: 5,
-                                                        ),
-                                                        Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            Flexible(
-                                                              child:
-                                                                  Container(
-                                                                child: Row(
-                                                                  children: [
-                                                                    Flexible(
-                                                                      child:
-                                                                          Row(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.end,
-                                                                        children: [
-                                                                          Image.asset(
-                                                                            "assets/images/emote_clap.png",
-                                                                            width: 16,
-                                                                            height: 16,
-                                                                          ),
-                                                                          SizedBox(
-                                                                            width: 2,
-                                                                          ),
-                                                                          Flexible(
-                                                                            child: Text(itemSub.voted_id_1.toString(), maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black)),
-                                                                          )
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                    SizedBox(
-                                                                        width:
-                                                                            5),
-                                                                    Flexible(
-                                                                      child:
-                                                                          Row(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.end,
-                                                                        children: [
-                                                                          Image.asset(
-                                                                            "assets/images/emote_rose.png",
-                                                                            width: 16,
-                                                                            height: 16,
-                                                                          ),
-                                                                          SizedBox(
-                                                                            width: 2,
-                                                                          ),
-                                                                          Flexible(
-                                                                            child: Text(itemSub.voted_id_2.toString(), maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black)),
-                                                                          )
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                    SizedBox(
-                                                                        width:
-                                                                            5),
-                                                                    Flexible(
-                                                                      child:
-                                                                          Row(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.end,
-                                                                        children: [
-                                                                          Image.asset(
-                                                                            "assets/images/emote_suprise.png",
-                                                                            width: 16,
-                                                                            height: 16,
-                                                                          ),
-                                                                          SizedBox(
-                                                                            width: 2,
-                                                                          ),
-                                                                          Text(itemSub.voted_id_3.toString(),
-                                                                              maxLines: 1,
-                                                                              overflow: TextOverflow.ellipsis,
-                                                                              style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black))
-                                                                        ],
-                                                                      ),
-                                                                    )
-                                                                  ],
-                                                                ),
+                                                          ),
+                                                          Flexible(
+                                                              child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .end,
+                                                            children: [
+                                                              Image.asset(
+                                                                "assets/images/ic_favorite_2x.png",
+                                                                width: 16,
+                                                                height: 16,
+                                                                color: Colors
+                                                                    .black,
                                                               ),
-                                                            ),
-                                                            Flexible(
-                                                                child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .end,
-                                                              children: [
-                                                                Image.asset(
-                                                                  "assets/images/ic_favorite_2x.png",
-                                                                  width: 16,
-                                                                  height: 16,
-                                                                  color: Colors
-                                                                      .black,
-                                                                ),
-                                                                SizedBox(
-                                                                    width: 5),
-                                                                Text(
-                                                                    itemSub
-                                                                        .favorite_count
-                                                                        .toString(),
-                                                                    style: TextStyle(
-                                                                        fontSize:
-                                                                            13,
-                                                                        fontFamily:
-                                                                            'RobotoBold',
-                                                                        color:
-                                                                            Colors.black)),
-                                                                SizedBox(
-                                                                    width: 5),
-                                                                Image.asset(
-                                                                  "assets/images/ic_chat_2x.png",
-                                                                  width: 16,
-                                                                  height: 16,
-                                                                  color: Colors
-                                                                      .black,
-                                                                ),
-                                                                SizedBox(
-                                                                    width: 5),
-                                                                RichText(
-                                                                    text: TextSpan(
-                                                                        text: itemSub
-                                                                            .replies_count
-                                                                            .toString(),
+                                                              SizedBox(
+                                                                  width: 5),
+                                                              Text(
+                                                                  itemSub
+                                                                      .favorite_count
+                                                                      .toString(),
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          13,
+                                                                      fontFamily:
+                                                                          'RobotoBold',
+                                                                      color: Colors
+                                                                          .black)),
+                                                              SizedBox(
+                                                                  width: 5),
+                                                              Image.asset(
+                                                                "assets/images/ic_chat_2x.png",
+                                                                width: 16,
+                                                                height: 16,
+                                                                color: Colors
+                                                                    .black,
+                                                              ),
+                                                              SizedBox(
+                                                                  width: 5),
+                                                              RichText(
+                                                                  text: TextSpan(
+                                                                      text: itemSub
+                                                                          .replies_count
+                                                                          .toString(),
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              13,
+                                                                          fontFamily:
+                                                                              'RobotoBold',
+                                                                          color: Colors
+                                                                              .black),
+                                                                      children: <
+                                                                          TextSpan>[
+                                                                    TextSpan(
+                                                                        text:
+                                                                            " bình luận",
                                                                         style: TextStyle(
-                                                                            fontSize: 13,
-                                                                            fontFamily: 'RobotoBold',
-                                                                            color: Colors.black),
-                                                                        children: <TextSpan>[
-                                                                      TextSpan(
-                                                                          text:
-                                                                              " bình luận",
-                                                                          style: TextStyle(
-                                                                              fontSize: 12,
-                                                                              fontFamily: 'RobotoRegular',
-                                                                              color: HattoColors.colorTimeLine.withOpacity(0.7))),
-                                                                    ])),
-                                                              ],
-                                                            ))
-                                                          ],
-                                                        )
-                                                      ],
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            )),
-                                      );
-                                    })),
+                                                                            fontSize:
+                                                                                12,
+                                                                            fontFamily:
+                                                                                'RobotoRegular',
+                                                                            color:
+                                                                                HattoColors.colorTimeLine.withOpacity(0.7))),
+                                                                  ])),
+                                                            ],
+                                                          ))
+                                                        ],
+                                                      )
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          )),
+                                    );
+                                  }),
+                            )),
                           ],
                         ),
                       );
@@ -1559,7 +1672,8 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                     itemCount: listSpecialSubmission.length,
                                     physics: BouncingScrollPhysics(),
                                     itemBuilder: (context, index) {
-                                      var itemSub = listSpecialSubmission[index];
+                                      var itemSub =
+                                          listSpecialSubmission[index];
                                       double scale = 1.0;
                                       if (topContainer > 0.5) {
                                         scale = index + 0.5 - topContainer;
@@ -1576,8 +1690,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                   new MaterialPageRoute(
                                                       builder: (context) =>
                                                           DetailSubmission(
-                                                              itemSub,
-                                                              index)))
+                                                              itemSub, index)))
                                               .then((value) {
                                             if (value != null) {
                                               Submission itemsDetailBack =
@@ -1592,15 +1705,11 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                         },
                                         child: Container(
                                             width: double.infinity,
-                                            margin:
-                                                const EdgeInsets.symmetric(
-                                                    horizontal: 20,
-                                                    vertical: 10),
+                                            margin: const EdgeInsets.symmetric(
+                                                horizontal: 20, vertical: 10),
                                             decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.all(
-                                                        Radius.circular(
-                                                            10.0)),
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(10.0)),
                                                 color: Colors.white,
                                                 boxShadow: [
                                                   BoxShadow(
@@ -1647,8 +1756,8 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                               "assets/images/ic_buaan.png",
                                                               width: 20,
                                                               height: 20,
-                                                              color: Colors
-                                                                  .white),
+                                                              color:
+                                                                  Colors.white),
                                                           left: 17.5,
                                                           top: 10,
                                                         )
@@ -1675,8 +1784,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 //                                                        CrossAxisAlignment
 //                                                            .start,
                                                           mainAxisSize:
-                                                              MainAxisSize
-                                                                  .max,
+                                                              MainAxisSize.max,
                                                           mainAxisAlignment:
                                                               MainAxisAlignment
                                                                   .start,
@@ -1686,13 +1794,12 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                                         .toString() +
                                                                     itemSub
                                                                         .portrait_url,
-                                                                child: getAvatarUser(
-                                                                    itemSub)),
-                                                            SizedBox(
-                                                                width: 5),
+                                                                child:
+                                                                    getAvatarUser(
+                                                                        itemSub)),
+                                                            SizedBox(width: 5),
                                                             Flexible(
-                                                              child:
-                                                                  Container(
+                                                              child: Container(
                                                                 child: Column(
                                                                     mainAxisSize:
                                                                         MainAxisSize
@@ -1705,7 +1812,8 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                                       Row(
                                                                         children: [
                                                                           Flexible(
-                                                                            child: Container(
+                                                                            child:
+                                                                                Container(
                                                                               child: Text(
                                                                                 itemSub.user_name,
                                                                                 overflow: TextOverflow.ellipsis,
@@ -1739,7 +1847,9 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                                         children: <
                                                                             Widget>[
                                                                           Visibility(
-                                                                            visible: itemSub.isVipCheck() ? false : true,
+                                                                            visible: itemSub.isVipCheck()
+                                                                                ? false
+                                                                                : true,
                                                                             child: Container(
                                                                                 decoration: new BoxDecoration(color: HattoColors.colorPrimary, borderRadius: new BorderRadius.all(Radius.circular(8))),
                                                                                 child: Padding(
@@ -1752,19 +1862,26 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                                                   ),
                                                                                 )),
                                                                           ),
-                                                                          SizedBox(width: 3),
+                                                                          SizedBox(
+                                                                              width: 3),
                                                                           Container(
                                                                               height: 15,
                                                                               width: 15,
                                                                               decoration: BoxDecoration(
                                                                                 image: DecorationImage(fit: BoxFit.cover, image: CachedNetworkImageProvider(getRankIcon(itemSub.rank_id))),
                                                                               )),
-                                                                          SizedBox(width: 3),
+                                                                          SizedBox(
+                                                                              width: 3),
                                                                           Text(
                                                                             itemSub.rank_desc,
-                                                                            overflow: TextOverflow.ellipsis,
-                                                                            maxLines: 1,
-                                                                            style: TextStyle(fontSize: 11, fontFamily: 'RobotoRegular', color: HattoColors.colorTimeLine),
+                                                                            overflow:
+                                                                                TextOverflow.ellipsis,
+                                                                            maxLines:
+                                                                                1,
+                                                                            style: TextStyle(
+                                                                                fontSize: 11,
+                                                                                fontFamily: 'RobotoRegular',
+                                                                                color: HattoColors.colorTimeLine),
                                                                           ),
                                                                         ],
                                                                       )
@@ -1775,9 +1892,8 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                         ),
                                                         Text(
                                                           itemSub.class_desc,
-                                                          overflow:
-                                                              TextOverflow
-                                                                  .ellipsis,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
                                                           maxLines: 2,
                                                           style: const TextStyle(
                                                               fontFamily:
@@ -1791,8 +1907,9 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                                   ? true
                                                                   : false,
                                                           child: Padding(
-                                                            padding: EdgeInsets
-                                                                .only(top: 2),
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                                    top: 2),
                                                             child: Row(
 //                                                    crossAxisAlignment:
 //                                                        CrossAxisAlignment
@@ -1813,10 +1930,12 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                                   child:
                                                                       Container(
                                                                     child: Column(
-                                                                        mainAxisSize: MainAxisSize
-                                                                            .min,
-                                                                        crossAxisAlignment: CrossAxisAlignment
-                                                                            .stretch,
+                                                                        mainAxisSize:
+                                                                            MainAxisSize
+                                                                                .min,
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment
+                                                                                .stretch,
                                                                         children: <
                                                                             Widget>[
                                                                           Row(
@@ -1848,11 +1967,14 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                                                 ),
                                                                               ),
                                                                             ],
-                                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                            mainAxisAlignment:
+                                                                                MainAxisAlignment.spaceBetween,
                                                                           ),
-                                                                          SizedBox(height: 5),
+                                                                          SizedBox(
+                                                                              height: 5),
                                                                           Row(
-                                                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                                                            crossAxisAlignment:
+                                                                                CrossAxisAlignment.center,
                                                                             children: <Widget>[
                                                                               Flexible(
                                                                                 child: Text(
@@ -1876,16 +1998,15 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                         ),
                                                         Text(
                                                           itemSub.extra_desc,
-                                                          overflow:
-                                                              TextOverflow
-                                                                  .ellipsis,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
                                                           maxLines: 3,
                                                           style: TextStyle(
                                                               fontSize: 12,
                                                               fontFamily:
                                                                   'RobotoRegular',
-                                                              color: Colors
-                                                                  .black),
+                                                              color:
+                                                                  Colors.black),
                                                         ),
                                                         SizedBox(
                                                           height: 5,
@@ -1903,13 +2024,11 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                                 children: [
                                                                   Image.asset(
                                                                       "assets/images/ic_clock.png",
-                                                                      width:
-                                                                          10,
+                                                                      width: 10,
                                                                       height:
                                                                           10),
                                                                   SizedBox(
-                                                                      width:
-                                                                          2),
+                                                                      width: 2),
                                                                   Text(
                                                                     AppUtils.getDateTimeAgo(
                                                                         itemSub
@@ -1917,19 +2036,17 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                                     overflow:
                                                                         TextOverflow
                                                                             .ellipsis,
-                                                                    maxLines:
-                                                                        1,
+                                                                    maxLines: 1,
                                                                     style: TextStyle(
                                                                         fontSize:
                                                                             12,
                                                                         fontFamily:
                                                                             'RobotoRegular',
-                                                                        color:
-                                                                            HattoColors.colorTimeLine),
+                                                                        color: HattoColors
+                                                                            .colorTimeLine),
                                                                   ),
                                                                   SizedBox(
-                                                                      width:
-                                                                          5),
+                                                                      width: 5),
                                                                   AppUtils.getSharingOptionIcon(
                                                                       itemSub
                                                                           .sharing_option,
@@ -1950,10 +2067,14 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                                             .total_unique_views
                                                                             .toString(),
                                                                         style: TextStyle(
-                                                                            fontSize: 13,
-                                                                            fontFamily: 'RobotoBold',
-                                                                            color: Colors.black),
-                                                                        children: <TextSpan>[
+                                                                            fontSize:
+                                                                                13,
+                                                                            fontFamily:
+                                                                                'RobotoBold',
+                                                                            color: Colors
+                                                                                .black),
+                                                                        children: <
+                                                                            TextSpan>[
                                                                       TextSpan(
                                                                           text:
                                                                               " lượt xem",
@@ -1975,8 +2096,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                                   .spaceBetween,
                                                           children: [
                                                             Flexible(
-                                                              child:
-                                                                  Container(
+                                                              child: Container(
                                                                 child: Row(
                                                                   children: [
                                                                     Flexible(
@@ -1985,16 +2105,23 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                                         crossAxisAlignment:
                                                                             CrossAxisAlignment.end,
                                                                         children: [
-                                                                          Image.asset(
+                                                                          Image
+                                                                              .asset(
                                                                             "assets/images/emote_clap.png",
-                                                                            width: 16,
-                                                                            height: 16,
+                                                                            width:
+                                                                                16,
+                                                                            height:
+                                                                                16,
                                                                           ),
                                                                           SizedBox(
-                                                                            width: 2,
+                                                                            width:
+                                                                                2,
                                                                           ),
                                                                           Flexible(
-                                                                            child: Text(itemSub.voted_id_1.toString(), maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black)),
+                                                                            child: Text(itemSub.voted_id_1.toString(),
+                                                                                maxLines: 1,
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                                style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black)),
                                                                           )
                                                                         ],
                                                                       ),
@@ -2008,16 +2135,23 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                                         crossAxisAlignment:
                                                                             CrossAxisAlignment.end,
                                                                         children: [
-                                                                          Image.asset(
+                                                                          Image
+                                                                              .asset(
                                                                             "assets/images/emote_rose.png",
-                                                                            width: 16,
-                                                                            height: 16,
+                                                                            width:
+                                                                                16,
+                                                                            height:
+                                                                                16,
                                                                           ),
                                                                           SizedBox(
-                                                                            width: 2,
+                                                                            width:
+                                                                                2,
                                                                           ),
                                                                           Flexible(
-                                                                            child: Text(itemSub.voted_id_2.toString(), maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black)),
+                                                                            child: Text(itemSub.voted_id_2.toString(),
+                                                                                maxLines: 1,
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                                style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black)),
                                                                           )
                                                                         ],
                                                                       ),
@@ -2031,15 +2165,20 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                                         crossAxisAlignment:
                                                                             CrossAxisAlignment.end,
                                                                         children: [
-                                                                          Image.asset(
+                                                                          Image
+                                                                              .asset(
                                                                             "assets/images/emote_suprise.png",
-                                                                            width: 16,
-                                                                            height: 16,
+                                                                            width:
+                                                                                16,
+                                                                            height:
+                                                                                16,
                                                                           ),
                                                                           SizedBox(
-                                                                            width: 2,
+                                                                            width:
+                                                                                2,
                                                                           ),
-                                                                          Text(itemSub.voted_id_3.toString(),
+                                                                          Text(
+                                                                              itemSub.voted_id_3.toString(),
                                                                               maxLines: 1,
                                                                               overflow: TextOverflow.ellipsis,
                                                                               style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black))
@@ -2074,8 +2213,8 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                                             13,
                                                                         fontFamily:
                                                                             'RobotoBold',
-                                                                        color:
-                                                                            Colors.black)),
+                                                                        color: Colors
+                                                                            .black)),
                                                                 SizedBox(
                                                                     width: 5),
                                                                 Image.asset(
@@ -2093,10 +2232,14 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                                                             .replies_count
                                                                             .toString(),
                                                                         style: TextStyle(
-                                                                            fontSize: 13,
-                                                                            fontFamily: 'RobotoBold',
-                                                                            color: Colors.black),
-                                                                        children: <TextSpan>[
+                                                                            fontSize:
+                                                                                13,
+                                                                            fontFamily:
+                                                                                'RobotoBold',
+                                                                            color: Colors
+                                                                                .black),
+                                                                        children: <
+                                                                            TextSpan>[
                                                                       TextSpan(
                                                                           text:
                                                                               " bình luận",
@@ -2139,8 +2282,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
               ),
             ),
             BottomNavigationBarItem(
-              activeIcon: ImageIcon(
-                  AssetImage("assets/images/menu_khoqua.png"),
+              activeIcon: ImageIcon(AssetImage("assets/images/menu_khoqua.png"),
                   color: HattoColors.colorPrimary),
               icon: ImageIcon(AssetImage("assets/images/menu_khoqua.png"),
                   color: Colors.grey),
