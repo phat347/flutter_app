@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapp/Utils/AppUtils.dart';
 import 'package:flutterapp/list_submission.dart';
+import 'package:flutterapp/loaders/LoadMoreCustom.dart';
 import 'package:flutterapp/loaders/color_loader_3.dart';
 import 'package:flutterapp/loaders/color_loader_5.dart';
 import 'package:flutterapp/loaders/dot_type.dart';
@@ -22,7 +23,6 @@ import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'HattoColors.dart';
-import 'package:loadmore/loadmore.dart';
 
 void main() {
   runApp(MyApp());
@@ -1021,9 +1021,9 @@ class _MyHomePageState extends State<MyHomePage>
                         child: Column(
                           children: <Widget>[
                             Expanded(
-                                child: LoadMore(
+                                child: LoadMoreCustom(
                               onLoadMore: loadMoreSubmission,
-                              textBuilder: DefaultLoadMoreTextBuilder.english,
+                              textBuilder: DefaultLoadMoreTextBuilder.vietnam,
                               child: ListView.builder(
                                   itemCount: listSubmission.length,
                                   physics: BouncingScrollPhysics(),
