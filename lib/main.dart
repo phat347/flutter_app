@@ -9,6 +9,7 @@ import 'package:flutterapp/loaders/dot_type.dart';
 import 'package:flutterapp/models/Submission.dart';
 import 'package:flutterapp/rank_master.dart';
 import 'package:flutterapp/screens/DetailSubmission.dart';
+import 'package:flutterapp/services/ApiService.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -16,6 +17,7 @@ import 'dart:async';
 
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:flutter/services.dart';
+import 'package:logger/logger.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
@@ -60,6 +62,9 @@ class MyHomePage extends StatefulWidget {
   // always marked "final".
 
   final String title;
+  Logger logger = Logger();
+
+  ApiService apiService = ApiService.create();
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -71,11 +76,15 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   bool closeTopContainer = false;
   double topContainer = 0;
 
-  List<Submission> itemsData = [];
+  List<Submission> listSpecialSubmission = [];
+  List<Submission> listSubmission = [];
+
   List<dynamic> rank = rank_master;
 
   int _counter = 0;
-  Future myFuture;
+  Future specialSubmissionFuture;
+  Future submissionFuture;
+
   final GlobalKey<RefreshIndicatorState> submissionTagKey =
       new GlobalKey<RefreshIndicatorState>();
 
@@ -132,24 +141,53 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 //        closeTopContainer = controller.offset > 50;
 //      });
 //    });
-    myFuture = getListSub();
+    specialSubmissionFuture = getListSpecialSubmission();
+    submissionFuture = getListSubmission();
     tabBarController = new TabController(initialIndex: 1,length: 3, vsync: this);
     tabBarController.addListener(_handleTabSelection);
   }
 
-  Future<List<Submission>> getListSub() async {
-    var data_server = await http
-        .get("https://next.json-generator.com/api/json/get/EyGudVOhu");
-    List<dynamic> json_data = jsonDecode(data_server.body);
-    List<Submission> data =
-        json_data.map((json_data) => Submission.fromJson(json_data)).toList();
-
-    setState(() {
-      itemsData = data;
+  Future<List<Submission>> getListSubmission() async{
+    await widget.apiService.getListSubmission().then((submissionItem){
+      widget.logger.i(submissionItem);
+      setState(() {
+        listSubmission = submissionItem;
+      });
     });
-
-    return data;
+    return listSubmission;
   }
+
+  Future<List<Submission>> getListSpecialSubmission() async{
+    await widget.apiService.getListSpecialSubmission().then((submissionItem){
+      widget.logger.i(submissionItem);
+      setState(() {
+        listSpecialSubmission = submissionItem;
+      });
+    });
+    return listSpecialSubmission;
+  }
+
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    tabBarController.dispose();
+    super.dispose();
+  }
+
+//  Future<List<Submission>> getListSub() async {
+//    var data_server = await http
+//        .get("https://next.json-generator.com/api/json/get/EyGudVOhu");
+//    List<dynamic> json_data = jsonDecode(data_server.body);
+//    List<Submission> data =
+//        json_data.map((json_data) => Submission.fromJson(json_data)).toList();
+//
+//    setState(() {
+//      listSpecialSubmission = data;
+//    });
+//
+//    return data;
+//  }
 
   void _incrementCounter() {
     setState(() {
@@ -226,7 +264,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     final double categoryHeight = size.height * 0.30;
     return Scaffold(
         appBar: AppBar(
-          flexibleSpace: new Column(mainAxisAlignment: MainAxisAlignment.end,children: [],),
           // Here we take the value from the MyHomePage object that was created by
           // the App.build method, and use it to set our appbar title.
           iconTheme: IconThemeData(
@@ -318,9 +355,9 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           children: [
             RefreshIndicator(
               key: PageStorageKey(specialTabKey),
-              onRefresh: getListSub,
+              onRefresh: getListSpecialSubmission,
               child: FutureBuilder(
-                  future: myFuture,
+                  future: specialSubmissionFuture,
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.data == null) {
                       return Container(
@@ -339,10 +376,10 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                           children: <Widget>[
                             Expanded(
                                 child: ListView.builder(
-                                    itemCount: itemsData.length,
+                                    itemCount: listSpecialSubmission.length,
                                     physics: BouncingScrollPhysics(),
                                     itemBuilder: (context, index) {
-                                      var itemSub = itemsData[index];
+                                      var itemSub = listSpecialSubmission[index];
                                       double scale = 1.0;
                                       if (topContainer > 0.5) {
                                         scale = index + 0.5 - topContainer;
@@ -366,7 +403,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                               Submission itemsDetailBack =
                                                   value as Submission;
                                               setState(() {
-                                                itemsData[index] =
+                                                listSpecialSubmission[index] =
                                                     itemsDetailBack;
 //                                            itemSub = itemsDetailBack;
                                               });
@@ -908,9 +945,9 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
             ),
             RefreshIndicator(
               key: PageStorageKey(submissionTagKey),
-              onRefresh: getListSub,
+              onRefresh: getListSubmission,
               child: FutureBuilder(
-                  future: myFuture,
+                  future: submissionFuture,
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.data == null) {
                       return Container(
@@ -929,10 +966,10 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                           children: <Widget>[
                             Expanded(
                                 child: ListView.builder(
-                                    itemCount: itemsData.length,
+                                    itemCount: listSubmission.length,
                                     physics: BouncingScrollPhysics(),
                                     itemBuilder: (context, index) {
-                                      var itemSub = itemsData[index];
+                                      var itemSub = listSubmission[index];
                                       double scale = 1.0;
                                       if (topContainer > 0.5) {
                                         scale = index + 0.5 - topContainer;
@@ -956,7 +993,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                               Submission itemsDetailBack =
                                                   value as Submission;
                                               setState(() {
-                                                itemsData[index] =
+                                                listSubmission[index] =
                                                     itemsDetailBack;
 //                                            itemSub = itemsDetailBack;
                                               });
@@ -1498,9 +1535,9 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
             ),
             RefreshIndicator(
               key: PageStorageKey(locationTabKey),
-              onRefresh: getListSub,
+              onRefresh: getListSpecialSubmission,
               child: FutureBuilder(
-                  future: myFuture,
+                  future: specialSubmissionFuture,
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.data == null) {
                       return Container(
@@ -1519,10 +1556,10 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                           children: <Widget>[
                             Expanded(
                                 child: ListView.builder(
-                                    itemCount: itemsData.length,
+                                    itemCount: listSpecialSubmission.length,
                                     physics: BouncingScrollPhysics(),
                                     itemBuilder: (context, index) {
-                                      var itemSub = itemsData[index];
+                                      var itemSub = listSpecialSubmission[index];
                                       double scale = 1.0;
                                       if (topContainer > 0.5) {
                                         scale = index + 0.5 - topContainer;
@@ -1546,7 +1583,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                               Submission itemsDetailBack =
                                                   value as Submission;
                                               setState(() {
-                                                itemsData[index] =
+                                                listSpecialSubmission[index] =
                                                     itemsDetailBack;
 //                                            itemSub = itemsDetailBack;
                                               });

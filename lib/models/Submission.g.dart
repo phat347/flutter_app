@@ -32,7 +32,7 @@ Submission _$SubmissionFromJson(Map<String, dynamic> json) {
     json['img_id'] as String,
     json['last_edited'] as String,
     json['location_address'] as String,
-    json['location_avg_rating'] as int,
+    (json['location_avg_rating'] as num)?.toDouble(),
     json['location_full_desc'] as String,
     json['location_img_header_url'] as String,
     json['location_name'] as String,

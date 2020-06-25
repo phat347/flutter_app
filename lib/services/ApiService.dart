@@ -16,4 +16,11 @@ abstract class ApiService {
   }
   @GET("/api/json/get/41TUyej6d")
   Future<Submission> getDetailSubmission();
+
+  @GET("/api/json/get/VJAAA4TT_")
+  Future<List<Submission>> getListSubmission();
+
+  @GET("/api/json/get/EyGudVOhu")
+  Future<List<Submission>> getListSpecialSubmission();
+
 }

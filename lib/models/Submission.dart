@@ -46,7 +46,7 @@ class Submission {
 
   String location_address;
 
-  int location_avg_rating;
+  double location_avg_rating;
 
   String location_full_desc;
 
