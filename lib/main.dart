@@ -2315,6 +2315,7 @@ class _MyHomePageState extends State<MyHomePage>
   Container ContainerRecommenderSubmission() => Container(
         color: HattoColors.colorPrimary,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 10, left: 10, bottom: 10),
@@ -2355,24 +2356,102 @@ class _MyHomePageState extends State<MyHomePage>
                 ],
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Bạn muốn chọn buổi ăn khác?",
-                  style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.white,
-                      fontFamily: "RobotoRegular"),
-                ),
-                SizedBox(
-                  width: 5,
-                ),
-                Icon(
-                  Icons.keyboard_arrow_down,
-                  color: Colors.white,size: 22,
-                )
-              ],
+            FutureBuilder(
+              future: specialSubmissionFuture,
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.data == null) {
+                  return Container(
+                      child: ColorLoader5(
+                    dotOneColor: Colors.redAccent,
+                    dotTwoColor: Colors.blueAccent,
+                    dotThreeColor: Colors.green,
+                    dotType: DotType.circle,
+                    dotIcon: Icon(Icons.adjust),
+                    duration: Duration(seconds: 1),
+                  ));
+                } else {
+                  return SizedBox(
+                    height: 240,
+                    child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: listSpecialSubmission.length,
+                        physics: BouncingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          var itemSub = listSpecialSubmission[index];
+                          double scale = 1.0;
+                          if (topContainer > 0.5) {
+                            scale = index + 0.5 - topContainer;
+                            if (scale < 0) {
+                              scale = 0;
+                            } else if (scale > 1) {
+                              scale = 1;
+                            }
+                          }
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) =>
+                                              DetailSubmission(itemSub, index)))
+                                  .then((value) {
+                                if (value != null) {
+                                  Submission itemsDetailBack =
+                                      value as Submission;
+                                  setState(() {
+                                    listSpecialSubmission[index] =
+                                        itemsDetailBack;
+//                                            itemSub = itemsDetailBack;
+                                  });
+                                }
+                              });
+                            },
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: Container(
+                                width: 170,
+                                height: 240,
+                                  decoration:
+                                  BoxDecoration(
+                                    image: DecorationImage(
+                                        fit: BoxFit
+                                            .cover,
+                                        image: CachedNetworkImageProvider(
+                                            itemSub
+                                                .URL_img_id)),
+                                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                                  )
+                              ),
+                            ),
+                          );
+                        }),
+                  );
+                }
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Bạn muốn chọn buổi ăn khác?",
+                    style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.white,
+                        fontFamily: "RobotoRegular"),
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Icon(
+                    Icons.keyboard_arrow_down,
+                    color: Colors.white,
+                    size: 22,
+                  )
+                ],
+              ),
             )
           ],
         ),
