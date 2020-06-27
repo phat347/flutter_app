@@ -51,6 +51,7 @@ class _DetailSubmissionState extends State<DetailSubmission> {
   void initState() {
     // TODO: implement initState
     boxCommentController = TextEditingController();
+    widget.items.total_unique_views++;
     super.initState();
   }
 
@@ -77,7 +78,7 @@ class _DetailSubmissionState extends State<DetailSubmission> {
   }
 
   CircleAvatar getAvatarUser(Submission items) {
-    if (items.isVipCheck()) {
+    if (!items.isVipCheck()) {
       return CircleAvatar(
           radius: 20,
           backgroundImage: CachedNetworkImageProvider(items.portrait_url),
@@ -161,7 +162,7 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                                   style: TextStyle(
                                       fontSize: 15,
                                       fontFamily: 'RobotoMedium',
-                                      color: widget.items.isVipCheck()
+                                      color: !widget.items.isVipCheck()
                                           ? Colors.black
                                           : HattoColors.colorPrimary),
                                 ),
@@ -175,7 +176,7 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             Visibility(
-                              visible: widget.items.isVipCheck() ? false : true,
+                              visible: !widget.items.isVipCheck() ? false : true,
                               child: Container(
                                   decoration: new BoxDecoration(
                                       color: HattoColors.colorPrimary,

@@ -83,11 +83,15 @@ class _MyHomePageState extends State<MyHomePage>
   List<Submission> listSpecialSubmission = [];
   List<Submission> listSubmission = [];
 
+  List<Submission> listRecommenderSubmission = [];
+
   List<dynamic> rank = rank_master;
 
   int _counter = 0;
   Future specialSubmissionFuture;
   Future submissionFuture;
+
+  Future recommnederSubmissionFuture;
 
   final GlobalKey<RefreshIndicatorState> submissionTagKey =
       new GlobalKey<RefreshIndicatorState>();
@@ -146,6 +150,7 @@ class _MyHomePageState extends State<MyHomePage>
 
     specialSubmissionFuture = getListSpecialSubmission();
     submissionFuture = getListSubmission();
+    recommnederSubmissionFuture = getRecommenderSubmission();
     tabBarController =
         new TabController(initialIndex: 1, length: 3, vsync: this);
     tabBarController.addListener(_handleTabSelection);
@@ -169,6 +174,16 @@ class _MyHomePageState extends State<MyHomePage>
       });
     });
     return listSpecialSubmission;
+  }
+
+  Future<List<Submission>> getRecommenderSubmission() async {
+    await widget.apiService.getRecommenderSubmission().then((submissionItem) {
+      widget.logger.i(submissionItem);
+      setState(() {
+        listRecommenderSubmission = submissionItem;
+      });
+    });
+    return listRecommenderSubmission;
   }
 
   Future<bool> loadMoreSubmission() async {
@@ -241,7 +256,7 @@ class _MyHomePageState extends State<MyHomePage>
   }
 
   CircleAvatar getAvatarUser(Submission items, double size) {
-    if (items.isVipCheck()) {
+    if (!items.isVipCheck()) {
       return CircleAvatar(
           radius: size,
           backgroundImage: CachedNetworkImageProvider(items.portrait_url),
@@ -552,7 +567,7 @@ class _MyHomePageState extends State<MyHomePage>
                                                                                 itemSub.user_name,
                                                                                 overflow: TextOverflow.ellipsis,
                                                                                 maxLines: 1,
-                                                                                style: TextStyle(fontSize: 15, fontFamily: 'RobotoMedium', color: itemSub.isVipCheck() ? Colors.black : HattoColors.colorPrimary),
+                                                                                style: TextStyle(fontSize: 15, fontFamily: 'RobotoMedium', color: !itemSub.isVipCheck() ? Colors.black : HattoColors.colorPrimary),
                                                                               ),
                                                                             ),
                                                                           ),
@@ -581,7 +596,7 @@ class _MyHomePageState extends State<MyHomePage>
                                                                         children: <
                                                                             Widget>[
                                                                           Visibility(
-                                                                            visible: itemSub.isVipCheck()
+                                                                            visible: !itemSub.isVipCheck()
                                                                                 ? false
                                                                                 : true,
                                                                             child: Container(
@@ -1002,7 +1017,10 @@ class _MyHomePageState extends State<MyHomePage>
             ),
             RefreshIndicator(
               key: PageStorageKey(submissionTagKey),
-              onRefresh: getListSubmission,
+              onRefresh: () async{
+                await getListSubmission();
+                 getRecommenderSubmission();
+              },
               child: FutureBuilder(
                   future: submissionFuture,
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -1059,7 +1077,7 @@ class _MyHomePageState extends State<MyHomePage>
                                               Submission itemsDetailBack =
                                                   value as Submission;
                                               setState(() {
-                                                listSubmission[index] =
+                                                listSubmission[index - 1] =
                                                     itemsDetailBack;
 //                                            itemSub = itemsDetailBack;
                                               });
@@ -1182,7 +1200,7 @@ class _MyHomePageState extends State<MyHomePage>
                                                                                 itemSub.user_name,
                                                                                 overflow: TextOverflow.ellipsis,
                                                                                 maxLines: 1,
-                                                                                style: TextStyle(fontSize: 15, fontFamily: 'RobotoMedium', color: itemSub.isVipCheck() ? Colors.black : HattoColors.colorPrimary),
+                                                                                style: TextStyle(fontSize: 15, fontFamily: 'RobotoMedium', color: !itemSub.isVipCheck() ? Colors.black : HattoColors.colorPrimary),
                                                                               ),
                                                                             ),
                                                                           ),
@@ -1211,7 +1229,7 @@ class _MyHomePageState extends State<MyHomePage>
                                                                         children: <
                                                                             Widget>[
                                                                           Visibility(
-                                                                            visible: itemSub.isVipCheck()
+                                                                            visible: !itemSub.isVipCheck()
                                                                                 ? false
                                                                                 : true,
                                                                             child: Container(
@@ -1805,7 +1823,7 @@ class _MyHomePageState extends State<MyHomePage>
                                                                                 itemSub.user_name,
                                                                                 overflow: TextOverflow.ellipsis,
                                                                                 maxLines: 1,
-                                                                                style: TextStyle(fontSize: 15, fontFamily: 'RobotoMedium', color: itemSub.isVipCheck() ? Colors.black : HattoColors.colorPrimary),
+                                                                                style: TextStyle(fontSize: 15, fontFamily: 'RobotoMedium', color: !itemSub.isVipCheck() ? Colors.black : HattoColors.colorPrimary),
                                                                               ),
                                                                             ),
                                                                           ),
@@ -1835,8 +1853,8 @@ class _MyHomePageState extends State<MyHomePage>
                                                                             Widget>[
                                                                           Visibility(
                                                                             visible: itemSub.isVipCheck()
-                                                                                ? false
-                                                                                : true,
+                                                                                ? true
+                                                                                : false,
                                                                             child: Container(
                                                                                 decoration: new BoxDecoration(color: HattoColors.colorPrimary, borderRadius: new BorderRadius.all(Radius.circular(8))),
                                                                                 child: Padding(
@@ -2360,7 +2378,7 @@ class _MyHomePageState extends State<MyHomePage>
               ),
             ),
             FutureBuilder(
-              future: specialSubmissionFuture,
+              future: recommnederSubmissionFuture,
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.data == null) {
                   return Container(
@@ -2377,10 +2395,10 @@ class _MyHomePageState extends State<MyHomePage>
                     height: 240,
                     child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: listSpecialSubmission.length,
+                        itemCount: listRecommenderSubmission.length,
                         physics: BouncingScrollPhysics(),
                         itemBuilder: (context, index) {
-                          var itemSub = listSpecialSubmission[index];
+                          var itemSub = listRecommenderSubmission[index];
                           double scale = 1.0;
                           if (topContainer > 0.5) {
                             scale = index + 0.5 - topContainer;
@@ -2402,7 +2420,7 @@ class _MyHomePageState extends State<MyHomePage>
                                   Submission itemsDetailBack =
                                       value as Submission;
                                   setState(() {
-                                    listSpecialSubmission[index] =
+                                    listRecommenderSubmission[index] =
                                         itemsDetailBack;
 //                                            itemSub = itemsDetailBack;
                                   });
@@ -2506,7 +2524,7 @@ class _MyHomePageState extends State<MyHomePage>
                                                             ),
                                                             Flexible(
                                                               child: Text(
-                                                                "${itemSub.i_found+itemSub.NUM_MATCHES}",
+                                                                "${itemSub.i_found + itemSub.NUM_MATCHES}",
                                                                 overflow:
                                                                     TextOverflow
                                                                         .ellipsis,
@@ -2557,19 +2575,28 @@ class _MyHomePageState extends State<MyHomePage>
                                                         ),
                                                       ),
                                                       Visibility(
-                                                        visible: itemSub.location_home_delivery!=0?true:false,
+                                                        visible:
+                                                            itemSub.location_home_delivery !=
+                                                                    0
+                                                                ? true
+                                                                : false,
                                                         child: Flexible(
                                                           flex: 1,
                                                           child: Row(
-                                                            mainAxisAlignment: MainAxisAlignment.end,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .end,
                                                             children: [
                                                               Container(
                                                                 child: Center(
-                                                                  child: Container(
+                                                                  child:
+                                                                      Container(
                                                                     child: Image.asset(
                                                                         "assets/images/ic_bike_delivery_2x.png",
-                                                                        width: 15,
-                                                                        height: 15),
+                                                                        width:
+                                                                            15,
+                                                                        height:
+                                                                            15),
                                                                   ),
                                                                 ),
                                                                 width: 18,
@@ -2581,7 +2608,6 @@ class _MyHomePageState extends State<MyHomePage>
                                                                     color: Colors
                                                                         .white),
                                                               ),
-
                                                             ],
                                                           ),
                                                         ),
@@ -2636,7 +2662,11 @@ class _MyHomePageState extends State<MyHomePage>
                                                           TextOverflow.ellipsis,
                                                       maxLines: 1,
                                                       style: TextStyle(
-                                                          color: Colors.black,
+                                                          color: itemSub
+                                                                  .isVipCheck()
+                                                              ? HattoColors
+                                                                  .colorPrimary
+                                                              : Colors.black,
                                                           fontFamily:
                                                               "RobotoMedium",
                                                           fontSize: 13),
