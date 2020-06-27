@@ -109,6 +109,8 @@ flutter:
     - assets/images/ic_tab_special_black.png
     - assets/images/ic_tab_location_black.png
     - assets/images/ic_tab_submission_black.png
+    - assets/images/ic_eye_pass_active.png
+    - assets/images/prediction.png
 
 
   fonts:
