@@ -1,10 +1,11 @@
 
+import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'Submission.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class Submission {
+class Submission extends ChangeNotifier{
   String class_desc,
       extra_desc,
       URL_img_id,
@@ -143,5 +144,9 @@ class Submission {
       isVip = true;
     }
     return isVip;
+  }
+
+  updateItem(){
+    notifyListeners();
   }
 }
