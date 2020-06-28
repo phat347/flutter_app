@@ -2394,6 +2394,7 @@ class _MyHomePageState extends State<MyHomePage>
                   return SizedBox(
                     height: 240,
                     child: ListView.builder(
+                       key: PageStorageKey(submissionTagKey),
                         scrollDirection: Axis.horizontal,
                         itemCount: listRecommenderSubmission.length,
                         physics: BouncingScrollPhysics(),

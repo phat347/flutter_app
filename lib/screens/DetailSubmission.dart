@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutterapp/HattoColors.dart';
 import 'package:flutterapp/Utils/AppUtils.dart';
+import 'package:flutterapp/models/BooleanOnTextChange.dart';
 import 'package:flutterapp/models/Submission.dart';
 import 'package:flutterapp/rank_master.dart';
 import 'package:flutterapp/screens/GalleryPhotoZoom.dart';
@@ -23,7 +24,7 @@ import 'package:provider/provider.dart';
 class DetailSubmission extends StatefulWidget {
   Submission items;
   int index;
-  bool boxCommentTextChange = false;
+  BooleanOnTextChange boxCommentTextChange = new BooleanOnTextChange();
   Logger logger = Logger();
 
   ApiService apiService = ApiService.create();
@@ -119,21 +120,21 @@ class _DetailSubmissionState extends State<DetailSubmission> {
     });
   }
 
-  getSubmissionDetail() async{
-    await widget.apiService.getDetailSubmission().then((submissionItem){
+  getSubmissionDetail() async {
+    await widget.apiService.getDetailSubmission().then((submissionItem) {
       widget.logger.i(submissionItem);
       setState(() {
         widget.items = submissionItem;
-
       });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
+    final Size size = MediaQuery
+        .of(context)
+        .size;
     print('setState build _DetailSubmissionState');
-
 
 
     return Scaffold(
@@ -185,7 +186,9 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             Visibility(
-                              visible: !widget.items.isVipCheck() ? false : true,
+                              visible: !widget.items.isVipCheck()
+                                  ? false
+                                  : true,
                               child: Container(
                                   decoration: new BoxDecoration(
                                       color: HattoColors.colorPrimary,
@@ -256,7 +259,7 @@ class _DetailSubmissionState extends State<DetailSubmission> {
         ),
         body: RefreshIndicator(
           // two attrs enable footer implements the effect in header default
-            onRefresh: ()async{
+            onRefresh: () async {
               await getSubmissionDetail();
             },
             child: Stack(
@@ -297,7 +300,8 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                                     width: double.infinity,
                                     height: size.height / 2,
                                     child: Hero(
-                                      tag: widget.index.toString()+widget.items.forum_id,
+                                      tag: widget.index.toString() +
+                                          widget.items.forum_id,
                                       child: CachedNetworkImage(
                                           imageUrl: widget.items.URL_img_id,
                                           fit: BoxFit.cover),
@@ -365,7 +369,8 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                                                   child: Column(
                                                     children: [
                                                       Text(
-                                                        "${widget.items.NUM_CHOICE_MATCHES}",
+                                                        "${widget.items
+                                                            .NUM_CHOICE_MATCHES}",
                                                         overflow: TextOverflow
                                                             .ellipsis,
                                                         maxLines: 1,
@@ -428,7 +433,10 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                                                   child: Column(
                                                     children: [
                                                       Text(
-                                                        "${widget.items.NUM_MATCHES + widget.items.i_found}",
+                                                        "${widget.items
+                                                            .NUM_MATCHES +
+                                                            widget.items
+                                                                .i_found}",
                                                         overflow: TextOverflow
                                                             .ellipsis,
                                                         maxLines: 1,
@@ -490,7 +498,8 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                                                   child: Column(
                                                       children: [
                                                         Text(
-                                                          "+${widget.items.forum_rewards}",
+                                                          "+${widget.items
+                                                              .forum_rewards}",
                                                           overflow: TextOverflow
                                                               .ellipsis,
                                                           maxLines: 1,
@@ -556,7 +565,8 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                                           color: Colors.black),
                                     ),
                                     Text(
-                                      "${widget.items.total_unique_views} lượt xem",
+                                      "${widget.items
+                                          .total_unique_views} lượt xem",
                                       style: TextStyle(
                                           fontSize: 15,
                                           fontFamily: 'RobotoMedium',
@@ -644,19 +654,25 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                                                       height: 2,
                                                     ),
                                                     Flexible(
-                                                        child: ChangeNotifierProvider<Submission>.value(
+                                                        child: ChangeNotifierProvider<
+                                                            Submission>.value(
                                                           value: widget.items,
-                                                          child: Consumer<Submission>(
-                                                            builder: (context,data,child) {
+                                                          child: Consumer<
+                                                              Submission>(
+                                                            builder: (context,
+                                                                data, child) {
                                                               return Text(
-                                                                "${data.voted_id_1}",
+                                                                "${data
+                                                                    .voted_id_1}",
                                                                 style: TextStyle(
                                                                     fontSize: 12,
                                                                     fontFamily:
                                                                     "RobotoMedium",
-                                                                    color: Colors.black),
+                                                                    color: Colors
+                                                                        .black),
                                                                 overflow:
-                                                                TextOverflow.ellipsis,
+                                                                TextOverflow
+                                                                    .ellipsis,
                                                                 maxLines: 1,
                                                               );
                                                             },
@@ -707,19 +723,25 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                                                       height: 2,
                                                     ),
                                                     Flexible(
-                                                        child: ChangeNotifierProvider<Submission>.value(
+                                                        child: ChangeNotifierProvider<
+                                                            Submission>.value(
                                                           value: widget.items,
-                                                          child: Consumer<Submission>(
-                                                            builder: (context,data,child) {
+                                                          child: Consumer<
+                                                              Submission>(
+                                                            builder: (context,
+                                                                data, child) {
                                                               return Text(
-                                                                "${data.voted_id_2}",
+                                                                "${data
+                                                                    .voted_id_2}",
                                                                 style: TextStyle(
                                                                     fontSize: 12,
                                                                     fontFamily:
                                                                     "RobotoMedium",
-                                                                    color: Colors.black),
+                                                                    color: Colors
+                                                                        .black),
                                                                 overflow:
-                                                                TextOverflow.ellipsis,
+                                                                TextOverflow
+                                                                    .ellipsis,
                                                                 maxLines: 1,
                                                               );
                                                             },
@@ -767,19 +789,25 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                                                       height: 2,
                                                     ),
                                                     Flexible(
-                                                        child: ChangeNotifierProvider<Submission>.value(
+                                                        child: ChangeNotifierProvider<
+                                                            Submission>.value(
                                                           value: widget.items,
-                                                          child: Consumer<Submission>(
-                                                            builder: (context,data,child) {
+                                                          child: Consumer<
+                                                              Submission>(
+                                                            builder: (context,
+                                                                data, child) {
                                                               return Text(
-                                                                "${data.voted_id_3}",
+                                                                "${data
+                                                                    .voted_id_3}",
                                                                 style: TextStyle(
                                                                     fontSize: 12,
                                                                     fontFamily:
                                                                     "RobotoMedium",
-                                                                    color: Colors.black),
+                                                                    color: Colors
+                                                                        .black),
                                                                 overflow:
-                                                                TextOverflow.ellipsis,
+                                                                TextOverflow
+                                                                    .ellipsis,
                                                                 maxLines: 1,
                                                               );
                                                             },
@@ -827,12 +855,14 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                                                     ),
                                                     Flexible(
                                                         child: Text(
-                                                          "${widget.items.replies_count}",
+                                                          "${widget.items
+                                                              .replies_count}",
                                                           style: TextStyle(
                                                               fontSize: 12,
                                                               fontFamily:
                                                               "RobotoMedium",
-                                                              color: Colors.black),
+                                                              color: Colors
+                                                                  .black),
                                                           overflow:
                                                           TextOverflow.ellipsis,
                                                           maxLines: 1,
@@ -876,13 +906,13 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                         Flexible(
                           child: TextField(
                             onChanged: (text) {
-                              setState(() {
-                                if (text.isEmpty) {
-                                  widget.boxCommentTextChange = false;
-                                } else {
-                                  widget.boxCommentTextChange = true;
-                                }
-                              });
+//                              setState(() {
+                              if (text.isEmpty) {
+                                widget.boxCommentTextChange.updateValue(false);
+                              } else {
+                                widget.boxCommentTextChange.updateValue(true);
+                              }
+//                              });
                             },
                             controller: boxCommentController,
                             textCapitalization: TextCapitalization.sentences,
@@ -914,10 +944,7 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                               boxCommentController.clear();
                               FocusScopeNode currentFocus =
                               FocusScope.of(context);
-
-                              setState(() {
-                                widget.boxCommentTextChange = false;
-                              });
+                              widget.boxCommentTextChange.updateValue(false);
                               if (!currentFocus.hasPrimaryFocus) {
                                 currentFocus.unfocus();
                               }
@@ -925,8 +952,30 @@ class _DetailSubmissionState extends State<DetailSubmission> {
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(left: 5),
-                            child: buildImageOntextChange(
-                                widget.boxCommentTextChange),
+                            child: ChangeNotifierProvider<
+                                BooleanOnTextChange>.value(
+                              value: widget.boxCommentTextChange,
+                              child: Consumer<BooleanOnTextChange>(
+                                builder: (context, value, child) {
+                                  if (value.textChange) {
+                                    return Image.asset(
+                                      "assets/images/ic_right_arrow.png",
+                                      color: Colors.blue,
+                                      width: 20,
+                                      height: 20,
+                                    );
+                                  }
+                                  else{
+                                    return Image.asset(
+                                      "assets/images/ic_right_arrow.png",
+                                      color: HattoColors.colorTimeLine,
+                                      width: 20,
+                                      height: 20,
+                                    );
+                                  }
+                                },
+                              ),
+                            ),
                           ),
                         )
                       ],
@@ -938,19 +987,8 @@ class _DetailSubmissionState extends State<DetailSubmission> {
         ));
   }
 
-  Image buildImageOntextChange(bool value) => value
-      ? Image.asset(
-          "assets/images/ic_right_arrow.png",
-          color: Colors.blue,
-          width: 20,
-          height: 20,
-        )
-      : Image.asset(
-          "assets/images/ic_right_arrow.png",
-          color: HattoColors.colorTimeLine,
-          width: 20,
-          height: 20,
-        );
+
+
 }
 
 //class GifHeader1 extends RefreshIndicator {
