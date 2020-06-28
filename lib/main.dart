@@ -2399,15 +2399,7 @@ class _MyHomePageState extends State<MyHomePage>
                         physics: BouncingScrollPhysics(),
                         itemBuilder: (context, index) {
                           var itemSub = listRecommenderSubmission[index];
-                          double scale = 1.0;
-                          if (topContainer > 0.5) {
-                            scale = index + 0.5 - topContainer;
-                            if (scale < 0) {
-                              scale = 0;
-                            } else if (scale > 1) {
-                              scale = 1;
-                            }
-                          }
+
                           return GestureDetector(
                             onTap: () {
                               Navigator.push(
