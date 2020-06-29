@@ -103,6 +103,8 @@ class _MyHomePageState extends State<MyHomePage>
       new GlobalKey<RefreshIndicatorState>();
 
   int _selectedIndex = 0;
+
+  bool isSwitched = true;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
@@ -295,6 +297,7 @@ class _MyHomePageState extends State<MyHomePage>
         appBar: AppBar(
           // Here we take the value from the MyHomePage object that was created by
           // the App.build method, and use it to set our appbar title.
+          elevation: 0,
           iconTheme: IconThemeData(
             color: Colors.black, //change your color here
           ),
@@ -1017,9 +1020,9 @@ class _MyHomePageState extends State<MyHomePage>
             ),
             RefreshIndicator(
               key: PageStorageKey(submissionTagKey),
-              onRefresh: () async{
+              onRefresh: () async {
                 await getListSubmission();
-                 getRecommenderSubmission();
+                getRecommenderSubmission();
               },
               child: FutureBuilder(
                   future: submissionFuture,
@@ -1039,6 +1042,106 @@ class _MyHomePageState extends State<MyHomePage>
                         height: size.height,
                         child: Column(
                           children: <Widget>[
+                            Container(
+                              width: size.width,
+                              height: 1,
+                              color: HattoColors.greyD3,
+                            ),
+                            Container(
+                              color: Colors.white,
+                              width: size.width,
+                              height: 50,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Flexible(
+                                    flex: 3,
+                                    child: Row(
+                                      children: [
+                                        Switch(
+                                          value: isSwitched,
+                                          activeColor: Colors.white,
+                                          inactiveTrackColor:
+                                              HattoColors.greyD3,
+                                          inactiveThumbColor:
+                                              HattoColors.whiteGrey92,
+                                          activeTrackColor:
+                                              HattoColors.greenLight,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              isSwitched = value;
+                                            });
+                                          },
+                                        ),
+                                        Flexible(
+                                          child: Text(
+                                            isSwitched
+                                                ? "Tất cả bài viết"
+                                                : "Bài của tôi",
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                            style: TextStyle(
+                                                fontFamily: "RobotoRegular",
+                                                fontSize: 13),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  Flexible(
+                                    flex: 2,
+                                    child: Container(
+                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(12),color: HattoColors.greyD3),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "Mọi nơi",
+                                              style: TextStyle(
+                                                  fontFamily: "RobotoBold",
+                                                  fontSize: 12,
+                                                  color: HattoColors.colorPrimary),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Flexible(
+                                    flex: 3,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(right: 5),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Image.asset(
+                                            "assets/images/ic_chopstick.png",
+                                            width: 15,
+                                            height: 15,
+                                          ),
+                                          Text("Chia sẻ bài mới",
+                                              style: TextStyle(
+                                                  fontFamily: "RobotoRegular",
+                                                  fontSize: 13)),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Image.asset(
+                                            "assets/images/ic_search.png",
+                                            width: 15,
+                                            height: 15,
+                                            color: Colors.black,
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
                             Expanded(
                                 child: LoadMoreCustom(
                               onLoadMore: loadMoreSubmission,
@@ -2394,7 +2497,7 @@ class _MyHomePageState extends State<MyHomePage>
                   return SizedBox(
                     height: 240,
                     child: ListView.builder(
-                       key: PageStorageKey(submissionTagKey),
+                        key: PageStorageKey(submissionTagKey),
                         scrollDirection: Axis.horizontal,
                         itemCount: listRecommenderSubmission.length,
                         physics: BouncingScrollPhysics(),

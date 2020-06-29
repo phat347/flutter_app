@@ -111,6 +111,8 @@ flutter:
     - assets/images/ic_tab_submission_black.png
     - assets/images/ic_eye_pass_active.png
     - assets/images/prediction.png
+    - assets/images/ic_chopstick.png
+    - assets/images/ic_search.png
 
 
   fonts:

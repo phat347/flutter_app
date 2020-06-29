@@ -8,6 +8,10 @@ class HattoColors {
   static Color gradientBlackStart = HexColor("#00000000");
   static Color gradientBlackEnd = HexColor("#a6000000");
   static Color whiteGrey = HexColor("#efefef");
+  static Color whiteGrey92 = HexColor("#929292");
+  static Color greenLight = HexColor("#4cd964");
+  static Color greyD3 = HexColor("#d3d3d3");
+
 
 }
 
