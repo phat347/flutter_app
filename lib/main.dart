@@ -7,9 +7,11 @@ import 'package:flutterapp/loaders/LoadMoreCustom.dart';
 import 'package:flutterapp/loaders/color_loader_3.dart';
 import 'package:flutterapp/loaders/color_loader_5.dart';
 import 'package:flutterapp/loaders/dot_type.dart';
+import 'package:flutterapp/models/SelecteDistance.dart';
 import 'package:flutterapp/models/Submission.dart';
 import 'package:flutterapp/rank_master.dart';
 import 'package:flutterapp/screens/DetailSubmission.dart';
+import 'package:flutterapp/select_distance.dart';
 import 'package:flutterapp/services/ApiService.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -78,6 +80,7 @@ class _MyHomePageState extends State<MyHomePage>
   bool closeTopContainer = false;
   double topContainer = 0;
 
+
   bool flagLoadmore = false;
 
   List<Submission> listSpecialSubmission = [];
@@ -86,6 +89,9 @@ class _MyHomePageState extends State<MyHomePage>
   List<Submission> listRecommenderSubmission = [];
 
   List<dynamic> rank = rank_master;
+  List<SelectDistance> listSelectDistance = [];
+  int indexSelectedDistance = 0;
+  SelectDistance selectedItem;
 
   int _counter = 0;
   Future specialSubmissionFuture;
@@ -140,9 +146,18 @@ class _MyHomePageState extends State<MyHomePage>
     setState(() {});
   }
 
+  void getSelectDistanceList() {
+    List<Map<String, Object>> json_data = select_distance;
+    listSelectDistance = json_data
+        .map((json_data) => SelectDistance.fromJson(json_data))
+        .toList();
+    selectedItem = listSelectDistance[0];
+  }
+
   @override
   void initState() {
     super.initState();
+    getSelectDistanceList();
     controller.addListener(() {
       if (controller.position.pixels == controller.position.maxScrollExtent) {
         //sự kiện kéo xuống cuối listview
@@ -1050,12 +1065,12 @@ class _MyHomePageState extends State<MyHomePage>
                             Container(
                               color: Colors.white,
                               width: size.width,
-                              height: 50,
+                              height: 40,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Flexible(
-                                    flex: 3,
+                                    flex: 4,
                                     child: Row(
                                       children: [
                                         Switch(
@@ -1089,28 +1104,102 @@ class _MyHomePageState extends State<MyHomePage>
                                     ),
                                   ),
                                   Flexible(
-                                    flex: 2,
-                                    child: Container(
-                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(12),color: HattoColors.greyD3),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(4.0),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              "Mọi nơi",
-                                              style: TextStyle(
-                                                  fontFamily: "RobotoBold",
-                                                  fontSize: 12,
-                                                  color: HattoColors.colorPrimary),
-                                            )
-                                          ],
+                                    flex: 3,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        showModalBottomSheet(
+                                          backgroundColor: Colors.transparent,
+                                            enableDrag: true,
+                                            context: context,
+                                            builder: (context) {
+                                              return SingleChildScrollView(
+                                                child: Container(
+                                                  decoration: BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20)),color: Colors.white),
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      ...listSelectDistance
+                                                          .map((e) => Column(
+                                                                children: [
+                                                                  GestureDetector(
+                                                                    child:
+                                                                        Container(
+                                                                          child: Padding(
+                                                                      padding: const EdgeInsets
+                                                                                .symmetric(
+                                                                            vertical:
+                                                                                15),
+                                                                      child: Center(
+                                                                        child: Text(
+                                                                          e.name,
+                                                                          style: TextStyle(
+                                                                              fontSize:
+                                                                                  20,
+                                                                              fontFamily:
+                                                                                  'RobotoRegular'),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                        width: size.width,color: Colors.white,),
+                                                                    onTap: () {
+                                                                      setState(() {
+                                                                        selectedItem = e;
+                                                                      });
+                                                                      Navigator.pop(context);
+                                                                    },
+                                                                  ),
+                                                                  Container(
+                                                                    height: 1,
+                                                                    color:
+                                                                        HattoColors
+                                                                            .greyD3,
+                                                                  )
+                                                                ],
+                                                              ))
+                                                          .toList()
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            });
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            color: HattoColors.greyD3),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Flexible(
+                                                child: Text(
+                                                  selectedItem.name,
+                                                  style: TextStyle(
+                                                      fontFamily: "RobotoBold",
+                                                      fontSize: 12,
+                                                      color: HattoColors
+                                                          .colorPrimary),
+                                                  overflow: TextOverflow.ellipsis,
+                                                  maxLines: 1,
+                                                ),
+                                              ),
+                                              Icon(
+                                                Icons.keyboard_arrow_down,
+                                                color: HattoColors.colorPrimary,
+                                                size: 15,
+                                              )
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
                                   Flexible(
-                                    flex: 3,
+                                    flex: 4,
                                     child: Padding(
                                       padding: EdgeInsets.only(right: 5),
                                       child: Row(
@@ -1122,10 +1211,12 @@ class _MyHomePageState extends State<MyHomePage>
                                             width: 15,
                                             height: 15,
                                           ),
-                                          Text("Chia sẻ bài mới",
-                                              style: TextStyle(
-                                                  fontFamily: "RobotoRegular",
-                                                  fontSize: 13)),
+                                          Flexible(
+                                            child: Text("Chia sẻ bài mới",
+                                                style: TextStyle(
+                                                    fontFamily: "RobotoRegular",
+                                                    fontSize: 13),overflow: TextOverflow.ellipsis,maxLines: 1,),
+                                          ),
                                           SizedBox(
                                             width: 5,
                                           ),
