@@ -80,7 +80,6 @@ class _MyHomePageState extends State<MyHomePage>
   bool closeTopContainer = false;
   double topContainer = 0;
 
-
   bool flagLoadmore = false;
 
   List<Submission> listSpecialSubmission = [];
@@ -195,6 +194,16 @@ class _MyHomePageState extends State<MyHomePage>
 
   Future<List<Submission>> getRecommenderSubmission() async {
     await widget.apiService.getRecommenderSubmission().then((submissionItem) {
+      widget.logger.i(submissionItem);
+      setState(() {
+        listRecommenderSubmission = submissionItem;
+      });
+    });
+    return listRecommenderSubmission;
+  }
+
+  Future<List<Submission>> getRecommenderSubmissionDistance() async {
+    await widget.apiService.getRecommenderSubmissionDistance().then((submissionItem) {
       widget.logger.i(submissionItem);
       setState(() {
         listRecommenderSubmission = submissionItem;
@@ -1108,57 +1117,94 @@ class _MyHomePageState extends State<MyHomePage>
                                     child: GestureDetector(
                                       onTap: () {
                                         showModalBottomSheet(
-                                          backgroundColor: Colors.transparent,
+                                            backgroundColor: Colors.transparent,
                                             enableDrag: true,
                                             context: context,
                                             builder: (context) {
                                               return SingleChildScrollView(
-                                                child: Container(
-                                                  decoration: BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20)),color: Colors.white),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(
+                                                      20.0),
                                                   child: Column(
                                                     mainAxisSize:
                                                         MainAxisSize.min,
                                                     children: [
-                                                      ...listSelectDistance
-                                                          .map((e) => Column(
-                                                                children: [
-                                                                  GestureDetector(
-                                                                    child:
-                                                                        Container(
-                                                                          decoration: BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20)),color: Colors.white),
-                                                                          child: Padding(
-                                                                      padding: const EdgeInsets
-                                                                                .symmetric(
-                                                                            vertical:
-                                                                                15),
-                                                                      child: Center(
-                                                                        child: Text(
-                                                                          e.name,
-                                                                          style: TextStyle(
-                                                                              fontSize:
-                                                                                  20,
-                                                                              fontFamily:
-                                                                                  'RobotoRegular'),
-                                                                        ),
+                                                      ClipRRect(
+                                                        child: Column(
+                                                          children: [
+                                                            ...listSelectDistance
+                                                                .map((e) =>
+                                                                    Container(
+                                                                      child:
+                                                                          Column(
+                                                                        children: [
+                                                                          GestureDetector(
+                                                                            child: Container(
+                                                                                decoration: BoxDecoration(color: Colors.white),
+                                                                                child: Padding(
+                                                                                  padding: const EdgeInsets.symmetric(vertical: 10),
+                                                                                  child: Center(
+                                                                                    child: Text(
+                                                                                      e.name,
+                                                                                      style: TextStyle(fontSize: 20, fontFamily: 'RobotoRegular'),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                                width: size.width),
+                                                                            onTap: () {
+                                                                              getRecommenderSubmissionDistance();
+                                                                              setState(() {
+                                                                                selectedItem = e;
+                                                                              });
+                                                                              Navigator.pop(context);
+                                                                            },
+                                                                          ),
+                                                                          Container(
+                                                                            height: 1,
+                                                                            color: HattoColors.greyD3,
+                                                                          )
+                                                                        ],
                                                                       ),
-                                                                    ),
-                                                                        width: size.width),
-                                                                    onTap: () {
-                                                                      setState(() {
-                                                                        selectedItem = e;
-                                                                      });
-                                                                      Navigator.pop(context);
-                                                                    },
+                                                                    ))
+                                                                .toList(),
+                                                          ],
+                                                        ),
+                                                          borderRadius: BorderRadius.circular(20)),
+                                                      SizedBox(height: 10,),
+                                                      ClipRRect(
+                                                        child: GestureDetector(
+                                                          child: Container(
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                      color: Colors
+                                                                          .white),
+                                                              child: Padding(
+                                                                padding: const EdgeInsets
+                                                                        .symmetric(
+                                                                    vertical:
+                                                                        10),
+                                                                child: Center(
+                                                                  child: Text(
+                                                                    "Hủy bỏ",
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            20,
+                                                                        fontFamily:
+                                                                            'RobotoRegular'),
                                                                   ),
-                                                                  Container(
-                                                                    height: 1,
-                                                                    color:
-                                                                        HattoColors
-                                                                            .greyD3,
-                                                                  )
-                                                                ],
-                                                              ))
-                                                          .toList()
+                                                                ),
+                                                              ),
+                                                              width:
+                                                                  size.width),
+                                                        onTap: (){
+                                                            Navigator.pop(context);
+                                                        },),
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius
+                                                                    .circular(
+                                                                        20)),
+                                                      ),
                                                     ],
                                                   ),
                                                 ),
@@ -1184,7 +1230,8 @@ class _MyHomePageState extends State<MyHomePage>
                                                       fontSize: 12,
                                                       color: HattoColors
                                                           .colorPrimary),
-                                                  overflow: TextOverflow.ellipsis,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                   maxLines: 1,
                                                 ),
                                               ),
@@ -1213,10 +1260,14 @@ class _MyHomePageState extends State<MyHomePage>
                                             height: 15,
                                           ),
                                           Flexible(
-                                            child: Text("Chia sẻ bài mới",
-                                                style: TextStyle(
-                                                    fontFamily: "RobotoRegular",
-                                                    fontSize: 13),overflow: TextOverflow.ellipsis,maxLines: 1,),
+                                            child: Text(
+                                              "Chia sẻ bài mới",
+                                              style: TextStyle(
+                                                  fontFamily: "RobotoRegular",
+                                                  fontSize: 13),
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
+                                            ),
                                           ),
                                           SizedBox(
                                             width: 5,

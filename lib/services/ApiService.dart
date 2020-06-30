@@ -26,5 +26,8 @@ abstract class ApiService {
   @GET("/api/json/get/VJjJ8zx0_")
   Future<List<Submission>> getRecommenderSubmission();
 
+  @GET("/api/json/get/EyGudVOhu")
+  Future<List<Submission>> getRecommenderSubmissionDistance();
+
 
 }
