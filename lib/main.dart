@@ -1125,6 +1125,7 @@ class _MyHomePageState extends State<MyHomePage>
                                                                   GestureDetector(
                                                                     child:
                                                                         Container(
+                                                                          decoration: BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20)),color: Colors.white),
                                                                           child: Padding(
                                                                       padding: const EdgeInsets
                                                                                 .symmetric(
@@ -1141,7 +1142,7 @@ class _MyHomePageState extends State<MyHomePage>
                                                                         ),
                                                                       ),
                                                                     ),
-                                                                        width: size.width,color: Colors.white,),
+                                                                        width: size.width),
                                                                     onTap: () {
                                                                       setState(() {
                                                                         selectedItem = e;
