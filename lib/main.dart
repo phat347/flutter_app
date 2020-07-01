@@ -98,6 +98,8 @@ class _MyHomePageState extends State<MyHomePage>
 
   Future recommnederSubmissionFuture;
 
+  int countNotification=99;
+
   final GlobalKey<RefreshIndicatorState> submissionTagKey =
       new GlobalKey<RefreshIndicatorState>();
 
@@ -203,7 +205,9 @@ class _MyHomePageState extends State<MyHomePage>
   }
 
   Future<List<Submission>> getRecommenderSubmissionDistance() async {
-    await widget.apiService.getRecommenderSubmissionDistance().then((submissionItem) {
+    await widget.apiService
+        .getRecommenderSubmissionDistance()
+        .then((submissionItem) {
       widget.logger.i(submissionItem);
       setState(() {
         listRecommenderSubmission = submissionItem;
@@ -315,6 +319,7 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   Widget build(BuildContext context) {
+    print("setState _MyHomePageState");
     final Size size = MediaQuery.of(context).size;
     final double categoryHeight = size.height * 0.30;
     return Scaffold(
@@ -1130,47 +1135,52 @@ class _MyHomePageState extends State<MyHomePage>
                                                         MainAxisSize.min,
                                                     children: [
                                                       ClipRRect(
-                                                        child: Column(
-                                                          children: [
-                                                            ...listSelectDistance
-                                                                .map((e) =>
-                                                                    Container(
-                                                                      child:
-                                                                          Column(
-                                                                        children: [
-                                                                          GestureDetector(
-                                                                            child: Container(
-                                                                                decoration: BoxDecoration(color: Colors.white),
-                                                                                child: Padding(
-                                                                                  padding: const EdgeInsets.symmetric(vertical: 10),
-                                                                                  child: Center(
-                                                                                    child: Text(
-                                                                                      e.name,
-                                                                                      style: TextStyle(fontSize: 20, fontFamily: 'RobotoRegular'),
+                                                          child: Column(
+                                                            children: [
+                                                              ...listSelectDistance
+                                                                  .map((e) =>
+                                                                      Container(
+                                                                        child:
+                                                                            Column(
+                                                                          children: [
+                                                                            GestureDetector(
+                                                                              child: Container(
+                                                                                  decoration: BoxDecoration(color: Colors.white),
+                                                                                  child: Padding(
+                                                                                    padding: const EdgeInsets.symmetric(vertical: 10),
+                                                                                    child: Center(
+                                                                                      child: Text(
+                                                                                        e.name,
+                                                                                        style: TextStyle(fontSize: 20, fontFamily: 'RobotoRegular'),
+                                                                                      ),
                                                                                     ),
                                                                                   ),
-                                                                                ),
-                                                                                width: size.width),
-                                                                            onTap: () {
-                                                                              getRecommenderSubmissionDistance();
-                                                                              setState(() {
-                                                                                selectedItem = e;
-                                                                              });
-                                                                              Navigator.pop(context);
-                                                                            },
-                                                                          ),
-                                                                          Container(
-                                                                            height: 1,
-                                                                            color: HattoColors.greyD3,
-                                                                          )
-                                                                        ],
-                                                                      ),
-                                                                    ))
-                                                                .toList(),
-                                                          ],
-                                                        ),
-                                                          borderRadius: BorderRadius.circular(20)),
-                                                      SizedBox(height: 10,),
+                                                                                  width: size.width),
+                                                                              onTap: () {
+                                                                                getRecommenderSubmissionDistance();
+                                                                                setState(() {
+                                                                                  selectedItem = e;
+                                                                                });
+                                                                                Navigator.pop(context);
+                                                                              },
+                                                                            ),
+                                                                            Container(
+                                                                              height: 1,
+                                                                              color: HattoColors.greyD3,
+                                                                            )
+                                                                          ],
+                                                                        ),
+                                                                      ))
+                                                                  .toList(),
+                                                            ],
+                                                          ),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      20)),
+                                                      SizedBox(
+                                                        height: 10,
+                                                      ),
                                                       ClipRRect(
                                                         child: GestureDetector(
                                                           child: Container(
@@ -1196,14 +1206,15 @@ class _MyHomePageState extends State<MyHomePage>
                                                               ),
                                                               width:
                                                                   size.width),
-                                                        onTap: (){
-                                                            Navigator.pop(context);
-                                                        },),
+                                                          onTap: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                        ),
                                                         borderRadius:
                                                             BorderRadius.all(
-                                                                Radius
-                                                                    .circular(
-                                                                        20)),
+                                                                Radius.circular(
+                                                                    20)),
                                                       ),
                                                     ],
                                                   ),
@@ -2519,63 +2530,99 @@ class _MyHomePageState extends State<MyHomePage>
             ),
           ],
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              activeIcon: ImageIcon(
-                  AssetImage("assets/images/combinedshape.png"),
-                  color: HattoColors.colorPrimary),
-              icon: ImageIcon(AssetImage("assets/images/combinedshape.png"),
-                  color: Colors.grey),
-              title: Padding(
-                padding: EdgeInsets.all(0),
-                child: Text('Trang chủ'),
-              ),
+        bottomNavigationBar: Stack(
+          children: [
+            BottomNavigationBar(
+              items: <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  activeIcon: ImageIcon(
+                      AssetImage("assets/images/combinedshape.png"),
+                      color: HattoColors.colorPrimary),
+                  icon: ImageIcon(AssetImage("assets/images/combinedshape.png"),
+                      color: Colors.grey),
+                  title: Padding(
+                    padding: EdgeInsets.all(0),
+                    child: Text('Trang chủ'),
+                  ),
+                ),
+                BottomNavigationBarItem(
+                  activeIcon: ImageIcon(
+                      AssetImage("assets/images/ic_search.png"),
+                      color: HattoColors.colorPrimary),
+                  icon: ImageIcon(AssetImage("assets/images/ic_search.png"),
+                      color: Colors.grey),
+                  title: Padding(
+                    padding: EdgeInsets.all(0),
+                    child: Text('Tìm kiếm'),
+                  ),
+                ),
+                BottomNavigationBarItem(
+                  activeIcon:
+                      Icon(Icons.camera, color: HattoColors.colorPrimary),
+                  icon: Icon(Icons.camera, color: Colors.white),
+                  title: Padding(
+                    padding: EdgeInsets.all(0),
+                    child: Text(''),
+                  ),
+                ),
+                BottomNavigationBarItem(
+                  activeIcon: ImageIcon(
+                      AssetImage("assets/images/ic_bell_2.png"),
+                      color: HattoColors.colorPrimary),
+                  icon: Stack(children: [
+                    ImageIcon(AssetImage("assets/images/ic_bell_2.png"),
+                        color: Colors.grey),
+                    Visibility(
+                      visible: countNotification>0?true:false,
+                      child: Positioned(
+                        right: 0,
+                        child: new Container(
+                          padding: EdgeInsets.symmetric(vertical: 1,horizontal: 3),
+                          decoration: new BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          constraints: BoxConstraints(
+                            minWidth: 12,
+                            minHeight: 12,
+                          ),
+                          child: new Text(
+                            '$countNotification',
+                            style: new TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'RobotoRegular',
+                              fontSize: 10,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    )
+                  ]),
+                  title: Padding(
+                    padding: EdgeInsets.all(0),
+                    child: Text('Thông báo'),
+                  ),
+                ),
+                BottomNavigationBarItem(
+                  activeIcon: Icon(Icons.menu, color: HattoColors.colorPrimary),
+                  icon: Icon(Icons.menu, color: Colors.grey),
+                  title: Padding(
+                    padding: EdgeInsets.all(0),
+                    child: Text('Thêm'),
+                  ),
+                )
+              ],
+              type: BottomNavigationBarType.fixed,
+              showSelectedLabels: true,
+              showUnselectedLabels: true,
+              unselectedItemColor: Colors.grey,
+              currentIndex: _selectedIndex,
+              selectedItemColor: HattoColors.colorPrimary,
+              onTap: _onItemTapped,
             ),
-            BottomNavigationBarItem(
-              activeIcon: ImageIcon(AssetImage("assets/images/menu_khoqua.png"),
-                  color: HattoColors.colorPrimary),
-              icon: ImageIcon(AssetImage("assets/images/menu_khoqua.png"),
-                  color: Colors.grey),
-              title: Padding(
-                padding: EdgeInsets.all(0),
-                child: Text('Kho quà'),
-              ),
-            ),
-            BottomNavigationBarItem(
-              activeIcon: Icon(Icons.camera, color: HattoColors.colorPrimary),
-              icon: Icon(Icons.camera, color: Colors.grey),
-              title: Padding(
-                padding: EdgeInsets.all(0),
-                child: Text('Chụp ảnh'),
-              ),
-            ),
-            BottomNavigationBarItem(
-              activeIcon: ImageIcon(AssetImage("assets/images/ic_bell_2.png"),
-                  color: HattoColors.colorPrimary),
-              icon: ImageIcon(AssetImage("assets/images/ic_bell_2.png"),
-                  color: Colors.grey),
-              title: Padding(
-                padding: EdgeInsets.all(0),
-                child: Text('Thông báo'),
-              ),
-            ),
-            BottomNavigationBarItem(
-              activeIcon: Icon(Icons.menu, color: HattoColors.colorPrimary),
-              icon: Icon(Icons.menu, color: Colors.grey),
-              title: Padding(
-                padding: EdgeInsets.all(0),
-                child: Text('Thêm'),
-              ),
-            )
+            BottomCameraWidget()
           ],
-          type: BottomNavigationBarType.fixed,
-          showSelectedLabels: true,
-          showUnselectedLabels: true,
-          unselectedItemColor: Colors.grey,
-          currentIndex: _selectedIndex,
-          selectedItemColor: HattoColors.colorPrimary,
-          onTap: _onItemTapped,
         ));
   }
 
@@ -2954,6 +3001,80 @@ class _MyHomePageState extends State<MyHomePage>
           ],
         ),
       );
+}
+
+class BottomCameraWidget extends StatefulWidget {
+  bool flagOpenCamera = true;
+
+  @override
+  _BottomCameraWidgetState createState() => _BottomCameraWidgetState();
+}
+
+class _BottomCameraWidgetState extends State<BottomCameraWidget> {
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    print('Khởi tạo onCreate BottomCameraWidget');
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print('setState build BottomCameraWidget');
+
+    return Container(
+      height: kBottomNavigationBarHeight,
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                widget.flagOpenCamera = !widget.flagOpenCamera;
+              });
+            },
+            child: Container(
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(40),
+                    color: HattoColors.colorPrimary,
+                    boxShadow: [
+                      BoxShadow(
+                          color: HattoColors.colorPrimary.withOpacity(0.2),
+                          blurRadius: 10,
+                          spreadRadius: 5),
+                    ]),
+                child: widget.flagOpenCamera
+                    ? Container(
+                        alignment: Alignment.center,
+                        child: Image.asset(
+                          "assets/images/ic_nav_camera.png",
+                          width: 20,
+                          height: 20,
+                        ))
+                    : Container(
+                        alignment: Alignment.center,
+                        child: Image.asset(
+                          "assets/images/ic_close_light.png",
+                          width: 18,
+                          height: 18,
+                        )),
+              ),
+              width: 80,
+              alignment: Alignment.center,
+              color: Colors.transparent,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class HexColor extends Color {

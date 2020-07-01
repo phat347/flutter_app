@@ -113,6 +113,8 @@ flutter:
     - assets/images/prediction.png
     - assets/images/ic_chopstick.png
     - assets/images/ic_search.png
+    - assets/images/ic_nav_camera.png
+    - assets/images/ic_close_light.png
 
 
   fonts:
