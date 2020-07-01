@@ -10,6 +10,7 @@ import 'package:flutterapp/loaders/dot_type.dart';
 import 'package:flutterapp/models/SelecteDistance.dart';
 import 'package:flutterapp/models/Submission.dart';
 import 'package:flutterapp/rank_master.dart';
+import 'package:flutterapp/recipe_search.dart';
 import 'package:flutterapp/screens/DetailSubmission.dart';
 import 'package:flutterapp/select_distance.dart';
 import 'package:flutterapp/services/ApiService.dart';
@@ -25,6 +26,7 @@ import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'HattoColors.dart';
+import 'models/RecipeSearch.dart';
 
 void main() {
   runApp(MyApp());
@@ -89,6 +91,8 @@ class _MyHomePageState extends State<MyHomePage>
 
   List<dynamic> rank = rank_master;
   List<SelectDistance> listSelectDistance = [];
+  List<RecipeSearch> listRecipeSearch = [];
+
   int indexSelectedDistance = 0;
   SelectDistance selectedItem;
 
@@ -98,7 +102,7 @@ class _MyHomePageState extends State<MyHomePage>
 
   Future recommnederSubmissionFuture;
 
-  int countNotification=99;
+  int countNotification = 99;
 
   final GlobalKey<RefreshIndicatorState> submissionTagKey =
       new GlobalKey<RefreshIndicatorState>();
@@ -155,10 +159,18 @@ class _MyHomePageState extends State<MyHomePage>
     selectedItem = listSelectDistance[0];
   }
 
+  void getRecipeSearchList() {
+    List<Map<String, Object>> json_data = recipe_search;
+    listRecipeSearch =
+        json_data.map((json_data) => RecipeSearch.fromJson(json_data)).toList();
+    listRecipeSearch[0].setSelected = true;
+  }
+
   @override
   void initState() {
     super.initState();
     getSelectDistanceList();
+    getRecipeSearchList();
     controller.addListener(() {
       if (controller.position.pixels == controller.position.maxScrollExtent) {
         //sự kiện kéo xuống cuối listview
@@ -1295,6 +1307,55 @@ class _MyHomePageState extends State<MyHomePage>
                                   )
                                 ],
                               ),
+                            ),
+                            Container(
+                              width: size.width,
+                              height: 3,
+                              color: HattoColors.greyD3,
+                            ),
+                            Container(
+                              color: Colors.white,
+                              width: size.width,
+                              height: 50,
+                              child: ListView.builder(
+                                  physics: BouncingScrollPhysics(),
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: listRecipeSearch.length,
+                                  itemBuilder: (context, index) {
+                                    RecipeSearch item = listRecipeSearch[index];
+                                    return GestureDetector(
+                                      onTap: (){
+                                        setState(() {
+                                          for(RecipeSearch r_items in listRecipeSearch)
+                                            {
+                                              r_items.setSelected = false;
+                                            }
+                                          listRecipeSearch[index].setSelected = true;
+                                        });
+                                      },
+                                      child: Container(
+                                        color: Colors.white,
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(horizontal: 5),
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                  height: 20,
+                                                  width: 20,
+                                                  decoration: BoxDecoration(
+                                                    image: DecorationImage(
+                                                        image:
+                                                            CachedNetworkImageProvider(
+                                                                item.icon_url)),
+                                                  )),
+                                              Text(item.display,style: TextStyle(fontFamily: 'RobotoBold',fontSize: 14,color: item.selected?HattoColors.colorPrimary:Colors.black.withOpacity(0.6)),)
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }),
                             ),
                             Expanded(
                                 child: LoadMoreCustom(
@@ -2573,11 +2634,12 @@ class _MyHomePageState extends State<MyHomePage>
                     ImageIcon(AssetImage("assets/images/ic_bell_2.png"),
                         color: Colors.grey),
                     Visibility(
-                      visible: countNotification>0?true:false,
+                      visible: countNotification > 0 ? true : false,
                       child: Positioned(
                         right: 0,
                         child: new Container(
-                          padding: EdgeInsets.symmetric(vertical: 1,horizontal: 3),
+                          padding:
+                              EdgeInsets.symmetric(vertical: 1, horizontal: 3),
                           decoration: new BoxDecoration(
                             color: Colors.red,
                             borderRadius: BorderRadius.circular(20),
