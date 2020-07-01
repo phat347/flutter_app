@@ -343,20 +343,41 @@ class _MyHomePageState extends State<MyHomePage>
             color: Colors.black, //change your color here
           ),
           backgroundColor: Colors.white,
-          leading: Icon(
-            Icons.chat,
-            color: Colors.black,
-          ),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.search, color: Colors.black),
-              onPressed: () {},
+          titleSpacing: 0,
+          automaticallyImplyLeading: false,
+          title: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Icon(
+                        Icons.chat,
+                        color: Colors.black,
+                      ),
+                      Text(
+                        "Tán gẫu",
+                        style: TextStyle(fontSize: 10, color: Colors.black),
+                      )
+                    ],
+                  ),
+                ),
+                CircleAvatar(
+                    radius: 15,
+                    child: CircleAvatar(
+                        radius: 14,
+                        backgroundImage: CachedNetworkImageProvider("https://images.hatto.info//profile_images//35eb5545-49ca-41d6-a78d-73b062790008/cbde8445-6c3f-404f-b36e-961332872bc2.jpg"),
+                        backgroundColor: Colors.transparent),
+                    backgroundColor: HattoColors.colorPrimary)
+              ],
+              mainAxisSize: MainAxisSize.max,
             ),
-            IconButton(
-              icon: Icon(Icons.person, color: Colors.black),
-              onPressed: () {},
-            )
-          ],
+          ),
           brightness: Brightness.light,
           bottom: TabBar(
             controller: tabBarController,
@@ -384,7 +405,7 @@ class _MyHomePageState extends State<MyHomePage>
                     ),
                     SizedBox(width: 5),
                     Text(
-                      "Đặc sắc    ".toUpperCase(),
+                      "Đặc sắc  ".toUpperCase(),
                       style: TextStyle(fontFamily: "RobotoBold", fontSize: 14),
                     )
                   ],
@@ -405,7 +426,7 @@ class _MyHomePageState extends State<MyHomePage>
                       width: 5,
                     ),
                     Text(
-                      "Món ăn    ".toUpperCase(),
+                      "Món ăn  ".toUpperCase(),
                       style: TextStyle(fontFamily: "RobotoBold", fontSize: 14),
                     )
                   ],
@@ -426,7 +447,7 @@ class _MyHomePageState extends State<MyHomePage>
                       width: 5,
                     ),
                     Text(
-                      "Địa điểm    ".toUpperCase(),
+                      "Địa điểm  ".toUpperCase(),
                       style: TextStyle(fontFamily: "RobotoBold", fontSize: 14),
                     )
                   ],
@@ -1159,11 +1180,11 @@ class _MyHomePageState extends State<MyHomePage>
                                                                               child: Container(
                                                                                   decoration: BoxDecoration(color: Colors.white),
                                                                                   child: Padding(
-                                                                                    padding: const EdgeInsets.symmetric(vertical: 10),
+                                                                                    padding: const EdgeInsets.symmetric(vertical: 8),
                                                                                     child: Center(
                                                                                       child: Text(
                                                                                         e.name,
-                                                                                        style: TextStyle(fontSize: 20, fontFamily: 'RobotoRegular'),
+                                                                                        style: TextStyle(fontSize: 15, fontFamily: 'RobotoRegular'),
                                                                                       ),
                                                                                     ),
                                                                                   ),
@@ -1210,7 +1231,7 @@ class _MyHomePageState extends State<MyHomePage>
                                                                     "Hủy bỏ",
                                                                     style: TextStyle(
                                                                         fontSize:
-                                                                            20,
+                                                                            15,
                                                                         fontFamily:
                                                                             'RobotoRegular'),
                                                                   ),
@@ -1324,21 +1345,24 @@ class _MyHomePageState extends State<MyHomePage>
                                   itemBuilder: (context, index) {
                                     RecipeSearch item = listRecipeSearch[index];
                                     return GestureDetector(
-                                      onTap: (){
+                                      onTap: () {
                                         setState(() {
-                                          for(RecipeSearch r_items in listRecipeSearch)
-                                            {
-                                              r_items.setSelected = false;
-                                            }
-                                          listRecipeSearch[index].setSelected = true;
+                                          for (RecipeSearch r_items
+                                              in listRecipeSearch) {
+                                            r_items.setSelected = false;
+                                          }
+                                          listRecipeSearch[index].setSelected =
+                                              true;
                                         });
                                       },
                                       child: Container(
                                         color: Colors.white,
                                         child: Padding(
-                                          padding: EdgeInsets.symmetric(horizontal: 5),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 5),
                                           child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
                                             children: [
                                               Container(
                                                   height: 20,
@@ -1349,7 +1373,17 @@ class _MyHomePageState extends State<MyHomePage>
                                                             CachedNetworkImageProvider(
                                                                 item.icon_url)),
                                                   )),
-                                              Text(item.display,style: TextStyle(fontFamily: 'RobotoBold',fontSize: 14,color: item.selected?HattoColors.colorPrimary:Colors.black.withOpacity(0.6)),)
+                                              Text(
+                                                item.display,
+                                                style: TextStyle(
+                                                    fontFamily: 'RobotoBold',
+                                                    fontSize: 14,
+                                                    color: item.selected
+                                                        ? HattoColors
+                                                            .colorPrimary
+                                                        : Colors.black
+                                                            .withOpacity(0.6)),
+                                              )
                                             ],
                                           ),
                                         ),
