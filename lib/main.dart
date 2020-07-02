@@ -16,6 +16,7 @@ import 'package:flutterapp/models/User.dart';
 import 'package:flutterapp/rank_master.dart';
 import 'package:flutterapp/recipe_search.dart';
 import 'package:flutterapp/screens/DetailSubmission.dart';
+import 'package:flutterapp/screens/GalleryPhotoZoom.dart';
 import 'package:flutterapp/select_distance.dart';
 import 'package:flutterapp/services/ApiService.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -110,6 +111,8 @@ class _MyHomePageState extends State<MyHomePage>
   Future recommnederSubmissionFuture;
 
   int countNotification = 99;
+
+  String trendy_url = "https://hatto.net/trendy/TRENDY_1585242157_5664e7c8-37df-41ce-bce0-2ec826ba2d2e.png";
 
   final GlobalKey<RefreshIndicatorState> submissionTagKey =
       new GlobalKey<RefreshIndicatorState>();
@@ -845,19 +848,34 @@ class _MyHomePageState extends State<MyHomePage>
                             ),
                             Expanded(
                                 child: ListView.builder(
-                                    itemCount: listSpecialSubmission.length,
+                                    itemCount: listSpecialSubmission.length+1,
                                     physics: BouncingScrollPhysics(),
                                     itemBuilder: (context, index) {
-                                      var itemSub =
-                                          listSpecialSubmission[index];
-                                      double scale = 1.0;
-                                      if (topContainer > 0.5) {
-                                        scale = index + 0.5 - topContainer;
-                                        if (scale < 0) {
-                                          scale = 0;
-                                        } else if (scale > 1) {
-                                          scale = 1;
-                                        }
+                                      var itemSub;
+                                      if (index != 0) {
+                                        itemSub = listSpecialSubmission[index - 1];
+                                      }
+                                      if (index == 0) {
+                                        return  GestureDetector(
+                                          onTap: (){
+                                            List<String> url = [];
+                                            url.add(trendy_url);
+                                            Navigator.push(
+                                                context,
+                                                new MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        GalleryPhotoZoom(url)));
+                                          },
+                                          child: Container(
+                                              height: 200,
+                                              width: size.width,
+                                              decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    fit: BoxFit.cover,
+                                                    image: CachedNetworkImageProvider(
+                                                        trendy_url)),
+                                              )),
+                                        );
                                       }
                                       return GestureDetector(
                                         onTap: () {
@@ -872,7 +890,7 @@ class _MyHomePageState extends State<MyHomePage>
                                               Submission itemsDetailBack =
                                                   value as Submission;
                                               setState(() {
-                                                listSpecialSubmission[index] =
+                                                listSpecialSubmission[index-1] =
                                                     itemsDetailBack;
 //                                            itemSub = itemsDetailBack;
                                               });
@@ -1767,15 +1785,7 @@ class _MyHomePageState extends State<MyHomePage>
                                       itemSub = listSubmission[index - 1];
                                     }
 
-                                    double scale = 1.0;
-                                    if (topContainer > 0.5) {
-                                      scale = index + 0.5 - topContainer;
-                                      if (scale < 0) {
-                                        scale = 0;
-                                      } else if (scale > 1) {
-                                        scale = 1;
-                                      }
-                                    }
+
                                     if (index == 0) {
                                       return ContainerRecommenderSubmission();
                                     } else {
