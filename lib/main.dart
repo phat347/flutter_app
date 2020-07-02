@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapp/Utils/AppUtils.dart';
+import 'package:flutterapp/current_user.dart';
 import 'package:flutterapp/list_submission.dart';
 import 'package:flutterapp/loaders/LoadMoreCustom.dart';
 import 'package:flutterapp/loaders/color_loader_3.dart';
@@ -9,6 +10,7 @@ import 'package:flutterapp/loaders/color_loader_5.dart';
 import 'package:flutterapp/loaders/dot_type.dart';
 import 'package:flutterapp/models/SelecteDistance.dart';
 import 'package:flutterapp/models/Submission.dart';
+import 'package:flutterapp/models/User.dart';
 import 'package:flutterapp/rank_master.dart';
 import 'package:flutterapp/recipe_search.dart';
 import 'package:flutterapp/screens/DetailSubmission.dart';
@@ -93,6 +95,8 @@ class _MyHomePageState extends State<MyHomePage>
   List<SelectDistance> listSelectDistance = [];
   List<RecipeSearch> listRecipeSearch = [];
 
+  User mCurrentUser;
+
   int indexSelectedDistance = 0;
   SelectDistance selectedItem;
 
@@ -166,11 +170,17 @@ class _MyHomePageState extends State<MyHomePage>
     listRecipeSearch[0].setSelected = true;
   }
 
+  void getCurrentUser() {
+    Map<String, Object> json_data = current_user;
+    mCurrentUser = User.fromJson(json_data);
+  }
+
   @override
   void initState() {
     super.initState();
     getSelectDistanceList();
     getRecipeSearchList();
+    getCurrentUser();
     controller.addListener(() {
       if (controller.position.pixels == controller.position.maxScrollExtent) {
         //sự kiện kéo xuống cuối listview
@@ -314,6 +324,23 @@ class _MyHomePageState extends State<MyHomePage>
     }
   }
 
+  CircleAvatar getCurrentAvatarUser(User user, double size) {
+    if (!user.isVipCheck()) {
+      return CircleAvatar(
+          radius: size,
+          backgroundImage: CachedNetworkImageProvider(user.portrait_url),
+          backgroundColor: Colors.transparent);
+    } else {
+      return CircleAvatar(
+          radius: size,
+          child: CircleAvatar(
+              radius: size - 1,
+              backgroundImage: CachedNetworkImageProvider(user.portrait_url),
+              backgroundColor: Colors.transparent),
+          backgroundColor: HattoColors.colorPrimary);
+    }
+  }
+
   CircleAvatar getAvatarLocation(Submission items) {
     if (items.location_ownership != 0) {
       return CircleAvatar(
@@ -352,28 +379,94 @@ class _MyHomePageState extends State<MyHomePage>
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
+                  child: Flexible(
+                    flex: 1,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Image.asset(
+                          "assets/images/ic_chat_hatto.png",
+                          width: 20,
+                          height: 20,
+                        ),
+                        SizedBox(
+                          height: 2,
+                        ),
+                        Text(
+                          "Tán gẫu",
+                          style: TextStyle(fontSize: 10, color: Colors.black),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                Flexible(
+                  flex: 2,
+                  child: Stack(
                     children: [
-                      Icon(
-                        Icons.chat,
-                        color: Colors.black,
-                      ),
-                      Text(
-                        "Tán gẫu",
-                        style: TextStyle(fontSize: 10, color: Colors.black),
-                      )
+                      Padding(
+                        padding: EdgeInsets.only(left: 22),
+                        child: Container(
+                          decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12)),color: HattoColors.veryLightPink),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 4,horizontal: 8),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(
+                                  "${mCurrentUser.remain_GAO}",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                      fontFamily: 'RobotoItalic',
+                                      color: HattoColors.colorPrimary),
+                                ),
+                                SizedBox(width: 5,),
+                                Image.asset(
+                                  "assets/images/ic_plus.png",
+                                  color: HattoColors.colorPrimary,
+                                  width: 15,
+                                  height: 15,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),Positioned(left: 18,child: Image.asset("assets/images/ic_rice.png",width: 25,height: 25,))
                     ],
                   ),
                 ),
-                CircleAvatar(
-                    radius: 15,
-                    child: CircleAvatar(
-                        radius: 14,
-                        backgroundImage: CachedNetworkImageProvider("https://images.hatto.info//profile_images//35eb5545-49ca-41d6-a78d-73b062790008/cbde8445-6c3f-404f-b36e-961332872bc2.jpg"),
-                        backgroundColor: Colors.transparent),
-                    backgroundColor: HattoColors.colorPrimary)
+                Flexible(
+                  flex: 2,
+                  child: Stack(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: 4,right: 22),
+                        child: Container(
+                          decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12)),color: HattoColors.veryLightPink),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 4,horizontal: 8),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(
+                                  "${mCurrentUser.rewards}",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                      fontFamily: 'RobotoItalic',
+                                      color: HattoColors.colorPrimary),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),Positioned(child: Image.asset("assets/images/ic_dua.png",width: 25,height: 25,))
+                    ],
+                  ),
+                ),
+                Flexible(flex: 1, child: getCurrentAvatarUser(mCurrentUser, 15))
               ],
               mainAxisSize: MainAxisSize.max,
             ),

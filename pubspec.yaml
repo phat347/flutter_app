@@ -115,6 +115,9 @@ flutter:
     - assets/images/ic_search.png
     - assets/images/ic_nav_camera.png
     - assets/images/ic_close_light.png
+    - assets/images/ic_chat_hatto.png
+    - assets/images/ic_rice.png
+    - assets/images/ic_plus.png
 
 
   fonts:

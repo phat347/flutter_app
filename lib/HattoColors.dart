@@ -11,6 +11,9 @@ class HattoColors {
   static Color whiteGrey92 = HexColor("#929292");
   static Color greenLight = HexColor("#4cd964");
   static Color greyD3 = HexColor("#d3d3d3");
+  static Color veryLightPink = HexColor("#fdebe9");
+
+
 
 
 }
