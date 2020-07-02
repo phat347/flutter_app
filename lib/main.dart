@@ -19,6 +19,7 @@ import 'package:flutterapp/screens/DetailSubmission.dart';
 import 'package:flutterapp/screens/GalleryPhotoZoom.dart';
 import 'package:flutterapp/select_distance.dart';
 import 'package:flutterapp/services/ApiService.dart';
+import 'package:flutterapp/widgets/dialogs/CustomDialogs.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -144,9 +145,11 @@ class _MyHomePageState extends State<MyHomePage>
   ];
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    if (index != 2) {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
 
   String getRankIcon(int rankId) {
@@ -3501,10 +3504,34 @@ class _BottomCameraWidgetState extends State<BottomCameraWidget> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           GestureDetector(
-            onTap: () {
+            onTap: () async {
+              bool shouldUpdate;
               setState(() {
                 widget.flagOpenCamera = !widget.flagOpenCamera;
               });
+
+              if(!widget.flagOpenCamera)
+                {
+                  shouldUpdate = await showDialog(
+                      barrierDismissible: true,
+                      context: context,
+                      builder: (BuildContext context){
+                        return CustomDialogs(
+                          title: "Đây là test thôi :D",
+                          description:
+                          "Đây là app Hatto viết bằng Flutter!",
+                          buttonText: "Đóng",
+                        );
+                      }
+                  );
+                }
+
+              if(shouldUpdate)
+                {
+                  setState(() {
+                    widget.flagOpenCamera = shouldUpdate;
+                  });
+                }
             },
             child: Container(
               child: Container(
@@ -3545,6 +3572,7 @@ class _BottomCameraWidgetState extends State<BottomCameraWidget> {
     );
   }
 }
+
 
 class HexColor extends Color {
   static int _getColorFromHex(String hexColor) {
