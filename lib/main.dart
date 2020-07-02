@@ -3,11 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapp/Utils/AppUtils.dart';
 import 'package:flutterapp/current_user.dart';
+import 'package:flutterapp/famous_group.dart';
 import 'package:flutterapp/list_submission.dart';
 import 'package:flutterapp/loaders/LoadMoreCustom.dart';
 import 'package:flutterapp/loaders/color_loader_3.dart';
 import 'package:flutterapp/loaders/color_loader_5.dart';
 import 'package:flutterapp/loaders/dot_type.dart';
+import 'package:flutterapp/models/FamousGroup.dart';
 import 'package:flutterapp/models/SelecteDistance.dart';
 import 'package:flutterapp/models/Submission.dart';
 import 'package:flutterapp/models/User.dart';
@@ -94,6 +96,7 @@ class _MyHomePageState extends State<MyHomePage>
   List<dynamic> rank = rank_master;
   List<SelectDistance> listSelectDistance = [];
   List<RecipeSearch> listRecipeSearch = [];
+  List<FamousGroup> listFamousGroup = [];
 
   User mCurrentUser;
 
@@ -170,6 +173,13 @@ class _MyHomePageState extends State<MyHomePage>
     listRecipeSearch[0].setSelected = true;
   }
 
+  void getFamousGroup() {
+    List<Map<String, Object>> json_data = famous_group;
+    listFamousGroup =
+        json_data.map((json_data) => FamousGroup.fromJson(json_data)).toList();
+    listFamousGroup[0].setSelected = true;
+  }
+
   void getCurrentUser() {
     Map<String, Object> json_data = current_user;
     mCurrentUser = User.fromJson(json_data);
@@ -181,6 +191,7 @@ class _MyHomePageState extends State<MyHomePage>
     getSelectDistanceList();
     getRecipeSearchList();
     getCurrentUser();
+    getFamousGroup();
     controller.addListener(() {
       if (controller.position.pixels == controller.position.maxScrollExtent) {
         //sự kiện kéo xuống cuối listview
@@ -372,104 +383,141 @@ class _MyHomePageState extends State<MyHomePage>
           backgroundColor: Colors.white,
           titleSpacing: 0,
           automaticallyImplyLeading: false,
-          title: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  child: Flexible(
-                    flex: 1,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Image.asset(
-                          "assets/images/ic_chat_hatto.png",
-                          width: 20,
-                          height: 20,
+          title: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      child: Flexible(
+                        flex: 1,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Image.asset(
+                              "assets/images/ic_chat_hatto.png",
+                              width: 20,
+                              height: 20,
+                            ),
+                            SizedBox(
+                              height: 2,
+                            ),
+                            Text(
+                              "Tán gẫu",
+                              style:
+                                  TextStyle(fontSize: 10, color: Colors.black),
+                            )
+                          ],
                         ),
-                        SizedBox(
-                          height: 2,
-                        ),
-                        Text(
-                          "Tán gẫu",
-                          style: TextStyle(fontSize: 10, color: Colors.black),
-                        )
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-                Flexible(
-                  flex: 2,
-                  child: Stack(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: 22),
-                        child: Container(
-                          decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12)),color: HattoColors.veryLightPink),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 4,horizontal: 8),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  "${mCurrentUser.remain_GAO}",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                      fontFamily: 'RobotoItalic',
-                                      color: HattoColors.colorPrimary),
+                    Flexible(
+                      flex: 2,
+                      child: Stack(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(left: 22),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(12)),
+                                  color: HattoColors.veryLightPink),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 4, horizontal: 8),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      "${mCurrentUser.remain_GAO}",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                          fontFamily: 'RobotoItalic',
+                                          color: HattoColors.colorPrimary),
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Image.asset(
+                                      "assets/images/ic_plus.png",
+                                      color: HattoColors.colorPrimary,
+                                      width: 15,
+                                      height: 15,
+                                    )
+                                  ],
                                 ),
-                                SizedBox(width: 5,),
-                                Image.asset(
-                                  "assets/images/ic_plus.png",
-                                  color: HattoColors.colorPrimary,
-                                  width: 15,
-                                  height: 15,
-                                )
-                              ],
+                              ),
                             ),
                           ),
-                        ),
-                      ),Positioned(left: 18,child: Image.asset("assets/images/ic_rice.png",width: 25,height: 25,))
-                    ],
-                  ),
-                ),
-                Flexible(
-                  flex: 2,
-                  child: Stack(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: 4,right: 22),
-                        child: Container(
-                          decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12)),color: HattoColors.veryLightPink),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 4,horizontal: 8),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  "${mCurrentUser.rewards}",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                      fontFamily: 'RobotoItalic',
-                                      color: HattoColors.colorPrimary),
+                          Positioned(
+                              left: 18,
+                              child: Image.asset(
+                                "assets/images/ic_rice.png",
+                                width: 25,
+                                height: 25,
+                              ))
+                        ],
+                      ),
+                    ),
+                    Flexible(
+                      flex: 2,
+                      child: Stack(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(left: 4, right: 22),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(12)),
+                                  color: HattoColors.veryLightPink),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 4, horizontal: 8),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      "${mCurrentUser.rewards}",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                          fontFamily: 'RobotoItalic',
+                                          color: HattoColors.colorPrimary),
+                                    ),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
                           ),
-                        ),
-                      ),Positioned(child: Image.asset("assets/images/ic_dua.png",width: 25,height: 25,))
-                    ],
-                  ),
+                          Positioned(
+                              child: Image.asset(
+                            "assets/images/ic_dua.png",
+                            width: 25,
+                            height: 25,
+                          ))
+                        ],
+                      ),
+                    ),
+                    Flexible(
+                        flex: 1, child: getCurrentAvatarUser(mCurrentUser, 15))
+                  ],
+                  mainAxisSize: MainAxisSize.max,
                 ),
-                Flexible(flex: 1, child: getCurrentAvatarUser(mCurrentUser, 15))
-              ],
-              mainAxisSize: MainAxisSize.max,
-            ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                width: size.width,
+                height: 1,
+                color: HattoColors.greyD3,
+              )
+            ],
           ),
           brightness: Brightness.light,
           bottom: TabBar(
@@ -573,6 +621,228 @@ class _MyHomePageState extends State<MyHomePage>
                         height: size.height,
                         child: Column(
                           children: <Widget>[
+                            Container(
+                              width: size.width,
+                              height: 1,
+                              color: HattoColors.greyD3,
+                            ),
+                            Container(
+                              color: Colors.white,
+                              width: size.width,
+                              height: 50,
+                              child: ListView.builder(
+                                  physics: BouncingScrollPhysics(),
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: listFamousGroup.length,
+                                  itemBuilder: (context, index) {
+                                    FamousGroup item = listFamousGroup[index];
+                                    return GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          for (FamousGroup r_items
+                                              in listFamousGroup) {
+                                            r_items.setSelected = false;
+                                          }
+                                          listFamousGroup[index].setSelected =
+                                              true;
+                                        });
+                                      },
+                                      child: Container(
+                                        color: Colors.white,
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 5),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                  height: 20,
+                                                  width: 20,
+                                                  decoration: BoxDecoration(
+                                                    image: DecorationImage(
+                                                        image:
+                                                            CachedNetworkImageProvider(
+                                                                item.icon_url)),
+                                                  )),
+                                              Text(
+                                                item.group_name ?? '',
+                                                style: TextStyle(
+                                                    fontFamily: 'RobotoBold',
+                                                    fontSize: 14,
+                                                    color: item.selected
+                                                        ? HattoColors
+                                                            .colorPrimary
+                                                        : Colors.black
+                                                            .withOpacity(0.6)),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }),
+                            ),
+                            Container(
+                              height: 30,
+                              color: Colors.white,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 5),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Flexible(flex:1,child: Text("Từ khóa thông dụng",style: TextStyle(fontFamily: 'RobotoBold',fontSize: 14,color: Colors.black),overflow: TextOverflow.ellipsis,maxLines: 1,)),
+                                    Flexible(
+                                      flex: 1,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          showModalBottomSheet(
+                                              backgroundColor: Colors.transparent,
+                                              enableDrag: true,
+                                              context: context,
+                                              builder: (context) {
+                                                return SingleChildScrollView(
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(20.0),
+                                                    child: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        ClipRRect(
+                                                            child: Column(
+                                                              children: [
+                                                                ...listSelectDistance
+                                                                    .map((e) =>
+                                                                        Container(
+                                                                          child:
+                                                                              Column(
+                                                                            children: [
+                                                                              GestureDetector(
+                                                                                child: Container(
+                                                                                    decoration: BoxDecoration(color: Colors.white),
+                                                                                    child: Padding(
+                                                                                      padding: const EdgeInsets.symmetric(vertical: 8),
+                                                                                      child: Center(
+                                                                                        child: Text(
+                                                                                          e.name,
+                                                                                          style: TextStyle(fontSize: 15, fontFamily: 'RobotoRegular'),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                    width: size.width),
+                                                                                onTap:
+                                                                                    () {
+                                                                                  getRecommenderSubmissionDistance();
+                                                                                  setState(() {
+                                                                                    selectedItem = e;
+                                                                                  });
+                                                                                  Navigator.pop(context);
+                                                                                },
+                                                                              ),
+                                                                              Container(
+                                                                                height:
+                                                                                    1,
+                                                                                color:
+                                                                                    HattoColors.greyD3,
+                                                                              )
+                                                                            ],
+                                                                          ),
+                                                                        ))
+                                                                    .toList(),
+                                                              ],
+                                                            ),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(20)),
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        ClipRRect(
+                                                          child: GestureDetector(
+                                                            child: Container(
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                        color: Colors
+                                                                            .white),
+                                                                child: Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .symmetric(
+                                                                          vertical:
+                                                                              10),
+                                                                  child: Center(
+                                                                    child: Text(
+                                                                      "Hủy bỏ",
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              15,
+                                                                          fontFamily:
+                                                                              'RobotoRegular'),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                width: size.width),
+                                                            onTap: () {
+                                                              Navigator.pop(
+                                                                  context);
+                                                            },
+                                                          ),
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius.circular(
+                                                                      20)),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                );
+                                              });
+                                        },
+                                        child: Container(
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(12),
+                                                    color: HattoColors.greyD3),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 4),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                        selectedItem.name,
+                                                        style: TextStyle(
+                                                            fontFamily: "RobotoBold",
+                                                            fontSize: 12,
+                                                            color: HattoColors
+                                                                .colorPrimary),
+                                                        overflow: TextOverflow.ellipsis,
+                                                        maxLines: 1,
+                                                      ),
+                                                      Icon(
+                                                        Icons.keyboard_arrow_down,
+                                                        color: HattoColors.colorPrimary,
+                                                        size: 15,
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
                             Expanded(
                                 child: ListView.builder(
                                     itemCount: listSpecialSubmission.length,
