@@ -38,11 +38,11 @@ import 'HattoColors.dart';
 import 'models/RecipeSearch.dart';
 
 void main() {
-
   //Nếu bắt Charles thì bật
   if (!kReleaseMode) {
     // For Android devices you can also allowBadCertificates: true below, but you should ONLY do this when !kReleaseMode
-    final proxy = CustomProxy(ipAddress: "192.168.16.44", port: 8888,allowBadCertificates: false);
+    final proxy = CustomProxy(
+        ipAddress: "192.168.16.44", port: 8888, allowBadCertificates: false);
     proxy.enable();
   }
   runApp(MyApp());
@@ -73,15 +73,6 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
   Logger logger = Logger();
 
@@ -93,7 +84,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
-  ScrollController controller = ScrollController();
   TabController tabBarController;
   bool closeTopContainer = false;
   double topContainer = 0;
@@ -115,7 +105,6 @@ class _MyHomePageState extends State<MyHomePage>
   int indexSelectedDistance = 0;
   SelectDistance selectedItem;
 
-  int _counter = 0;
   Future specialSubmissionFuture;
   Future submissionFuture;
 
@@ -123,7 +112,8 @@ class _MyHomePageState extends State<MyHomePage>
 
   int countNotification = 99;
 
-  String trendy_url = "https://hatto.net/trendy/TRENDY_1585242157_5664e7c8-37df-41ce-bce0-2ec826ba2d2e.png";
+  String trendy_url =
+      "https://hatto.net/trendy/TRENDY_1585242157_5664e7c8-37df-41ce-bce0-2ec826ba2d2e.png";
 
   final GlobalKey<RefreshIndicatorState> submissionTagKey =
       new GlobalKey<RefreshIndicatorState>();
@@ -137,22 +127,6 @@ class _MyHomePageState extends State<MyHomePage>
   int _selectedIndex = 0;
 
   bool isSwitched = true;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Home',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 1: Business',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 2: School',
-      style: optionStyle,
-    ),
-  ];
 
   void _onItemTapped(int index) {
     if (index != 2) {
@@ -203,14 +177,10 @@ class _MyHomePageState extends State<MyHomePage>
     mCurrentUser = User.fromJson(json_data);
   }
 
-  ScrollController hideBottomNavController;
-
-
   ScrollController hideBottomBarScrollController1;
   ScrollController hideBottomBarScrollController2;
   ScrollController hideBottomBarScrollController3;
   bool isVisibleBottomBar;
-
 
   @override
   void initState() {
@@ -219,12 +189,6 @@ class _MyHomePageState extends State<MyHomePage>
     getRecipeSearchList();
     getCurrentUser();
     getFamousGroup();
-    controller.addListener(() {
-      if (controller.position.pixels == controller.position.maxScrollExtent) {
-        //sự kiện kéo xuống cuối listview
-//        loadMoreSubmission();
-      }
-    });
 
     specialSubmissionFuture = getListSpecialSubmission();
     submissionFuture = getListSubmission();
@@ -235,12 +199,9 @@ class _MyHomePageState extends State<MyHomePage>
 
     isVisibleBottomBar = true;
 
-    hideBottomNavController = ScrollController();
     hideBottomBarScrollController1 = ScrollController();
     hideBottomBarScrollController2 = ScrollController();
     hideBottomBarScrollController3 = ScrollController();
-
-
 
     hideBottomBarScrollController1.addListener(() {
       if (hideBottomBarScrollController1.position.userScrollDirection ==
@@ -292,27 +253,6 @@ class _MyHomePageState extends State<MyHomePage>
           });
       }
     });
-
-
-    hideBottomNavController.addListener(
-          () {
-        if (hideBottomNavController.position.userScrollDirection ==
-            ScrollDirection.reverse) {
-          if (isVisibleBottomBar)
-            setState(() {
-              isVisibleBottomBar = false;
-            });
-        }
-        if (hideBottomNavController.position.userScrollDirection ==
-            ScrollDirection.forward) {
-          if (!isVisibleBottomBar)
-            setState(() {
-              isVisibleBottomBar = true;
-            });
-        }
-      },
-    );
-
   }
 
   Future<List<Submission>> getListSubmission() async {
@@ -371,40 +311,10 @@ class _MyHomePageState extends State<MyHomePage>
   void dispose() {
     // TODO: implement dispose
     tabBarController.dispose();
-    controller.dispose();
+    hideBottomBarScrollController1.dispose();
+    hideBottomBarScrollController2.dispose();
+    hideBottomBarScrollController3.dispose();
     super.dispose();
-  }
-
-//  Future<List<Submission>> getListSub() async {
-//    var data_server = await http
-//        .get("https://next.json-generator.com/api/json/get/EyGudVOhu");
-//    List<dynamic> json_data = jsonDecode(data_server.body);
-//    List<Submission> data =
-//        json_data.map((json_data) => Submission.fromJson(json_data)).toList();
-//
-//    setState(() {
-//      listSpecialSubmission = data;
-//    });
-//
-//    return data;
-//  }
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  void _resetCounter() {
-    setState(() {
-      _counter = 0;
-    });
-  }
-
-  void _decreaseCounter() {
-    setState(() {
-      _counter--;
-    });
   }
 
   Color getMyColor(int moneyCounter) {
@@ -481,1164 +391,338 @@ class _MyHomePageState extends State<MyHomePage>
     final Size size = MediaQuery.of(context).size;
     final double categoryHeight = size.height * 0.30;
     return Scaffold(
-        appBar: AppBar(
-          // Here we take the value from the MyHomePage object that was created by
-          // the App.build method, and use it to set our appbar title.
-          elevation: 0,
-          iconTheme: IconThemeData(
-            color: Colors.black, //change your color here
-          ),
-          backgroundColor: Colors.white,
-          titleSpacing: 0,
-          automaticallyImplyLeading: false,
-          title: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      child: Flexible(
-                        flex: 1,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Image.asset(
-                              "assets/images/ic_chat_hatto.png",
-                              width: 20,
-                              height: 20,
-                            ),
-                            SizedBox(
-                              height: 2,
-                            ),
-                            Text(
-                              "Tán gẫu",
-                              style:
-                                  TextStyle(fontSize: 10, color: Colors.black),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    Flexible(
-                      flex: 2,
-                      child: Stack(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(left: 22),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(12)),
-                                  color: HattoColors.veryLightPink),
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 4, horizontal: 8),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      "${mCurrentUser.remain_GAO}",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14,
-                                          fontFamily: 'RobotoItalic',
-                                          color: HattoColors.colorPrimary),
-                                    ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Image.asset(
-                                      "assets/images/ic_plus.png",
-                                      color: HattoColors.colorPrimary,
-                                      width: 15,
-                                      height: 15,
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                              left: 18,
-                              child: Image.asset(
-                                "assets/images/ic_rice.png",
-                                width: 25,
-                                height: 25,
-                              ))
-                        ],
-                      ),
-                    ),
-                    Flexible(
-                      flex: 2,
-                      child: Stack(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(left: 4, right: 22),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(12)),
-                                  color: HattoColors.veryLightPink),
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 4, horizontal: 8),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      "${mCurrentUser.rewards}",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14,
-                                          fontFamily: 'RobotoItalic',
-                                          color: HattoColors.colorPrimary),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                              child: Image.asset(
-                            "assets/images/ic_dua.png",
-                            width: 25,
-                            height: 25,
-                          ))
-                        ],
-                      ),
-                    ),
-                    Flexible(
-                        flex: 1, child: getCurrentAvatarUser(mCurrentUser, 15))
-                  ],
-                  mainAxisSize: MainAxisSize.max,
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                width: size.width,
-                height: 1,
-                color: HattoColors.greyD3,
-              )
-            ],
-          ),
-          brightness: Brightness.light,
-          bottom: TabBar(
-            controller: tabBarController,
-            indicator: new BubbleTabIndicator(
-              indicatorHeight: 35.0,
-              indicatorColor: HattoColors.colorPrimary,
-              tabBarIndicatorSize: TabBarIndicatorSize.tab,
-            ),
-            isScrollable: true,
-            indicatorColor: HattoColors.colorPrimary,
-            labelColor: Colors.white,
-            unselectedLabelColor: HattoColors.colorTimeLine,
-            tabs: [
-              Tab(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      "assets/images/ic_tab_special_black.png",
-                      color: tabBarController.index == 0
-                          ? Colors.white
-                          : HattoColors.colorTimeLine,
-                      width: 20,
-                      height: 20,
-                    ),
-                    SizedBox(width: 5),
-                    Text(
-                      "Đặc sắc  ".toUpperCase(),
-                      style: TextStyle(fontFamily: "RobotoBold", fontSize: 14),
-                    )
-                  ],
-                ),
-              ),
-              Tab(
-                child: Row(
-                  children: [
-                    Image.asset(
-                      "assets/images/ic_tab_submission_black.png",
-                      color: tabBarController.index == 1
-                          ? Colors.white
-                          : HattoColors.colorTimeLine,
-                      width: 20,
-                      height: 20,
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      "Món ăn  ".toUpperCase(),
-                      style: TextStyle(fontFamily: "RobotoBold", fontSize: 14),
-                    )
-                  ],
-                ),
-              ),
-              Tab(
-                child: Row(
-                  children: [
-                    Image.asset(
-                      "assets/images/ic_tab_location_black.png",
-                      color: tabBarController.index == 2
-                          ? Colors.white
-                          : HattoColors.colorTimeLine,
-                      width: 20,
-                      height: 20,
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      "Địa điểm  ".toUpperCase(),
-                      style: TextStyle(fontFamily: "RobotoBold", fontSize: 14),
-                    )
-                  ],
-                ),
-              )
-            ],
-          ),
+      appBar: AppBar(
+        // Here we take the value from the MyHomePage object that was created by
+        // the App.build method, and use it to set our appbar title.
+        elevation: 0,
+        iconTheme: IconThemeData(
+          color: Colors.black, //change your color here
         ),
-        body: TabBarView(
-          controller: tabBarController,
+        backgroundColor: Colors.white,
+        titleSpacing: 0,
+        automaticallyImplyLeading: false,
+        title: Column(
           children: [
-            RefreshIndicator(
-              key: PageStorageKey(specialTabKey),
-              onRefresh: getListSpecialSubmission,
-              child: FutureBuilder(
-                  future: specialSubmissionFuture,
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    if (snapshot.data == null) {
-                      return Container(
-                          child: ColorLoader5(
-                        dotOneColor: Colors.redAccent,
-                        dotTwoColor: Colors.blueAccent,
-                        dotThreeColor: Colors.green,
-                        dotType: DotType.circle,
-                        dotIcon: Icon(Icons.adjust),
-                        duration: Duration(seconds: 1),
-                      ));
-                    } else {
-                      return Container(
-                        height: size.height,
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              width: size.width,
-                              height: 1,
-                              color: HattoColors.greyD3,
-                            ),
-                            Container(
-                              color: Colors.white,
-                              width: size.width,
-                              height: 50,
-                              child: ListView.builder(
-                                  physics: BouncingScrollPhysics(),
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: listFamousGroup.length,
-                                  itemBuilder: (context, index) {
-                                    FamousGroup item = listFamousGroup[index];
-                                    return GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          for (FamousGroup r_items
-                                              in listFamousGroup) {
-                                            r_items.setSelected = false;
-                                          }
-                                          listFamousGroup[index].setSelected =
-                                              true;
-                                        });
-                                      },
-                                      child: Container(
-                                        color: Colors.white,
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 5),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Container(
-                                                  height: 20,
-                                                  width: 20,
-                                                  decoration: BoxDecoration(
-                                                    image: DecorationImage(
-                                                        image:
-                                                            CachedNetworkImageProvider(
-                                                                item.icon_url)),
-                                                  )),
-                                              Text(
-                                                item.group_name ?? '',
-                                                style: TextStyle(
-                                                    fontFamily: 'RobotoBold',
-                                                    fontSize: 14,
-                                                    color: item.selected
-                                                        ? HattoColors
-                                                            .colorPrimary
-                                                        : Colors.black
-                                                            .withOpacity(0.6)),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  }),
-                            ),
-                            Container(
-                              height: 30,
-                              color: Colors.white,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 5),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Flexible(flex:1,child: Text("Từ khóa thông dụng",style: TextStyle(fontFamily: 'RobotoBold',fontSize: 14,color: Colors.black),overflow: TextOverflow.ellipsis,maxLines: 1,)),
-                                    Flexible(
-                                      flex: 1,
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          showModalBottomSheet(
-                                              backgroundColor: Colors.transparent,
-                                              enableDrag: true,
-                                              context: context,
-                                              builder: (context) {
-                                                return SingleChildScrollView(
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(20.0),
-                                                    child: Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      children: [
-                                                        ClipRRect(
-                                                            child: Column(
-                                                              children: [
-                                                                ...listSelectDistance
-                                                                    .map((e) =>
-                                                                        Container(
-                                                                          child:
-                                                                              Column(
-                                                                            children: [
-                                                                              GestureDetector(
-                                                                                child: Container(
-                                                                                    decoration: BoxDecoration(color: Colors.white),
-                                                                                    child: Padding(
-                                                                                      padding: const EdgeInsets.symmetric(vertical: 8),
-                                                                                      child: Center(
-                                                                                        child: Text(
-                                                                                          e.name,
-                                                                                          style: TextStyle(fontSize: 15, fontFamily: 'RobotoRegular'),
-                                                                                        ),
-                                                                                      ),
-                                                                                    ),
-                                                                                    width: size.width),
-                                                                                onTap:
-                                                                                    () {
-                                                                                  getRecommenderSubmissionDistance();
-                                                                                  setState(() {
-                                                                                    selectedItem = e;
-                                                                                  });
-                                                                                  Navigator.pop(context);
-                                                                                },
-                                                                              ),
-                                                                              Container(
-                                                                                height:
-                                                                                    1,
-                                                                                color:
-                                                                                    HattoColors.greyD3,
-                                                                              )
-                                                                            ],
-                                                                          ),
-                                                                        ))
-                                                                    .toList(),
-                                                              ],
-                                                            ),
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(20)),
-                                                        SizedBox(
-                                                          height: 10,
-                                                        ),
-                                                        ClipRRect(
-                                                          child: GestureDetector(
-                                                            child: Container(
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                        color: Colors
-                                                                            .white),
-                                                                child: Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .symmetric(
-                                                                          vertical:
-                                                                              10),
-                                                                  child: Center(
-                                                                    child: Text(
-                                                                      "Hủy bỏ",
-                                                                      style: TextStyle(
-                                                                          fontSize:
-                                                                              15,
-                                                                          fontFamily:
-                                                                              'RobotoRegular'),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                width: size.width),
-                                                            onTap: () {
-                                                              Navigator.pop(
-                                                                  context);
-                                                            },
-                                                          ),
-                                                          borderRadius:
-                                                              BorderRadius.all(
-                                                                  Radius.circular(
-                                                                      20)),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                );
-                                              });
-                                        },
-                                        child: Container(
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(12),
-                                                    color: HattoColors.greyD3),
-                                                child: Padding(
-                                                  padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 4),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.center,
-                                                    children: [
-                                                      Text(
-                                                        selectedItem.name,
-                                                        style: TextStyle(
-                                                            fontFamily: "RobotoBold",
-                                                            fontSize: 12,
-                                                            color: HattoColors
-                                                                .colorPrimary),
-                                                        overflow: TextOverflow.ellipsis,
-                                                        maxLines: 1,
-                                                      ),
-                                                      Icon(
-                                                        Icons.keyboard_arrow_down,
-                                                        color: HattoColors.colorPrimary,
-                                                        size: 15,
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    child: Flexible(
+                      flex: 1,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Image.asset(
+                            "assets/images/ic_chat_hatto.png",
+                            width: 20,
+                            height: 20,
+                          ),
+                          SizedBox(
+                            height: 2,
+                          ),
+                          Text(
+                            "Tán gẫu",
+                            style: TextStyle(fontSize: 10, color: Colors.black),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  Flexible(
+                    flex: 2,
+                    child: Stack(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(left: 22),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(12)),
+                                color: HattoColors.veryLightPink),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 4, horizontal: 8),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    "${mCurrentUser.remain_GAO}",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                        fontFamily: 'RobotoItalic',
+                                        color: HattoColors.colorPrimary),
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Image.asset(
+                                    "assets/images/ic_plus.png",
+                                    color: HattoColors.colorPrimary,
+                                    width: 15,
+                                    height: 15,
+                                  )
+                                ],
                               ),
                             ),
-                            Expanded(
-                                child: ListView.builder(
-                                    controller: hideBottomBarScrollController1,
-                                    itemCount: listSpecialSubmission.length+1,
-                                    physics: BouncingScrollPhysics(),
-                                    itemBuilder: (context, index) {
-                                      var itemSub;
-                                      if (index != 0) {
-                                        itemSub = listSpecialSubmission[index - 1];
-                                      }
-                                      if (index == 0) {
-                                        return  GestureDetector(
-                                          onTap: (){
-                                            List<String> url = [];
-                                            url.add(trendy_url);
-                                            Navigator.push(
-                                                context,
-                                                new MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        GalleryPhotoZoom(url)));
-                                          },
-                                          child: Container(
-                                              height: 200,
-                                              width: size.width,
-                                              decoration: BoxDecoration(
-                                                image: DecorationImage(
-                                                    fit: BoxFit.cover,
-                                                    image: CachedNetworkImageProvider(
-                                                        trendy_url)),
-                                              )),
-                                        );
-                                      }
-                                      return GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(
-                                                  context,
-                                                  new MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          DetailSubmission(
-                                                              itemSub, index)))
-                                              .then((value) {
-                                            if (value != null) {
-                                              Submission itemsDetailBack =
-                                                  value as Submission;
-                                              setState(() {
-                                                listSpecialSubmission[index-1] =
-                                                    itemsDetailBack;
-//                                            itemSub = itemsDetailBack;
-                                              });
-                                            }
-                                          });
-                                        },
-                                        child: Container(
-                                            width: double.infinity,
-                                            margin: const EdgeInsets.symmetric(
-                                                horizontal: 20, vertical: 10),
-                                            decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(10.0)),
-                                                color: Colors.white,
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      color: Colors.black
-                                                          .withAlpha(100),
-                                                      blurRadius: 10.0),
-                                                ]),
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  bottom: 0),
-                                              child: Column(
-//                                          crossAxisAlignment:
-//                                              CrossAxisAlignment.start,
-                                                children: <Widget>[
-                                                  Hero(
-                                                    child: Stack(
-                                                      children: [
-                                                        Container(
-                                                            height: 300,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              image: DecorationImage(
-                                                                  fit: BoxFit
-                                                                      .cover,
-                                                                  image: CachedNetworkImageProvider(
-                                                                      itemSub
-                                                                          .URL_img_id)),
-                                                              borderRadius: BorderRadius.only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          10.0),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          10.0)),
-                                                            )),
-                                                        Positioned(
-                                                            child: Image.asset(
-                                                                "assets/images/ic_rectangle_green.png",
-                                                                width: 35,
-                                                                height: 45),
-                                                            left: 10),
-                                                        Positioned(
-                                                          child: Image.asset(
-                                                              "assets/images/ic_buaan.png",
-                                                              width: 20,
-                                                              height: 20,
-                                                              color:
-                                                                  Colors.white),
-                                                          left: 17.5,
-                                                          top: 10,
-                                                        )
-                                                      ],
-                                                    ),
-                                                    tag: index.toString() +
-                                                        itemSub.forum_id,
-                                                  ),
-                                                  SizedBox(width: 10),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-//                                                mainAxisSize: MainAxisSize.max,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .stretch,
-                                                      children: <Widget>[
-                                                        Row(
-//                                                    crossAxisAlignment:
-//                                                        CrossAxisAlignment
-//                                                            .start,
-                                                          mainAxisSize:
-                                                              MainAxisSize.max,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          children: <Widget>[
-                                                            Hero(
-                                                                tag: index
-                                                                        .toString() +
-                                                                    itemSub
-                                                                        .portrait_url,
-                                                                child:
-                                                                    getAvatarUser(
-                                                                        itemSub,
-                                                                        20)),
-                                                            SizedBox(width: 5),
-                                                            Flexible(
-                                                              child: Container(
-                                                                child: Column(
-                                                                    mainAxisSize:
-                                                                        MainAxisSize
-                                                                            .min,
-                                                                    crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .stretch,
-                                                                    children: <
-                                                                        Widget>[
-                                                                      Row(
-                                                                        children: [
-                                                                          Flexible(
-                                                                            child:
-                                                                                Container(
-                                                                              child: Text(
-                                                                                itemSub.user_name,
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                maxLines: 1,
-                                                                                style: TextStyle(fontSize: 15, fontFamily: 'RobotoMedium', color: !itemSub.isVipCheck() ? Colors.black : HattoColors.colorPrimary),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                          Row(
-                                                                            children: [
-                                                                              Text(
-                                                                                AppUtils.formatNumber(itemSub.remain_rewards),
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                maxLines: 1,
-                                                                                style: TextStyle(fontSize: 15, fontFamily: 'RobotoMedium', color: HattoColors.colorPrimary),
-                                                                              ),
-                                                                              SizedBox(width: 1),
-                                                                              Container(width: 15, height: 15, child: Image.asset("assets/images/ic_dua.png"))
-                                                                            ],
-                                                                          ),
-                                                                        ],
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.spaceBetween,
-                                                                      ),
-                                                                      SizedBox(
-                                                                          height:
-                                                                              5),
-                                                                      Row(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.center,
-                                                                        children: <
-                                                                            Widget>[
-                                                                          Visibility(
-                                                                            visible: !itemSub.isVipCheck()
-                                                                                ? false
-                                                                                : true,
-                                                                            child: Container(
-                                                                                decoration: new BoxDecoration(color: HattoColors.colorPrimary, borderRadius: new BorderRadius.all(Radius.circular(8))),
-                                                                                child: Padding(
-                                                                                  padding: const EdgeInsets.only(left: 2, right: 2, top: 2, bottom: 2),
-                                                                                  child: Center(
-                                                                                    child: Text(
-                                                                                      "Super VIP".toUpperCase(),
-                                                                                      style: TextStyle(fontSize: 7, fontFamily: 'RobotoBold', color: Colors.white),
-                                                                                    ),
-                                                                                  ),
-                                                                                )),
-                                                                          ),
-                                                                          SizedBox(
-                                                                              width: 3),
-                                                                          Container(
-                                                                              height: 15,
-                                                                              width: 15,
-                                                                              decoration: BoxDecoration(
-                                                                                image: DecorationImage(fit: BoxFit.cover, image: CachedNetworkImageProvider(getRankIcon(itemSub.rank_id))),
-                                                                              )),
-                                                                          SizedBox(
-                                                                              width: 3),
-                                                                          Text(
-                                                                            itemSub.rank_desc,
-                                                                            overflow:
-                                                                                TextOverflow.ellipsis,
-                                                                            maxLines:
-                                                                                1,
-                                                                            style: TextStyle(
-                                                                                fontSize: 11,
-                                                                                fontFamily: 'RobotoRegular',
-                                                                                color: HattoColors.colorTimeLine),
-                                                                          ),
-                                                                        ],
-                                                                      )
-                                                                    ]),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        Text(
-                                                          itemSub.class_desc,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          maxLines: 2,
-                                                          style: const TextStyle(
-                                                              fontFamily:
-                                                                  'RobotoMedium',
-                                                              fontSize: 20),
-                                                        ),
-                                                        Visibility(
-                                                          visible:
-                                                              itemSub.location_name !=
-                                                                      null
-                                                                  ? true
-                                                                  : false,
-                                                          child: Padding(
-                                                            padding:
-                                                                EdgeInsets.only(
-                                                                    top: 2),
-                                                            child: Row(
-//                                                    crossAxisAlignment:
-//                                                        CrossAxisAlignment
-//                                                            .start,
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .max,
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .start,
-                                                              children: <
-                                                                  Widget>[
-                                                                getAvatarLocation(
-                                                                    itemSub),
-                                                                SizedBox(
-                                                                    width: 5),
-                                                                Flexible(
-                                                                  child:
-                                                                      Container(
-                                                                    child: Column(
-                                                                        mainAxisSize:
-                                                                            MainAxisSize
-                                                                                .min,
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment
-                                                                                .stretch,
-                                                                        children: <
-                                                                            Widget>[
-                                                                          Row(
-                                                                            children: [
-                                                                              Flexible(
-                                                                                child: Container(
-                                                                                  child: Text(
-                                                                                    itemSub.location_name ?? "",
-                                                                                    overflow: TextOverflow.ellipsis,
-                                                                                    maxLines: 1,
-                                                                                    style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black),
-                                                                                  ),
-                                                                                ),
-                                                                              ),
-                                                                              Visibility(
-                                                                                visible: itemSub.location_home_delivery != 0 ? true : false,
-                                                                                child: Row(
-                                                                                  children: [
-                                                                                    Container(width: 15, height: 15, child: Image.asset("assets/images/ic_bike_delivery_2x.png")),
-                                                                                    SizedBox(width: 1),
-                                                                                    Text(
-                                                                                      "Có giao hàng qua Hatto",
-                                                                                      overflow: TextOverflow.ellipsis,
-                                                                                      maxLines: 1,
-                                                                                      style: TextStyle(fontSize: 11, fontFamily: 'RobotoMedium', color: Colors.black),
-                                                                                    ),
-                                                                                  ],
-                                                                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                                                                ),
-                                                                              ),
-                                                                            ],
-                                                                            mainAxisAlignment:
-                                                                                MainAxisAlignment.spaceBetween,
-                                                                          ),
-                                                                          SizedBox(
-                                                                              height: 5),
-                                                                          Row(
-                                                                            crossAxisAlignment:
-                                                                                CrossAxisAlignment.center,
-                                                                            children: <Widget>[
-                                                                              Flexible(
-                                                                                child: Text(
-                                                                                  itemSub.location_address ?? "",
-                                                                                  overflow: TextOverflow.ellipsis,
-                                                                                  maxLines: 2,
-                                                                                  style: TextStyle(fontSize: 11, fontFamily: 'RobotoRegular', color: HattoColors.colorTimeLine),
-                                                                                ),
-                                                                              ),
-                                                                            ],
-                                                                          )
-                                                                        ]),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 5,
-                                                        ),
-                                                        Text(
-                                                          itemSub.extra_desc,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          maxLines: 3,
-                                                          style: TextStyle(
-                                                              fontSize: 12,
-                                                              fontFamily:
-                                                                  'RobotoRegular',
-                                                              color:
-                                                                  Colors.black),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 5,
-                                                        ),
-                                                        Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            Flexible(
-                                                              child: Row(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  Image.asset(
-                                                                      "assets/images/ic_clock.png",
-                                                                      width: 10,
-                                                                      height:
-                                                                          10),
-                                                                  SizedBox(
-                                                                      width: 2),
-                                                                  Text(
-                                                                    AppUtils.getDateTimeAgo(
-                                                                        itemSub
-                                                                            .timestamp),
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                    maxLines: 1,
-                                                                    style: TextStyle(
-                                                                        fontSize:
-                                                                            12,
-                                                                        fontFamily:
-                                                                            'RobotoRegular',
-                                                                        color: HattoColors
-                                                                            .colorTimeLine),
-                                                                  ),
-                                                                  SizedBox(
-                                                                      width: 5),
-                                                                  AppUtils.getSharingOptionIcon(
-                                                                      itemSub
-                                                                          .sharing_option,
-                                                                      10,
-                                                                      10)
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            Flexible(
-                                                                child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .end,
-                                                              children: [
-                                                                RichText(
-                                                                    text: TextSpan(
-                                                                        text: itemSub
-                                                                            .total_unique_views
-                                                                            .toString(),
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                13,
-                                                                            fontFamily:
-                                                                                'RobotoBold',
-                                                                            color: Colors
-                                                                                .black),
-                                                                        children: <
-                                                                            TextSpan>[
-                                                                      TextSpan(
-                                                                          text:
-                                                                              " lượt xem",
-                                                                          style: TextStyle(
-                                                                              fontSize: 12,
-                                                                              fontFamily: 'RobotoRegular',
-                                                                              color: HattoColors.colorTimeLine.withOpacity(0.7))),
-                                                                    ])),
-                                                              ],
-                                                            ))
-                                                          ],
-                                                        ),
-                                                        SizedBox(
-                                                          height: 5,
-                                                        ),
-                                                        Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            Flexible(
-                                                              child: Container(
-                                                                child: Row(
-                                                                  children: [
-                                                                    Flexible(
-                                                                      child:
-                                                                          Row(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.end,
-                                                                        children: [
-                                                                          Image
-                                                                              .asset(
-                                                                            "assets/images/emote_clap.png",
-                                                                            width:
-                                                                                16,
-                                                                            height:
-                                                                                16,
-                                                                          ),
-                                                                          SizedBox(
-                                                                            width:
-                                                                                2,
-                                                                          ),
-                                                                          Flexible(
-                                                                            child: Text(itemSub.voted_id_1.toString(),
-                                                                                maxLines: 1,
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black)),
-                                                                          )
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                    SizedBox(
-                                                                        width:
-                                                                            5),
-                                                                    Flexible(
-                                                                      child:
-                                                                          Row(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.end,
-                                                                        children: [
-                                                                          Image
-                                                                              .asset(
-                                                                            "assets/images/emote_rose.png",
-                                                                            width:
-                                                                                16,
-                                                                            height:
-                                                                                16,
-                                                                          ),
-                                                                          SizedBox(
-                                                                            width:
-                                                                                2,
-                                                                          ),
-                                                                          Flexible(
-                                                                            child: Text(itemSub.voted_id_2.toString(),
-                                                                                maxLines: 1,
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black)),
-                                                                          )
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                    SizedBox(
-                                                                        width:
-                                                                            5),
-                                                                    Flexible(
-                                                                      child:
-                                                                          Row(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.end,
-                                                                        children: [
-                                                                          Image
-                                                                              .asset(
-                                                                            "assets/images/emote_suprise.png",
-                                                                            width:
-                                                                                16,
-                                                                            height:
-                                                                                16,
-                                                                          ),
-                                                                          SizedBox(
-                                                                            width:
-                                                                                2,
-                                                                          ),
-                                                                          Text(
-                                                                              itemSub.voted_id_3.toString(),
-                                                                              maxLines: 1,
-                                                                              overflow: TextOverflow.ellipsis,
-                                                                              style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black))
-                                                                        ],
-                                                                      ),
-                                                                    )
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            Flexible(
-                                                                child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .end,
-                                                              children: [
-                                                                Image.asset(
-                                                                  "assets/images/ic_favorite_2x.png",
-                                                                  width: 16,
-                                                                  height: 16,
-                                                                  color: Colors
-                                                                      .black,
-                                                                ),
-                                                                SizedBox(
-                                                                    width: 5),
-                                                                Text(
-                                                                    itemSub
-                                                                        .favorite_count
-                                                                        .toString(),
-                                                                    style: TextStyle(
-                                                                        fontSize:
-                                                                            13,
-                                                                        fontFamily:
-                                                                            'RobotoBold',
-                                                                        color: Colors
-                                                                            .black)),
-                                                                SizedBox(
-                                                                    width: 5),
-                                                                Image.asset(
-                                                                  "assets/images/ic_chat_2x.png",
-                                                                  width: 16,
-                                                                  height: 16,
-                                                                  color: Colors
-                                                                      .black,
-                                                                ),
-                                                                SizedBox(
-                                                                    width: 5),
-                                                                RichText(
-                                                                    text: TextSpan(
-                                                                        text: itemSub
-                                                                            .replies_count
-                                                                            .toString(),
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                13,
-                                                                            fontFamily:
-                                                                                'RobotoBold',
-                                                                            color: Colors
-                                                                                .black),
-                                                                        children: <
-                                                                            TextSpan>[
-                                                                      TextSpan(
-                                                                          text:
-                                                                              " bình luận",
-                                                                          style: TextStyle(
-                                                                              fontSize: 12,
-                                                                              fontFamily: 'RobotoRegular',
-                                                                              color: HattoColors.colorTimeLine.withOpacity(0.7))),
-                                                                    ])),
-                                                              ],
-                                                            ))
-                                                          ],
-                                                        )
-                                                      ],
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            )),
-                                      );
-                                    })),
-                          ],
+                          ),
                         ),
-                      );
-                    }
-                  }),
-            ),
-            RefreshIndicator(
-              key: PageStorageKey(submissionTagKey),
-              onRefresh: () async {
-               getRecommenderSubmission();
-               await getListSubmission();
-              },
-              child: FutureBuilder(
-                  future: submissionFuture,
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    if (snapshot.data == null) {
-                      return Container(
-                          child: ColorLoader5(
-                        dotOneColor: Colors.redAccent,
-                        dotTwoColor: Colors.blueAccent,
-                        dotThreeColor: Colors.green,
-                        dotType: DotType.circle,
-                        dotIcon: Icon(Icons.adjust),
-                        duration: Duration(seconds: 1),
-                      ));
-                    } else {
-                      return Container(
-                        height: size.height,
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              width: size.width,
-                              height: 1,
-                              color: HattoColors.greyD3,
-                            ),
-                            Container(
-                              color: Colors.white,
-                              width: size.width,
-                              height: 40,
+                        Positioned(
+                            left: 18,
+                            child: Image.asset(
+                              "assets/images/ic_rice.png",
+                              width: 25,
+                              height: 25,
+                            ))
+                      ],
+                    ),
+                  ),
+                  Flexible(
+                    flex: 2,
+                    child: Stack(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(left: 4, right: 22),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(12)),
+                                color: HattoColors.veryLightPink),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 4, horizontal: 8),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    "${mCurrentUser.rewards}",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                        fontFamily: 'RobotoItalic',
+                                        color: HattoColors.colorPrimary),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                            child: Image.asset(
+                          "assets/images/ic_dua.png",
+                          width: 25,
+                          height: 25,
+                        ))
+                      ],
+                    ),
+                  ),
+                  Flexible(
+                      flex: 1, child: getCurrentAvatarUser(mCurrentUser, 15))
+                ],
+                mainAxisSize: MainAxisSize.max,
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              width: size.width,
+              height: 1,
+              color: HattoColors.greyD3,
+            )
+          ],
+        ),
+        brightness: Brightness.light,
+        bottom: TabBar(
+          controller: tabBarController,
+          indicator: new BubbleTabIndicator(
+            indicatorHeight: 35.0,
+            indicatorColor: HattoColors.colorPrimary,
+            tabBarIndicatorSize: TabBarIndicatorSize.tab,
+          ),
+          isScrollable: true,
+          indicatorColor: HattoColors.colorPrimary,
+          labelColor: Colors.white,
+          unselectedLabelColor: HattoColors.colorTimeLine,
+          tabs: [
+            Tab(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    "assets/images/ic_tab_special_black.png",
+                    color: tabBarController.index == 0
+                        ? Colors.white
+                        : HattoColors.colorTimeLine,
+                    width: 20,
+                    height: 20,
+                  ),
+                  SizedBox(width: 5),
+                  Text(
+                    "Đặc sắc  ".toUpperCase(),
+                    style: TextStyle(fontFamily: "RobotoBold", fontSize: 14),
+                  )
+                ],
+              ),
+            ),
+            Tab(
+              child: Row(
+                children: [
+                  Image.asset(
+                    "assets/images/ic_tab_submission_black.png",
+                    color: tabBarController.index == 1
+                        ? Colors.white
+                        : HattoColors.colorTimeLine,
+                    width: 20,
+                    height: 20,
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text(
+                    "Món ăn  ".toUpperCase(),
+                    style: TextStyle(fontFamily: "RobotoBold", fontSize: 14),
+                  )
+                ],
+              ),
+            ),
+            Tab(
+              child: Row(
+                children: [
+                  Image.asset(
+                    "assets/images/ic_tab_location_black.png",
+                    color: tabBarController.index == 2
+                        ? Colors.white
+                        : HattoColors.colorTimeLine,
+                    width: 20,
+                    height: 20,
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text(
+                    "Địa điểm  ".toUpperCase(),
+                    style: TextStyle(fontFamily: "RobotoBold", fontSize: 14),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+      body: TabBarView(
+        controller: tabBarController,
+        children: [
+          RefreshIndicator(
+            key: PageStorageKey(specialTabKey),
+            onRefresh: getListSpecialSubmission,
+            child: FutureBuilder(
+                future: specialSubmissionFuture,
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (snapshot.data == null) {
+                    return Container(
+                        child: ColorLoader5(
+                      dotOneColor: Colors.redAccent,
+                      dotTwoColor: Colors.blueAccent,
+                      dotThreeColor: Colors.green,
+                      dotType: DotType.circle,
+                      dotIcon: Icon(Icons.adjust),
+                      duration: Duration(seconds: 1),
+                    ));
+                  } else {
+                    return Container(
+                      height: size.height,
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            width: size.width,
+                            height: 1,
+                            color: HattoColors.greyD3,
+                          ),
+                          Container(
+                            color: Colors.white,
+                            width: size.width,
+                            height: 50,
+                            child: ListView.builder(
+                                physics: BouncingScrollPhysics(),
+                                scrollDirection: Axis.horizontal,
+                                itemCount: listFamousGroup.length,
+                                itemBuilder: (context, index) {
+                                  FamousGroup item = listFamousGroup[index];
+                                  return GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        for (FamousGroup r_items
+                                            in listFamousGroup) {
+                                          r_items.setSelected = false;
+                                        }
+                                        listFamousGroup[index].setSelected =
+                                            true;
+                                      });
+                                    },
+                                    child: Container(
+                                      color: Colors.white,
+                                      child: Padding(
+                                        padding:
+                                            EdgeInsets.symmetric(horizontal: 5),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                                height: 20,
+                                                width: 20,
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                      image:
+                                                          CachedNetworkImageProvider(
+                                                              item.icon_url)),
+                                                )),
+                                            Text(
+                                              item.group_name ?? '',
+                                              style: TextStyle(
+                                                  fontFamily: 'RobotoBold',
+                                                  fontSize: 14,
+                                                  color: item.selected
+                                                      ? HattoColors.colorPrimary
+                                                      : Colors.black
+                                                          .withOpacity(0.6)),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }),
+                          ),
+                          Container(
+                            height: 30,
+                            color: Colors.white,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 5),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Flexible(
-                                    flex: 4,
-                                    child: Row(
-                                      children: [
-                                        Switch(
-                                          value: isSwitched,
-                                          activeColor: Colors.white,
-                                          inactiveTrackColor:
-                                              HattoColors.greyD3,
-                                          inactiveThumbColor:
-                                              HattoColors.whiteGrey92,
-                                          activeTrackColor:
-                                              HattoColors.greenLight,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              isSwitched = value;
-                                            });
-                                          },
-                                        ),
-                                        Flexible(
-                                          child: Text(
-                                            isSwitched
-                                                ? "Tất cả bài viết"
-                                                : "Bài của tôi",
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                            style: TextStyle(
-                                                fontFamily: "RobotoRegular",
-                                                fontSize: 13),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
+                                      flex: 1,
+                                      child: Text(
+                                        "Từ khóa thông dụng",
+                                        style: TextStyle(
+                                            fontFamily: 'RobotoBold',
+                                            fontSize: 14,
+                                            color: Colors.black),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                      )),
                                   Flexible(
-                                    flex: 3,
+                                    flex: 1,
                                     child: GestureDetector(
                                       onTap: () {
                                         showModalBottomSheet(
@@ -1743,1472 +827,2431 @@ class _MyHomePageState extends State<MyHomePage>
                                             });
                                       },
                                       child: Container(
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            color: HattoColors.greyD3),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(4.0),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Flexible(
-                                                child: Text(
-                                                  selectedItem.name,
-                                                  style: TextStyle(
-                                                      fontFamily: "RobotoBold",
-                                                      fontSize: 12,
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  color: HattoColors.greyD3),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 8,
+                                                        vertical: 4),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      selectedItem.name,
+                                                      style: TextStyle(
+                                                          fontFamily:
+                                                              "RobotoBold",
+                                                          fontSize: 12,
+                                                          color: HattoColors
+                                                              .colorPrimary),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      maxLines: 1,
+                                                    ),
+                                                    Icon(
+                                                      Icons.keyboard_arrow_down,
                                                       color: HattoColors
-                                                          .colorPrimary),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  maxLines: 1,
+                                                          .colorPrimary,
+                                                      size: 15,
+                                                    )
+                                                  ],
                                                 ),
                                               ),
-                                              Icon(
-                                                Icons.keyboard_arrow_down,
-                                                color: HattoColors.colorPrimary,
-                                                size: 15,
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Flexible(
-                                    flex: 4,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(right: 5),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          Image.asset(
-                                            "assets/images/ic_chopstick.png",
-                                            width: 15,
-                                            height: 15,
-                                          ),
-                                          Flexible(
-                                            child: Text(
-                                              "Chia sẻ bài mới",
-                                              style: TextStyle(
-                                                  fontFamily: "RobotoRegular",
-                                                  fontSize: 13),
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 1,
                                             ),
-                                          ),
-                                          SizedBox(
-                                            width: 5,
-                                          ),
-                                          Image.asset(
-                                            "assets/images/ic_search.png",
-                                            width: 15,
-                                            height: 15,
-                                            color: Colors.black,
-                                          )
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   )
                                 ],
                               ),
                             ),
-                            Container(
-                              width: size.width,
-                              height: 3,
-                              color: HattoColors.greyD3,
-                            ),
-                            Container(
-                              color: Colors.white,
-                              width: size.width,
-                              height: 50,
+                          ),
+                          Expanded(
                               child: ListView.builder(
-                                  physics: BouncingScrollPhysics(),
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: listRecipeSearch.length,
-                                  itemBuilder: (context, index) {
-                                    RecipeSearch item = listRecipeSearch[index];
-                                    return GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          for (RecipeSearch r_items
-                                              in listRecipeSearch) {
-                                            r_items.setSelected = false;
-                                          }
-                                          listRecipeSearch[index].setSelected =
-                                              true;
-                                        });
-                                      },
-                                      child: Container(
-                                        color: Colors.white,
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 5),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Container(
-                                                  height: 20,
-                                                  width: 20,
-                                                  decoration: BoxDecoration(
-                                                    image: DecorationImage(
-                                                        image:
-                                                            CachedNetworkImageProvider(
-                                                                item.icon_url)),
-                                                  )),
-                                              Text(
-                                                item.display,
-                                                style: TextStyle(
-                                                    fontFamily: 'RobotoBold',
-                                                    fontSize: 14,
-                                                    color: item.selected
-                                                        ? HattoColors
-                                                            .colorPrimary
-                                                        : Colors.black
-                                                            .withOpacity(0.6)),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  }),
-                            ),
-                            Expanded(
-                                child: LoadMoreCustom(
-                              onLoadMore: loadMoreSubmission,
-                              textBuilder: DefaultLoadMoreTextBuilder.vietnam,
-                              child: ListView.builder(
-                                  controller: hideBottomBarScrollController2,
-                                  itemCount: listSubmission.length + 1,
+                                  controller: hideBottomBarScrollController1,
+                                  itemCount: listSpecialSubmission.length + 1,
                                   physics: BouncingScrollPhysics(),
                                   itemBuilder: (context, index) {
                                     var itemSub;
                                     if (index != 0) {
-                                      itemSub = listSubmission[index - 1];
+                                      itemSub =
+                                          listSpecialSubmission[index - 1];
                                     }
-
-
                                     if (index == 0) {
-                                      return ContainerRecommenderSubmission();
-                                    } else {
                                       return GestureDetector(
                                         onTap: () {
+                                          List<String> url = [];
+                                          url.add(trendy_url);
                                           Navigator.push(
-                                                  context,
-                                                  new MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          DetailSubmission(
-                                                              itemSub, index)))
-                                              .then((value) {
-                                            if (value != null) {
-                                              Submission itemsDetailBack =
-                                                  value as Submission;
-                                              setState(() {
-                                                listSubmission[index - 1] =
-                                                    itemsDetailBack;
-//                                            itemSub = itemsDetailBack;
-                                              });
-                                            }
-                                          });
+                                              context,
+                                              new MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      GalleryPhotoZoom(url)));
                                         },
                                         child: Container(
-                                            width: double.infinity,
-                                            margin: const EdgeInsets.symmetric(
-                                                horizontal: 20, vertical: 10),
+                                            height: 200,
+                                            width: size.width,
                                             decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(10.0)),
-                                                color: Colors.white,
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      color: Colors.black
-                                                          .withAlpha(100),
-                                                      blurRadius: 10.0),
-                                                ]),
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  bottom: 0),
-                                              child: Column(
-//                                          crossAxisAlignment:
-//                                              CrossAxisAlignment.start,
-                                                children: <Widget>[
-                                                  Hero(
-                                                    child: Stack(
-                                                      children: [
-                                                        Container(
-                                                            height: 300,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              image: DecorationImage(
-                                                                  fit: BoxFit
-                                                                      .cover,
-                                                                  image: CachedNetworkImageProvider(
-                                                                      itemSub
-                                                                          .URL_img_id)),
-                                                              borderRadius: BorderRadius.only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          10.0),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          10.0)),
-                                                            )),
-                                                        Positioned(
-                                                            child: Image.asset(
-                                                                "assets/images/ic_rectangle_green.png",
-                                                                width: 35,
-                                                                height: 45),
-                                                            left: 10),
-                                                        Positioned(
-                                                          child: Image.asset(
-                                                              "assets/images/ic_buaan.png",
-                                                              width: 20,
-                                                              height: 20,
-                                                              color:
-                                                                  Colors.white),
-                                                          left: 17.5,
-                                                          top: 10,
-                                                        )
-                                                      ],
-                                                    ),
-                                                    tag: index.toString() +
-                                                        itemSub.forum_id,
-                                                  ),
-                                                  SizedBox(width: 10),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-//                                                mainAxisSize: MainAxisSize.max,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .stretch,
-                                                      children: <Widget>[
-                                                        Row(
-//                                                    crossAxisAlignment:
-//                                                        CrossAxisAlignment
-//                                                            .start,
-                                                          mainAxisSize:
-                                                              MainAxisSize.max,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          children: <Widget>[
-                                                            Hero(
-                                                                tag: index
-                                                                        .toString() +
-                                                                    itemSub
-                                                                        .portrait_url,
-                                                                child:
-                                                                    getAvatarUser(
-                                                                        itemSub,
-                                                                        20)),
-                                                            SizedBox(width: 5),
-                                                            Flexible(
-                                                              child: Container(
-                                                                child: Column(
-                                                                    mainAxisSize:
-                                                                        MainAxisSize
-                                                                            .min,
-                                                                    crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .stretch,
-                                                                    children: <
-                                                                        Widget>[
-                                                                      Row(
-                                                                        children: [
-                                                                          Flexible(
-                                                                            child:
-                                                                                Container(
-                                                                              child: Text(
-                                                                                itemSub.user_name,
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                maxLines: 1,
-                                                                                style: TextStyle(fontSize: 15, fontFamily: 'RobotoMedium', color: !itemSub.isVipCheck() ? Colors.black : HattoColors.colorPrimary),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                          Row(
-                                                                            children: [
-                                                                              Text(
-                                                                                AppUtils.formatNumber(itemSub.remain_rewards),
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                maxLines: 1,
-                                                                                style: TextStyle(fontSize: 15, fontFamily: 'RobotoMedium', color: HattoColors.colorPrimary),
-                                                                              ),
-                                                                              SizedBox(width: 1),
-                                                                              Container(width: 15, height: 15, child: Image.asset("assets/images/ic_dua.png"))
-                                                                            ],
-                                                                          ),
-                                                                        ],
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.spaceBetween,
-                                                                      ),
-                                                                      SizedBox(
-                                                                          height:
-                                                                              5),
-                                                                      Row(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.center,
-                                                                        children: <
-                                                                            Widget>[
-                                                                          Visibility(
-                                                                            visible: !itemSub.isVipCheck()
-                                                                                ? false
-                                                                                : true,
-                                                                            child: Container(
-                                                                                decoration: new BoxDecoration(color: HattoColors.colorPrimary, borderRadius: new BorderRadius.all(Radius.circular(8))),
-                                                                                child: Padding(
-                                                                                  padding: const EdgeInsets.only(left: 2, right: 2, top: 2, bottom: 2),
-                                                                                  child: Center(
-                                                                                    child: Text(
-                                                                                      "Super VIP".toUpperCase(),
-                                                                                      style: TextStyle(fontSize: 7, fontFamily: 'RobotoBold', color: Colors.white),
-                                                                                    ),
-                                                                                  ),
-                                                                                )),
-                                                                          ),
-                                                                          SizedBox(
-                                                                              width: 3),
-                                                                          Container(
-                                                                              height: 15,
-                                                                              width: 15,
-                                                                              decoration: BoxDecoration(
-                                                                                image: DecorationImage(fit: BoxFit.cover, image: CachedNetworkImageProvider(getRankIcon(itemSub.rank_id))),
-                                                                              )),
-                                                                          SizedBox(
-                                                                              width: 3),
-                                                                          Text(
-                                                                            itemSub.rank_desc,
-                                                                            overflow:
-                                                                                TextOverflow.ellipsis,
-                                                                            maxLines:
-                                                                                1,
-                                                                            style: TextStyle(
-                                                                                fontSize: 11,
-                                                                                fontFamily: 'RobotoRegular',
-                                                                                color: HattoColors.colorTimeLine),
-                                                                          ),
-                                                                        ],
-                                                                      )
-                                                                    ]),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        Text(
-                                                          itemSub.class_desc,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          maxLines: 2,
-                                                          style: const TextStyle(
-                                                              fontFamily:
-                                                                  'RobotoMedium',
-                                                              fontSize: 20),
-                                                        ),
-                                                        Visibility(
-                                                          visible:
-                                                              itemSub.location_name !=
-                                                                      null
-                                                                  ? true
-                                                                  : false,
-                                                          child: Padding(
-                                                            padding:
-                                                                EdgeInsets.only(
-                                                                    top: 2),
-                                                            child: Row(
-//                                                    crossAxisAlignment:
-//                                                        CrossAxisAlignment
-//                                                            .start,
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .max,
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .start,
-                                                              children: <
-                                                                  Widget>[
-                                                                getAvatarLocation(
-                                                                    itemSub),
-                                                                SizedBox(
-                                                                    width: 5),
-                                                                Flexible(
-                                                                  child:
-                                                                      Container(
-                                                                    child: Column(
-                                                                        mainAxisSize:
-                                                                            MainAxisSize
-                                                                                .min,
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment
-                                                                                .stretch,
-                                                                        children: <
-                                                                            Widget>[
-                                                                          Row(
-                                                                            children: [
-                                                                              Flexible(
-                                                                                child: Container(
-                                                                                  child: Text(
-                                                                                    itemSub.location_name ?? "",
-                                                                                    overflow: TextOverflow.ellipsis,
-                                                                                    maxLines: 1,
-                                                                                    style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black),
-                                                                                  ),
-                                                                                ),
-                                                                              ),
-                                                                              Visibility(
-                                                                                visible: itemSub.location_home_delivery != 0 ? true : false,
-                                                                                child: Row(
-                                                                                  children: [
-                                                                                    Container(width: 15, height: 15, child: Image.asset("assets/images/ic_bike_delivery_2x.png")),
-                                                                                    SizedBox(width: 1),
-                                                                                    Text(
-                                                                                      "Có giao hàng qua Hatto",
-                                                                                      overflow: TextOverflow.ellipsis,
-                                                                                      maxLines: 1,
-                                                                                      style: TextStyle(fontSize: 11, fontFamily: 'RobotoMedium', color: Colors.black),
-                                                                                    ),
-                                                                                  ],
-                                                                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                                                                ),
-                                                                              ),
-                                                                            ],
-                                                                            mainAxisAlignment:
-                                                                                MainAxisAlignment.spaceBetween,
-                                                                          ),
-                                                                          SizedBox(
-                                                                              height: 5),
-                                                                          Row(
-                                                                            crossAxisAlignment:
-                                                                                CrossAxisAlignment.center,
-                                                                            children: <Widget>[
-                                                                              Flexible(
-                                                                                child: Text(
-                                                                                  itemSub.location_address ?? "",
-                                                                                  overflow: TextOverflow.ellipsis,
-                                                                                  maxLines: 2,
-                                                                                  style: TextStyle(fontSize: 11, fontFamily: 'RobotoRegular', color: HattoColors.colorTimeLine),
-                                                                                ),
-                                                                              ),
-                                                                            ],
-                                                                          )
-                                                                        ]),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 5,
-                                                        ),
-                                                        Text(
-                                                          itemSub.extra_desc,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          maxLines: 3,
-                                                          style: TextStyle(
-                                                              fontSize: 12,
-                                                              fontFamily:
-                                                                  'RobotoRegular',
-                                                              color:
-                                                                  Colors.black),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 5,
-                                                        ),
-                                                        Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            Flexible(
-                                                              child: Row(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  Image.asset(
-                                                                      "assets/images/ic_clock.png",
-                                                                      width: 10,
-                                                                      height:
-                                                                          10),
-                                                                  SizedBox(
-                                                                      width: 2),
-                                                                  Text(
-                                                                    AppUtils.getDateTimeAgo(
-                                                                        itemSub
-                                                                            .timestamp),
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                    maxLines: 1,
-                                                                    style: TextStyle(
-                                                                        fontSize:
-                                                                            12,
-                                                                        fontFamily:
-                                                                            'RobotoRegular',
-                                                                        color: HattoColors
-                                                                            .colorTimeLine),
-                                                                  ),
-                                                                  SizedBox(
-                                                                      width: 5),
-                                                                  AppUtils.getSharingOptionIcon(
-                                                                      itemSub
-                                                                          .sharing_option,
-                                                                      10,
-                                                                      10)
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            Flexible(
-                                                                child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .end,
-                                                              children: [
-                                                                RichText(
-                                                                    text: TextSpan(
-                                                                        text: itemSub
-                                                                            .total_unique_views
-                                                                            .toString(),
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                13,
-                                                                            fontFamily:
-                                                                                'RobotoBold',
-                                                                            color: Colors
-                                                                                .black),
-                                                                        children: <
-                                                                            TextSpan>[
-                                                                      TextSpan(
-                                                                          text:
-                                                                              " lượt xem",
-                                                                          style: TextStyle(
-                                                                              fontSize: 12,
-                                                                              fontFamily: 'RobotoRegular',
-                                                                              color: HattoColors.colorTimeLine.withOpacity(0.7))),
-                                                                    ])),
-                                                              ],
-                                                            ))
-                                                          ],
-                                                        ),
-                                                        SizedBox(
-                                                          height: 5,
-                                                        ),
-                                                        Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            Flexible(
-                                                              child: Container(
-                                                                child: Row(
-                                                                  children: [
-                                                                    Flexible(
-                                                                      child:
-                                                                          Row(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.end,
-                                                                        children: [
-                                                                          Image
-                                                                              .asset(
-                                                                            "assets/images/emote_clap.png",
-                                                                            width:
-                                                                                16,
-                                                                            height:
-                                                                                16,
-                                                                          ),
-                                                                          SizedBox(
-                                                                            width:
-                                                                                2,
-                                                                          ),
-                                                                          Flexible(
-                                                                            child: Text(itemSub.voted_id_1.toString(),
-                                                                                maxLines: 1,
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black)),
-                                                                          )
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                    SizedBox(
-                                                                        width:
-                                                                            5),
-                                                                    Flexible(
-                                                                      child:
-                                                                          Row(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.end,
-                                                                        children: [
-                                                                          Image
-                                                                              .asset(
-                                                                            "assets/images/emote_rose.png",
-                                                                            width:
-                                                                                16,
-                                                                            height:
-                                                                                16,
-                                                                          ),
-                                                                          SizedBox(
-                                                                            width:
-                                                                                2,
-                                                                          ),
-                                                                          Flexible(
-                                                                            child: Text(itemSub.voted_id_2.toString(),
-                                                                                maxLines: 1,
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black)),
-                                                                          )
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                    SizedBox(
-                                                                        width:
-                                                                            5),
-                                                                    Flexible(
-                                                                      child:
-                                                                          Row(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.end,
-                                                                        children: [
-                                                                          Image
-                                                                              .asset(
-                                                                            "assets/images/emote_suprise.png",
-                                                                            width:
-                                                                                16,
-                                                                            height:
-                                                                                16,
-                                                                          ),
-                                                                          SizedBox(
-                                                                            width:
-                                                                                2,
-                                                                          ),
-                                                                          Text(
-                                                                              itemSub.voted_id_3.toString(),
-                                                                              maxLines: 1,
-                                                                              overflow: TextOverflow.ellipsis,
-                                                                              style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black))
-                                                                        ],
-                                                                      ),
-                                                                    )
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            Flexible(
-                                                                child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .end,
-                                                              children: [
-                                                                Image.asset(
-                                                                  "assets/images/ic_favorite_2x.png",
-                                                                  width: 16,
-                                                                  height: 16,
-                                                                  color: Colors
-                                                                      .black,
-                                                                ),
-                                                                SizedBox(
-                                                                    width: 5),
-                                                                Text(
-                                                                    itemSub
-                                                                        .favorite_count
-                                                                        .toString(),
-                                                                    style: TextStyle(
-                                                                        fontSize:
-                                                                            13,
-                                                                        fontFamily:
-                                                                            'RobotoBold',
-                                                                        color: Colors
-                                                                            .black)),
-                                                                SizedBox(
-                                                                    width: 5),
-                                                                Image.asset(
-                                                                  "assets/images/ic_chat_2x.png",
-                                                                  width: 16,
-                                                                  height: 16,
-                                                                  color: Colors
-                                                                      .black,
-                                                                ),
-                                                                SizedBox(
-                                                                    width: 5),
-                                                                RichText(
-                                                                    text: TextSpan(
-                                                                        text: itemSub
-                                                                            .replies_count
-                                                                            .toString(),
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                13,
-                                                                            fontFamily:
-                                                                                'RobotoBold',
-                                                                            color: Colors
-                                                                                .black),
-                                                                        children: <
-                                                                            TextSpan>[
-                                                                      TextSpan(
-                                                                          text:
-                                                                              " bình luận",
-                                                                          style: TextStyle(
-                                                                              fontSize: 12,
-                                                                              fontFamily: 'RobotoRegular',
-                                                                              color: HattoColors.colorTimeLine.withOpacity(0.7))),
-                                                                    ])),
-                                                              ],
-                                                            ))
-                                                          ],
-                                                        )
-                                                      ],
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
+                                              image: DecorationImage(
+                                                  fit: BoxFit.cover,
+                                                  image:
+                                                      CachedNetworkImageProvider(
+                                                          trendy_url)),
                                             )),
                                       );
                                     }
-                                  }),
-                            )),
-                          ],
-                        ),
-                      );
-                    }
-                  }),
-            ),
-            RefreshIndicator(
-              key: PageStorageKey(locationTabKey),
-              onRefresh: getListSpecialSubmission,
-              child: FutureBuilder(
-                  future: specialSubmissionFuture,
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    if (snapshot.data == null) {
-                      return Container(
-                          child: ColorLoader5(
-                        dotOneColor: Colors.redAccent,
-                        dotTwoColor: Colors.blueAccent,
-                        dotThreeColor: Colors.green,
-                        dotType: DotType.circle,
-                        dotIcon: Icon(Icons.adjust),
-                        duration: Duration(seconds: 1),
-                      ));
-                    } else {
-                      return Container(
-                        height: size.height,
-                        child: Column(
-                          children: <Widget>[
-                            Expanded(
-                                child: ListView.builder(
-                                    controller: hideBottomBarScrollController3,
-                                    itemCount: listSpecialSubmission.length,
-                                    physics: BouncingScrollPhysics(),
-                                    itemBuilder: (context, index) {
-                                      var itemSub =
-                                          listSpecialSubmission[index];
-                                      double scale = 1.0;
-                                      if (topContainer > 0.5) {
-                                        scale = index + 0.5 - topContainer;
-                                        if (scale < 0) {
-                                          scale = 0;
-                                        } else if (scale > 1) {
-                                          scale = 1;
-                                        }
-                                      }
-                                      return GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(
-                                                  context,
-                                                  new MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          DetailSubmission(
-                                                              itemSub, index)))
-                                              .then((value) {
-                                            if (value != null) {
-                                              Submission itemsDetailBack =
-                                                  value as Submission;
-                                              setState(() {
-                                                listSpecialSubmission[index] =
-                                                    itemsDetailBack;
+                                    return GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                                context,
+                                                new MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        DetailSubmission(
+                                                            itemSub, index)))
+                                            .then((value) {
+                                          if (value != null) {
+                                            Submission itemsDetailBack =
+                                                value as Submission;
+                                            setState(() {
+                                              listSpecialSubmission[index - 1] =
+                                                  itemsDetailBack;
 //                                            itemSub = itemsDetailBack;
-                                              });
-                                            }
-                                          });
-                                        },
-                                        child: Container(
-                                            width: double.infinity,
-                                            margin: const EdgeInsets.symmetric(
-                                                horizontal: 20, vertical: 10),
-                                            decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(10.0)),
-                                                color: Colors.white,
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      color: Colors.black
-                                                          .withAlpha(100),
-                                                      blurRadius: 10.0),
-                                                ]),
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  bottom: 0),
-                                              child: Column(
+                                            });
+                                          }
+                                        });
+                                      },
+                                      child: Container(
+                                          width: double.infinity,
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 20, vertical: 10),
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(10.0)),
+                                              color: Colors.white,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    color: Colors.black
+                                                        .withAlpha(100),
+                                                    blurRadius: 10.0),
+                                              ]),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 0),
+                                            child: Column(
 //                                          crossAxisAlignment:
 //                                              CrossAxisAlignment.start,
-                                                children: <Widget>[
-                                                  Hero(
-                                                    child: Stack(
-                                                      children: [
-                                                        Container(
-                                                            height: 300,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              image: DecorationImage(
-                                                                  fit: BoxFit
-                                                                      .cover,
-                                                                  image: CachedNetworkImageProvider(
-                                                                      itemSub
-                                                                          .URL_img_id)),
-                                                              borderRadius: BorderRadius.only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          10.0),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          10.0)),
-                                                            )),
-                                                        Positioned(
-                                                            child: Image.asset(
-                                                                "assets/images/ic_rectangle_green.png",
-                                                                width: 35,
-                                                                height: 45),
-                                                            left: 10),
-                                                        Positioned(
+                                              children: <Widget>[
+                                                Hero(
+                                                  child: Stack(
+                                                    children: [
+                                                      Container(
+                                                          height: 300,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            image: DecorationImage(
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                                image: CachedNetworkImageProvider(
+                                                                    itemSub
+                                                                        .URL_img_id)),
+                                                            borderRadius: BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10.0),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        10.0)),
+                                                          )),
+                                                      Positioned(
                                                           child: Image.asset(
-                                                              "assets/images/ic_buaan.png",
-                                                              width: 20,
-                                                              height: 20,
-                                                              color:
-                                                                  Colors.white),
-                                                          left: 17.5,
-                                                          top: 10,
-                                                        )
-                                                      ],
-                                                    ),
-                                                    tag: index.toString() +
-                                                        itemSub.forum_id,
+                                                              "assets/images/ic_rectangle_green.png",
+                                                              width: 35,
+                                                              height: 45),
+                                                          left: 10),
+                                                      Positioned(
+                                                        child: Image.asset(
+                                                            "assets/images/ic_buaan.png",
+                                                            width: 20,
+                                                            height: 20,
+                                                            color:
+                                                                Colors.white),
+                                                        left: 17.5,
+                                                        top: 10,
+                                                      )
+                                                    ],
                                                   ),
-                                                  SizedBox(width: 10),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
+                                                  tag: index.toString() +
+                                                      itemSub.forum_id,
+                                                ),
+                                                SizedBox(width: 10),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
 //                                                mainAxisSize: MainAxisSize.max,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .stretch,
-                                                      children: <Widget>[
-                                                        Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .stretch,
+                                                    children: <Widget>[
+                                                      Row(
 //                                                    crossAxisAlignment:
 //                                                        CrossAxisAlignment
 //                                                            .start,
-                                                          mainAxisSize:
-                                                              MainAxisSize.max,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          children: <Widget>[
-                                                            Hero(
-                                                                tag: index
-                                                                        .toString() +
-                                                                    itemSub
-                                                                        .portrait_url,
-                                                                child:
-                                                                    getAvatarUser(
-                                                                        itemSub,
-                                                                        20)),
-                                                            SizedBox(width: 5),
-                                                            Flexible(
-                                                              child: Container(
-                                                                child: Column(
-                                                                    mainAxisSize:
-                                                                        MainAxisSize
-                                                                            .min,
-                                                                    crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .stretch,
-                                                                    children: <
-                                                                        Widget>[
-                                                                      Row(
-                                                                        children: [
-                                                                          Flexible(
+                                                        mainAxisSize:
+                                                            MainAxisSize.max,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        children: <Widget>[
+                                                          Hero(
+                                                              tag: index
+                                                                      .toString() +
+                                                                  itemSub
+                                                                      .portrait_url,
+                                                              child:
+                                                                  getAvatarUser(
+                                                                      itemSub,
+                                                                      20)),
+                                                          SizedBox(width: 5),
+                                                          Flexible(
+                                                            child: Container(
+                                                              child: Column(
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .min,
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .stretch,
+                                                                  children: <
+                                                                      Widget>[
+                                                                    Row(
+                                                                      children: [
+                                                                        Flexible(
+                                                                          child:
+                                                                              Container(
                                                                             child:
-                                                                                Container(
-                                                                              child: Text(
-                                                                                itemSub.user_name,
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                maxLines: 1,
-                                                                                style: TextStyle(fontSize: 15, fontFamily: 'RobotoMedium', color: !itemSub.isVipCheck() ? Colors.black : HattoColors.colorPrimary),
-                                                                              ),
+                                                                                Text(
+                                                                              itemSub.user_name,
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                              maxLines: 1,
+                                                                              style: TextStyle(fontSize: 15, fontFamily: 'RobotoMedium', color: !itemSub.isVipCheck() ? Colors.black : HattoColors.colorPrimary),
                                                                             ),
                                                                           ),
-                                                                          Row(
-                                                                            children: [
-                                                                              Text(
-                                                                                AppUtils.formatNumber(itemSub.remain_rewards),
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                maxLines: 1,
-                                                                                style: TextStyle(fontSize: 15, fontFamily: 'RobotoMedium', color: HattoColors.colorPrimary),
-                                                                              ),
-                                                                              SizedBox(width: 1),
-                                                                              Container(width: 15, height: 15, child: Image.asset("assets/images/ic_dua.png"))
-                                                                            ],
-                                                                          ),
-                                                                        ],
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.spaceBetween,
-                                                                      ),
-                                                                      SizedBox(
-                                                                          height:
-                                                                              5),
-                                                                      Row(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.center,
-                                                                        children: <
-                                                                            Widget>[
-                                                                          Visibility(
-                                                                            visible: itemSub.isVipCheck()
-                                                                                ? true
-                                                                                : false,
-                                                                            child: Container(
-                                                                                decoration: new BoxDecoration(color: HattoColors.colorPrimary, borderRadius: new BorderRadius.all(Radius.circular(8))),
-                                                                                child: Padding(
-                                                                                  padding: const EdgeInsets.only(left: 2, right: 2, top: 2, bottom: 2),
-                                                                                  child: Center(
-                                                                                    child: Text(
-                                                                                      "Super VIP".toUpperCase(),
-                                                                                      style: TextStyle(fontSize: 7, fontFamily: 'RobotoBold', color: Colors.white),
-                                                                                    ),
+                                                                        ),
+                                                                        Row(
+                                                                          children: [
+                                                                            Text(
+                                                                              AppUtils.formatNumber(itemSub.remain_rewards),
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                              maxLines: 1,
+                                                                              style: TextStyle(fontSize: 15, fontFamily: 'RobotoMedium', color: HattoColors.colorPrimary),
+                                                                            ),
+                                                                            SizedBox(width: 1),
+                                                                            Container(
+                                                                                width: 15,
+                                                                                height: 15,
+                                                                                child: Image.asset("assets/images/ic_dua.png"))
+                                                                          ],
+                                                                        ),
+                                                                      ],
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .spaceBetween,
+                                                                    ),
+                                                                    SizedBox(
+                                                                        height:
+                                                                            5),
+                                                                    Row(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .center,
+                                                                      children: <
+                                                                          Widget>[
+                                                                        Visibility(
+                                                                          visible: !itemSub.isVipCheck()
+                                                                              ? false
+                                                                              : true,
+                                                                          child: Container(
+                                                                              decoration: new BoxDecoration(color: HattoColors.colorPrimary, borderRadius: new BorderRadius.all(Radius.circular(8))),
+                                                                              child: Padding(
+                                                                                padding: const EdgeInsets.only(left: 2, right: 2, top: 2, bottom: 2),
+                                                                                child: Center(
+                                                                                  child: Text(
+                                                                                    "Super VIP".toUpperCase(),
+                                                                                    style: TextStyle(fontSize: 7, fontFamily: 'RobotoBold', color: Colors.white),
                                                                                   ),
-                                                                                )),
-                                                                          ),
-                                                                          SizedBox(
-                                                                              width: 3),
-                                                                          Container(
-                                                                              height: 15,
-                                                                              width: 15,
-                                                                              decoration: BoxDecoration(
-                                                                                image: DecorationImage(fit: BoxFit.cover, image: CachedNetworkImageProvider(getRankIcon(itemSub.rank_id))),
+                                                                                ),
                                                                               )),
-                                                                          SizedBox(
-                                                                              width: 3),
-                                                                          Text(
-                                                                            itemSub.rank_desc,
-                                                                            overflow:
-                                                                                TextOverflow.ellipsis,
-                                                                            maxLines:
-                                                                                1,
-                                                                            style: TextStyle(
-                                                                                fontSize: 11,
-                                                                                fontFamily: 'RobotoRegular',
-                                                                                color: HattoColors.colorTimeLine),
-                                                                          ),
-                                                                        ],
-                                                                      )
-                                                                    ]),
-                                                              ),
+                                                                        ),
+                                                                        SizedBox(
+                                                                            width:
+                                                                                3),
+                                                                        Container(
+                                                                            height:
+                                                                                15,
+                                                                            width:
+                                                                                15,
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              image: DecorationImage(fit: BoxFit.cover, image: CachedNetworkImageProvider(getRankIcon(itemSub.rank_id))),
+                                                                            )),
+                                                                        SizedBox(
+                                                                            width:
+                                                                                3),
+                                                                        Text(
+                                                                          itemSub
+                                                                              .rank_desc,
+                                                                          overflow:
+                                                                              TextOverflow.ellipsis,
+                                                                          maxLines:
+                                                                              1,
+                                                                          style: TextStyle(
+                                                                              fontSize: 11,
+                                                                              fontFamily: 'RobotoRegular',
+                                                                              color: HattoColors.colorTimeLine),
+                                                                        ),
+                                                                      ],
+                                                                    )
+                                                                  ]),
                                                             ),
-                                                          ],
-                                                        ),
-                                                        Text(
-                                                          itemSub.class_desc,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          maxLines: 2,
-                                                          style: const TextStyle(
-                                                              fontFamily:
-                                                                  'RobotoMedium',
-                                                              fontSize: 20),
-                                                        ),
-                                                        Visibility(
-                                                          visible:
-                                                              itemSub.location_name !=
-                                                                      null
-                                                                  ? true
-                                                                  : false,
-                                                          child: Padding(
-                                                            padding:
-                                                                EdgeInsets.only(
-                                                                    top: 2),
-                                                            child: Row(
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Text(
+                                                        itemSub.class_desc,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        maxLines: 2,
+                                                        style: const TextStyle(
+                                                            fontFamily:
+                                                                'RobotoMedium',
+                                                            fontSize: 20),
+                                                      ),
+                                                      Visibility(
+                                                        visible:
+                                                            itemSub.location_name !=
+                                                                    null
+                                                                ? true
+                                                                : false,
+                                                        child: Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  top: 2),
+                                                          child: Row(
 //                                                    crossAxisAlignment:
 //                                                        CrossAxisAlignment
 //                                                            .start,
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .max,
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .start,
-                                                              children: <
-                                                                  Widget>[
-                                                                getAvatarLocation(
-                                                                    itemSub),
-                                                                SizedBox(
-                                                                    width: 5),
-                                                                Flexible(
-                                                                  child:
-                                                                      Container(
-                                                                    child: Column(
-                                                                        mainAxisSize:
-                                                                            MainAxisSize
-                                                                                .min,
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment
-                                                                                .stretch,
-                                                                        children: <
-                                                                            Widget>[
-                                                                          Row(
-                                                                            children: [
-                                                                              Flexible(
-                                                                                child: Container(
-                                                                                  child: Text(
-                                                                                    itemSub.location_name ?? "",
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .max,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .start,
+                                                            children: <Widget>[
+                                                              getAvatarLocation(
+                                                                  itemSub),
+                                                              SizedBox(
+                                                                  width: 5),
+                                                              Flexible(
+                                                                child:
+                                                                    Container(
+                                                                  child: Column(
+                                                                      mainAxisSize:
+                                                                          MainAxisSize
+                                                                              .min,
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .stretch,
+                                                                      children: <
+                                                                          Widget>[
+                                                                        Row(
+                                                                          children: [
+                                                                            Flexible(
+                                                                              child: Container(
+                                                                                child: Text(
+                                                                                  itemSub.location_name ?? "",
+                                                                                  overflow: TextOverflow.ellipsis,
+                                                                                  maxLines: 1,
+                                                                                  style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            Visibility(
+                                                                              visible: itemSub.location_home_delivery != 0 ? true : false,
+                                                                              child: Row(
+                                                                                children: [
+                                                                                  Container(width: 15, height: 15, child: Image.asset("assets/images/ic_bike_delivery_2x.png")),
+                                                                                  SizedBox(width: 1),
+                                                                                  Text(
+                                                                                    "Có giao hàng qua Hatto",
                                                                                     overflow: TextOverflow.ellipsis,
                                                                                     maxLines: 1,
-                                                                                    style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black),
+                                                                                    style: TextStyle(fontSize: 11, fontFamily: 'RobotoMedium', color: Colors.black),
                                                                                   ),
-                                                                                ),
+                                                                                ],
+                                                                                crossAxisAlignment: CrossAxisAlignment.end,
                                                                               ),
-                                                                              Visibility(
-                                                                                visible: itemSub.location_home_delivery != 0 ? true : false,
-                                                                                child: Row(
-                                                                                  children: [
-                                                                                    Container(width: 15, height: 15, child: Image.asset("assets/images/ic_bike_delivery_2x.png")),
-                                                                                    SizedBox(width: 1),
-                                                                                    Text(
-                                                                                      "Có giao hàng qua Hatto",
-                                                                                      overflow: TextOverflow.ellipsis,
-                                                                                      maxLines: 1,
-                                                                                      style: TextStyle(fontSize: 11, fontFamily: 'RobotoMedium', color: Colors.black),
-                                                                                    ),
-                                                                                  ],
-                                                                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                                                                ),
+                                                                            ),
+                                                                          ],
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.spaceBetween,
+                                                                        ),
+                                                                        SizedBox(
+                                                                            height:
+                                                                                5),
+                                                                        Row(
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment.center,
+                                                                          children: <
+                                                                              Widget>[
+                                                                            Flexible(
+                                                                              child: Text(
+                                                                                itemSub.location_address ?? "",
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                                maxLines: 2,
+                                                                                style: TextStyle(fontSize: 11, fontFamily: 'RobotoRegular', color: HattoColors.colorTimeLine),
                                                                               ),
-                                                                            ],
-                                                                            mainAxisAlignment:
-                                                                                MainAxisAlignment.spaceBetween,
-                                                                          ),
-                                                                          SizedBox(
-                                                                              height: 5),
-                                                                          Row(
-                                                                            crossAxisAlignment:
-                                                                                CrossAxisAlignment.center,
-                                                                            children: <Widget>[
-                                                                              Flexible(
-                                                                                child: Text(
-                                                                                  itemSub.location_address ?? "",
-                                                                                  overflow: TextOverflow.ellipsis,
-                                                                                  maxLines: 2,
-                                                                                  style: TextStyle(fontSize: 11, fontFamily: 'RobotoRegular', color: HattoColors.colorTimeLine),
-                                                                                ),
-                                                                              ),
-                                                                            ],
-                                                                          )
-                                                                        ]),
-                                                                  ),
+                                                                            ),
+                                                                          ],
+                                                                        )
+                                                                      ]),
                                                                 ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Text(
+                                                        itemSub.extra_desc,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        maxLines: 3,
+                                                        style: TextStyle(
+                                                            fontSize: 12,
+                                                            fontFamily:
+                                                                'RobotoRegular',
+                                                            color:
+                                                                Colors.black),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Flexible(
+                                                            child: Row(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Image.asset(
+                                                                    "assets/images/ic_clock.png",
+                                                                    width: 10,
+                                                                    height: 10),
+                                                                SizedBox(
+                                                                    width: 2),
+                                                                Text(
+                                                                  AppUtils.getDateTimeAgo(
+                                                                      itemSub
+                                                                          .timestamp),
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  maxLines: 1,
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          12,
+                                                                      fontFamily:
+                                                                          'RobotoRegular',
+                                                                      color: HattoColors
+                                                                          .colorTimeLine),
+                                                                ),
+                                                                SizedBox(
+                                                                    width: 5),
+                                                                AppUtils.getSharingOptionIcon(
+                                                                    itemSub
+                                                                        .sharing_option,
+                                                                    10,
+                                                                    10)
                                                               ],
                                                             ),
                                                           ),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 5,
-                                                        ),
-                                                        Text(
-                                                          itemSub.extra_desc,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          maxLines: 3,
-                                                          style: TextStyle(
-                                                              fontSize: 12,
-                                                              fontFamily:
-                                                                  'RobotoRegular',
-                                                              color:
-                                                                  Colors.black),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 5,
-                                                        ),
-                                                        Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            Flexible(
+                                                          Flexible(
                                                               child: Row(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .center,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .end,
+                                                            children: [
+                                                              RichText(
+                                                                  text: TextSpan(
+                                                                      text: itemSub
+                                                                          .total_unique_views
+                                                                          .toString(),
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              13,
+                                                                          fontFamily:
+                                                                              'RobotoBold',
+                                                                          color: Colors
+                                                                              .black),
+                                                                      children: <
+                                                                          TextSpan>[
+                                                                    TextSpan(
+                                                                        text:
+                                                                            " lượt xem",
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                12,
+                                                                            fontFamily:
+                                                                                'RobotoRegular',
+                                                                            color:
+                                                                                HattoColors.colorTimeLine.withOpacity(0.7))),
+                                                                  ])),
+                                                            ],
+                                                          ))
+                                                        ],
+                                                      ),
+                                                      SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Flexible(
+                                                            child: Container(
+                                                              child: Row(
                                                                 children: [
-                                                                  Image.asset(
-                                                                      "assets/images/ic_clock.png",
-                                                                      width: 10,
-                                                                      height:
-                                                                          10),
-                                                                  SizedBox(
-                                                                      width: 2),
-                                                                  Text(
-                                                                    AppUtils.getDateTimeAgo(
-                                                                        itemSub
-                                                                            .timestamp),
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                    maxLines: 1,
-                                                                    style: TextStyle(
-                                                                        fontSize:
-                                                                            12,
-                                                                        fontFamily:
-                                                                            'RobotoRegular',
-                                                                        color: HattoColors
-                                                                            .colorTimeLine),
+                                                                  Flexible(
+                                                                    child: Row(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .end,
+                                                                      children: [
+                                                                        Image
+                                                                            .asset(
+                                                                          "assets/images/emote_clap.png",
+                                                                          width:
+                                                                              16,
+                                                                          height:
+                                                                              16,
+                                                                        ),
+                                                                        SizedBox(
+                                                                          width:
+                                                                              2,
+                                                                        ),
+                                                                        Flexible(
+                                                                          child: Text(
+                                                                              itemSub.voted_id_1.toString(),
+                                                                              maxLines: 1,
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                              style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black)),
+                                                                        )
+                                                                      ],
+                                                                    ),
                                                                   ),
                                                                   SizedBox(
                                                                       width: 5),
-                                                                  AppUtils.getSharingOptionIcon(
-                                                                      itemSub
-                                                                          .sharing_option,
-                                                                      10,
-                                                                      10)
+                                                                  Flexible(
+                                                                    child: Row(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .end,
+                                                                      children: [
+                                                                        Image
+                                                                            .asset(
+                                                                          "assets/images/emote_rose.png",
+                                                                          width:
+                                                                              16,
+                                                                          height:
+                                                                              16,
+                                                                        ),
+                                                                        SizedBox(
+                                                                          width:
+                                                                              2,
+                                                                        ),
+                                                                        Flexible(
+                                                                          child: Text(
+                                                                              itemSub.voted_id_2.toString(),
+                                                                              maxLines: 1,
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                              style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black)),
+                                                                        )
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                  SizedBox(
+                                                                      width: 5),
+                                                                  Flexible(
+                                                                    child: Row(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .end,
+                                                                      children: [
+                                                                        Image
+                                                                            .asset(
+                                                                          "assets/images/emote_suprise.png",
+                                                                          width:
+                                                                              16,
+                                                                          height:
+                                                                              16,
+                                                                        ),
+                                                                        SizedBox(
+                                                                          width:
+                                                                              2,
+                                                                        ),
+                                                                        Text(
+                                                                            itemSub
+                                                                                .voted_id_3
+                                                                                .toString(),
+                                                                            maxLines:
+                                                                                1,
+                                                                            overflow: TextOverflow
+                                                                                .ellipsis,
+                                                                            style: TextStyle(
+                                                                                fontSize: 12,
+                                                                                fontFamily: 'RobotoMedium',
+                                                                                color: Colors.black))
+                                                                      ],
+                                                                    ),
+                                                                  )
                                                                 ],
                                                               ),
                                                             ),
-                                                            Flexible(
-                                                                child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .end,
-                                                              children: [
-                                                                RichText(
-                                                                    text: TextSpan(
-                                                                        text: itemSub
-                                                                            .total_unique_views
-                                                                            .toString(),
+                                                          ),
+                                                          Flexible(
+                                                              child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .end,
+                                                            children: [
+                                                              Image.asset(
+                                                                "assets/images/ic_favorite_2x.png",
+                                                                width: 16,
+                                                                height: 16,
+                                                                color: Colors
+                                                                    .black,
+                                                              ),
+                                                              SizedBox(
+                                                                  width: 5),
+                                                              Text(
+                                                                  itemSub
+                                                                      .favorite_count
+                                                                      .toString(),
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          13,
+                                                                      fontFamily:
+                                                                          'RobotoBold',
+                                                                      color: Colors
+                                                                          .black)),
+                                                              SizedBox(
+                                                                  width: 5),
+                                                              Image.asset(
+                                                                "assets/images/ic_chat_2x.png",
+                                                                width: 16,
+                                                                height: 16,
+                                                                color: Colors
+                                                                    .black,
+                                                              ),
+                                                              SizedBox(
+                                                                  width: 5),
+                                                              RichText(
+                                                                  text: TextSpan(
+                                                                      text: itemSub
+                                                                          .replies_count
+                                                                          .toString(),
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              13,
+                                                                          fontFamily:
+                                                                              'RobotoBold',
+                                                                          color: Colors
+                                                                              .black),
+                                                                      children: <
+                                                                          TextSpan>[
+                                                                    TextSpan(
+                                                                        text:
+                                                                            " bình luận",
                                                                         style: TextStyle(
                                                                             fontSize:
-                                                                                13,
+                                                                                12,
                                                                             fontFamily:
-                                                                                'RobotoBold',
-                                                                            color: Colors
-                                                                                .black),
-                                                                        children: <
-                                                                            TextSpan>[
-                                                                      TextSpan(
-                                                                          text:
-                                                                              " lượt xem",
-                                                                          style: TextStyle(
-                                                                              fontSize: 12,
-                                                                              fontFamily: 'RobotoRegular',
-                                                                              color: HattoColors.colorTimeLine.withOpacity(0.7))),
-                                                                    ])),
-                                                              ],
-                                                            ))
+                                                                                'RobotoRegular',
+                                                                            color:
+                                                                                HattoColors.colorTimeLine.withOpacity(0.7))),
+                                                                  ])),
+                                                            ],
+                                                          ))
+                                                        ],
+                                                      )
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          )),
+                                    );
+                                  })),
+                        ],
+                      ),
+                    );
+                  }
+                }),
+          ),
+          RefreshIndicator(
+            key: PageStorageKey(submissionTagKey),
+            onRefresh: () async {
+              getRecommenderSubmission();
+              await getListSubmission();
+            },
+            child: FutureBuilder(
+                future: submissionFuture,
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (snapshot.data == null) {
+                    return Container(
+                        child: ColorLoader5(
+                      dotOneColor: Colors.redAccent,
+                      dotTwoColor: Colors.blueAccent,
+                      dotThreeColor: Colors.green,
+                      dotType: DotType.circle,
+                      dotIcon: Icon(Icons.adjust),
+                      duration: Duration(seconds: 1),
+                    ));
+                  } else {
+                    return Container(
+                      height: size.height,
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            width: size.width,
+                            height: 1,
+                            color: HattoColors.greyD3,
+                          ),
+                          Container(
+                            color: Colors.white,
+                            width: size.width,
+                            height: 40,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Flexible(
+                                  flex: 4,
+                                  child: Row(
+                                    children: [
+                                      Switch(
+                                        value: isSwitched,
+                                        activeColor: Colors.white,
+                                        inactiveTrackColor: HattoColors.greyD3,
+                                        inactiveThumbColor:
+                                            HattoColors.whiteGrey92,
+                                        activeTrackColor:
+                                            HattoColors.greenLight,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            isSwitched = value;
+                                          });
+                                        },
+                                      ),
+                                      Flexible(
+                                        child: Text(
+                                          isSwitched
+                                              ? "Tất cả bài viết"
+                                              : "Bài của tôi",
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                              fontFamily: "RobotoRegular",
+                                              fontSize: 13),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                Flexible(
+                                  flex: 3,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                          backgroundColor: Colors.transparent,
+                                          enableDrag: true,
+                                          context: context,
+                                          builder: (context) {
+                                            return SingleChildScrollView(
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(20.0),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    ClipRRect(
+                                                        child: Column(
+                                                          children: [
+                                                            ...listSelectDistance
+                                                                .map((e) =>
+                                                                    Container(
+                                                                      child:
+                                                                          Column(
+                                                                        children: [
+                                                                          GestureDetector(
+                                                                            child: Container(
+                                                                                decoration: BoxDecoration(color: Colors.white),
+                                                                                child: Padding(
+                                                                                  padding: const EdgeInsets.symmetric(vertical: 8),
+                                                                                  child: Center(
+                                                                                    child: Text(
+                                                                                      e.name,
+                                                                                      style: TextStyle(fontSize: 15, fontFamily: 'RobotoRegular'),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                                width: size.width),
+                                                                            onTap:
+                                                                                () {
+                                                                              getRecommenderSubmissionDistance();
+                                                                              setState(() {
+                                                                                selectedItem = e;
+                                                                              });
+                                                                              Navigator.pop(context);
+                                                                            },
+                                                                          ),
+                                                                          Container(
+                                                                            height:
+                                                                                1,
+                                                                            color:
+                                                                                HattoColors.greyD3,
+                                                                          )
+                                                                        ],
+                                                                      ),
+                                                                    ))
+                                                                .toList(),
                                                           ],
                                                         ),
-                                                        SizedBox(
-                                                          height: 5,
-                                                        ),
-                                                        Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            Flexible(
-                                                              child: Container(
-                                                                child: Row(
-                                                                  children: [
-                                                                    Flexible(
-                                                                      child:
-                                                                          Row(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.end,
-                                                                        children: [
-                                                                          Image
-                                                                              .asset(
-                                                                            "assets/images/emote_clap.png",
-                                                                            width:
-                                                                                16,
-                                                                            height:
-                                                                                16,
-                                                                          ),
-                                                                          SizedBox(
-                                                                            width:
-                                                                                2,
-                                                                          ),
-                                                                          Flexible(
-                                                                            child: Text(itemSub.voted_id_1.toString(),
-                                                                                maxLines: 1,
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black)),
-                                                                          )
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                    SizedBox(
-                                                                        width:
-                                                                            5),
-                                                                    Flexible(
-                                                                      child:
-                                                                          Row(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.end,
-                                                                        children: [
-                                                                          Image
-                                                                              .asset(
-                                                                            "assets/images/emote_rose.png",
-                                                                            width:
-                                                                                16,
-                                                                            height:
-                                                                                16,
-                                                                          ),
-                                                                          SizedBox(
-                                                                            width:
-                                                                                2,
-                                                                          ),
-                                                                          Flexible(
-                                                                            child: Text(itemSub.voted_id_2.toString(),
-                                                                                maxLines: 1,
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black)),
-                                                                          )
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                    SizedBox(
-                                                                        width:
-                                                                            5),
-                                                                    Flexible(
-                                                                      child:
-                                                                          Row(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.end,
-                                                                        children: [
-                                                                          Image
-                                                                              .asset(
-                                                                            "assets/images/emote_suprise.png",
-                                                                            width:
-                                                                                16,
-                                                                            height:
-                                                                                16,
-                                                                          ),
-                                                                          SizedBox(
-                                                                            width:
-                                                                                2,
-                                                                          ),
-                                                                          Text(
-                                                                              itemSub.voted_id_3.toString(),
-                                                                              maxLines: 1,
-                                                                              overflow: TextOverflow.ellipsis,
-                                                                              style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black))
-                                                                        ],
-                                                                      ),
-                                                                    )
-                                                                  ],
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(20)),
+                                                    SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    ClipRRect(
+                                                      child: GestureDetector(
+                                                        child: Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                                    color: Colors
+                                                                        .white),
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .symmetric(
+                                                                      vertical:
+                                                                          10),
+                                                              child: Center(
+                                                                child: Text(
+                                                                  "Hủy bỏ",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          15,
+                                                                      fontFamily:
+                                                                          'RobotoRegular'),
                                                                 ),
                                                               ),
                                                             ),
-                                                            Flexible(
-                                                                child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .end,
+                                                            width: size.width),
+                                                        onTap: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  20)),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          });
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          color: HattoColors.greyD3),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Flexible(
+                                              child: Text(
+                                                selectedItem.name,
+                                                style: TextStyle(
+                                                    fontFamily: "RobotoBold",
+                                                    fontSize: 12,
+                                                    color: HattoColors
+                                                        .colorPrimary),
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
+                                              ),
+                                            ),
+                                            Icon(
+                                              Icons.keyboard_arrow_down,
+                                              color: HattoColors.colorPrimary,
+                                              size: 15,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Flexible(
+                                  flex: 4,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(right: 5),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Image.asset(
+                                          "assets/images/ic_chopstick.png",
+                                          width: 15,
+                                          height: 15,
+                                        ),
+                                        Flexible(
+                                          child: Text(
+                                            "Chia sẻ bài mới",
+                                            style: TextStyle(
+                                                fontFamily: "RobotoRegular",
+                                                fontSize: 13),
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Image.asset(
+                                          "assets/images/ic_search.png",
+                                          width: 15,
+                                          height: 15,
+                                          color: Colors.black,
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          Container(
+                            width: size.width,
+                            height: 3,
+                            color: HattoColors.greyD3,
+                          ),
+                          Container(
+                            color: Colors.white,
+                            width: size.width,
+                            height: 50,
+                            child: ListView.builder(
+                                physics: BouncingScrollPhysics(),
+                                scrollDirection: Axis.horizontal,
+                                itemCount: listRecipeSearch.length,
+                                itemBuilder: (context, index) {
+                                  RecipeSearch item = listRecipeSearch[index];
+                                  return GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        for (RecipeSearch r_items
+                                            in listRecipeSearch) {
+                                          r_items.setSelected = false;
+                                        }
+                                        listRecipeSearch[index].setSelected =
+                                            true;
+                                      });
+                                    },
+                                    child: Container(
+                                      color: Colors.white,
+                                      child: Padding(
+                                        padding:
+                                            EdgeInsets.symmetric(horizontal: 5),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                                height: 20,
+                                                width: 20,
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                      image:
+                                                          CachedNetworkImageProvider(
+                                                              item.icon_url)),
+                                                )),
+                                            Text(
+                                              item.display,
+                                              style: TextStyle(
+                                                  fontFamily: 'RobotoBold',
+                                                  fontSize: 14,
+                                                  color: item.selected
+                                                      ? HattoColors.colorPrimary
+                                                      : Colors.black
+                                                          .withOpacity(0.6)),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }),
+                          ),
+                          Expanded(
+                              child: LoadMoreCustom(
+                            onLoadMore: loadMoreSubmission,
+                            textBuilder: DefaultLoadMoreTextBuilder.vietnam,
+                            child: ListView.builder(
+                                controller: hideBottomBarScrollController2,
+                                itemCount: listSubmission.length + 1,
+                                physics: BouncingScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  var itemSub;
+                                  if (index != 0) {
+                                    itemSub = listSubmission[index - 1];
+                                  }
+
+                                  if (index == 0) {
+                                    return ContainerRecommenderSubmission();
+                                  } else {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                                context,
+                                                new MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        DetailSubmission(
+                                                            itemSub, index)))
+                                            .then((value) {
+                                          if (value != null) {
+                                            Submission itemsDetailBack =
+                                                value as Submission;
+                                            setState(() {
+                                              listSubmission[index - 1] =
+                                                  itemsDetailBack;
+//                                            itemSub = itemsDetailBack;
+                                            });
+                                          }
+                                        });
+                                      },
+                                      child: Container(
+                                          width: double.infinity,
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 20, vertical: 10),
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(10.0)),
+                                              color: Colors.white,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    color: Colors.black
+                                                        .withAlpha(100),
+                                                    blurRadius: 10.0),
+                                              ]),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 0),
+                                            child: Column(
+//                                          crossAxisAlignment:
+//                                              CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                Hero(
+                                                  child: Stack(
+                                                    children: [
+                                                      Container(
+                                                          height: 300,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            image: DecorationImage(
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                                image: CachedNetworkImageProvider(
+                                                                    itemSub
+                                                                        .URL_img_id)),
+                                                            borderRadius: BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10.0),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        10.0)),
+                                                          )),
+                                                      Positioned(
+                                                          child: Image.asset(
+                                                              "assets/images/ic_rectangle_green.png",
+                                                              width: 35,
+                                                              height: 45),
+                                                          left: 10),
+                                                      Positioned(
+                                                        child: Image.asset(
+                                                            "assets/images/ic_buaan.png",
+                                                            width: 20,
+                                                            height: 20,
+                                                            color:
+                                                                Colors.white),
+                                                        left: 17.5,
+                                                        top: 10,
+                                                      )
+                                                    ],
+                                                  ),
+                                                  tag: index.toString() +
+                                                      itemSub.forum_id,
+                                                ),
+                                                SizedBox(width: 10),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+//                                                mainAxisSize: MainAxisSize.max,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .stretch,
+                                                    children: <Widget>[
+                                                      Row(
+//                                                    crossAxisAlignment:
+//                                                        CrossAxisAlignment
+//                                                            .start,
+                                                        mainAxisSize:
+                                                            MainAxisSize.max,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        children: <Widget>[
+                                                          Hero(
+                                                              tag: index
+                                                                      .toString() +
+                                                                  itemSub
+                                                                      .portrait_url,
+                                                              child:
+                                                                  getAvatarUser(
+                                                                      itemSub,
+                                                                      20)),
+                                                          SizedBox(width: 5),
+                                                          Flexible(
+                                                            child: Container(
+                                                              child: Column(
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .min,
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .stretch,
+                                                                  children: <
+                                                                      Widget>[
+                                                                    Row(
+                                                                      children: [
+                                                                        Flexible(
+                                                                          child:
+                                                                              Container(
+                                                                            child:
+                                                                                Text(
+                                                                              itemSub.user_name,
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                              maxLines: 1,
+                                                                              style: TextStyle(fontSize: 15, fontFamily: 'RobotoMedium', color: !itemSub.isVipCheck() ? Colors.black : HattoColors.colorPrimary),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        Row(
+                                                                          children: [
+                                                                            Text(
+                                                                              AppUtils.formatNumber(itemSub.remain_rewards),
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                              maxLines: 1,
+                                                                              style: TextStyle(fontSize: 15, fontFamily: 'RobotoMedium', color: HattoColors.colorPrimary),
+                                                                            ),
+                                                                            SizedBox(width: 1),
+                                                                            Container(
+                                                                                width: 15,
+                                                                                height: 15,
+                                                                                child: Image.asset("assets/images/ic_dua.png"))
+                                                                          ],
+                                                                        ),
+                                                                      ],
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .spaceBetween,
+                                                                    ),
+                                                                    SizedBox(
+                                                                        height:
+                                                                            5),
+                                                                    Row(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .center,
+                                                                      children: <
+                                                                          Widget>[
+                                                                        Visibility(
+                                                                          visible: !itemSub.isVipCheck()
+                                                                              ? false
+                                                                              : true,
+                                                                          child: Container(
+                                                                              decoration: new BoxDecoration(color: HattoColors.colorPrimary, borderRadius: new BorderRadius.all(Radius.circular(8))),
+                                                                              child: Padding(
+                                                                                padding: const EdgeInsets.only(left: 2, right: 2, top: 2, bottom: 2),
+                                                                                child: Center(
+                                                                                  child: Text(
+                                                                                    "Super VIP".toUpperCase(),
+                                                                                    style: TextStyle(fontSize: 7, fontFamily: 'RobotoBold', color: Colors.white),
+                                                                                  ),
+                                                                                ),
+                                                                              )),
+                                                                        ),
+                                                                        SizedBox(
+                                                                            width:
+                                                                                3),
+                                                                        Container(
+                                                                            height:
+                                                                                15,
+                                                                            width:
+                                                                                15,
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              image: DecorationImage(fit: BoxFit.cover, image: CachedNetworkImageProvider(getRankIcon(itemSub.rank_id))),
+                                                                            )),
+                                                                        SizedBox(
+                                                                            width:
+                                                                                3),
+                                                                        Text(
+                                                                          itemSub
+                                                                              .rank_desc,
+                                                                          overflow:
+                                                                              TextOverflow.ellipsis,
+                                                                          maxLines:
+                                                                              1,
+                                                                          style: TextStyle(
+                                                                              fontSize: 11,
+                                                                              fontFamily: 'RobotoRegular',
+                                                                              color: HattoColors.colorTimeLine),
+                                                                        ),
+                                                                      ],
+                                                                    )
+                                                                  ]),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Text(
+                                                        itemSub.class_desc,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        maxLines: 2,
+                                                        style: const TextStyle(
+                                                            fontFamily:
+                                                                'RobotoMedium',
+                                                            fontSize: 20),
+                                                      ),
+                                                      Visibility(
+                                                        visible:
+                                                            itemSub.location_name !=
+                                                                    null
+                                                                ? true
+                                                                : false,
+                                                        child: Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  top: 2),
+                                                          child: Row(
+//                                                    crossAxisAlignment:
+//                                                        CrossAxisAlignment
+//                                                            .start,
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .max,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .start,
+                                                            children: <Widget>[
+                                                              getAvatarLocation(
+                                                                  itemSub),
+                                                              SizedBox(
+                                                                  width: 5),
+                                                              Flexible(
+                                                                child:
+                                                                    Container(
+                                                                  child: Column(
+                                                                      mainAxisSize:
+                                                                          MainAxisSize
+                                                                              .min,
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .stretch,
+                                                                      children: <
+                                                                          Widget>[
+                                                                        Row(
+                                                                          children: [
+                                                                            Flexible(
+                                                                              child: Container(
+                                                                                child: Text(
+                                                                                  itemSub.location_name ?? "",
+                                                                                  overflow: TextOverflow.ellipsis,
+                                                                                  maxLines: 1,
+                                                                                  style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            Visibility(
+                                                                              visible: itemSub.location_home_delivery != 0 ? true : false,
+                                                                              child: Row(
+                                                                                children: [
+                                                                                  Container(width: 15, height: 15, child: Image.asset("assets/images/ic_bike_delivery_2x.png")),
+                                                                                  SizedBox(width: 1),
+                                                                                  Text(
+                                                                                    "Có giao hàng qua Hatto",
+                                                                                    overflow: TextOverflow.ellipsis,
+                                                                                    maxLines: 1,
+                                                                                    style: TextStyle(fontSize: 11, fontFamily: 'RobotoMedium', color: Colors.black),
+                                                                                  ),
+                                                                                ],
+                                                                                crossAxisAlignment: CrossAxisAlignment.end,
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.spaceBetween,
+                                                                        ),
+                                                                        SizedBox(
+                                                                            height:
+                                                                                5),
+                                                                        Row(
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment.center,
+                                                                          children: <
+                                                                              Widget>[
+                                                                            Flexible(
+                                                                              child: Text(
+                                                                                itemSub.location_address ?? "",
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                                maxLines: 2,
+                                                                                style: TextStyle(fontSize: 11, fontFamily: 'RobotoRegular', color: HattoColors.colorTimeLine),
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        )
+                                                                      ]),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Text(
+                                                        itemSub.extra_desc,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        maxLines: 3,
+                                                        style: TextStyle(
+                                                            fontSize: 12,
+                                                            fontFamily:
+                                                                'RobotoRegular',
+                                                            color:
+                                                                Colors.black),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Flexible(
+                                                            child: Row(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .center,
                                                               children: [
                                                                 Image.asset(
-                                                                  "assets/images/ic_favorite_2x.png",
-                                                                  width: 16,
-                                                                  height: 16,
-                                                                  color: Colors
-                                                                      .black,
-                                                                ),
+                                                                    "assets/images/ic_clock.png",
+                                                                    width: 10,
+                                                                    height: 10),
                                                                 SizedBox(
-                                                                    width: 5),
+                                                                    width: 2),
                                                                 Text(
-                                                                    itemSub
-                                                                        .favorite_count
-                                                                        .toString(),
-                                                                    style: TextStyle(
-                                                                        fontSize:
-                                                                            13,
-                                                                        fontFamily:
-                                                                            'RobotoBold',
-                                                                        color: Colors
-                                                                            .black)),
-                                                                SizedBox(
-                                                                    width: 5),
-                                                                Image.asset(
-                                                                  "assets/images/ic_chat_2x.png",
-                                                                  width: 16,
-                                                                  height: 16,
-                                                                  color: Colors
-                                                                      .black,
+                                                                  AppUtils.getDateTimeAgo(
+                                                                      itemSub
+                                                                          .timestamp),
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  maxLines: 1,
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          12,
+                                                                      fontFamily:
+                                                                          'RobotoRegular',
+                                                                      color: HattoColors
+                                                                          .colorTimeLine),
                                                                 ),
                                                                 SizedBox(
                                                                     width: 5),
-                                                                RichText(
-                                                                    text: TextSpan(
-                                                                        text: itemSub
-                                                                            .replies_count
-                                                                            .toString(),
+                                                                AppUtils.getSharingOptionIcon(
+                                                                    itemSub
+                                                                        .sharing_option,
+                                                                    10,
+                                                                    10)
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          Flexible(
+                                                              child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .end,
+                                                            children: [
+                                                              RichText(
+                                                                  text: TextSpan(
+                                                                      text: itemSub
+                                                                          .total_unique_views
+                                                                          .toString(),
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              13,
+                                                                          fontFamily:
+                                                                              'RobotoBold',
+                                                                          color: Colors
+                                                                              .black),
+                                                                      children: <
+                                                                          TextSpan>[
+                                                                    TextSpan(
+                                                                        text:
+                                                                            " lượt xem",
                                                                         style: TextStyle(
                                                                             fontSize:
-                                                                                13,
+                                                                                12,
                                                                             fontFamily:
-                                                                                'RobotoBold',
-                                                                            color: Colors
-                                                                                .black),
-                                                                        children: <
-                                                                            TextSpan>[
-                                                                      TextSpan(
-                                                                          text:
-                                                                              " bình luận",
+                                                                                'RobotoRegular',
+                                                                            color:
+                                                                                HattoColors.colorTimeLine.withOpacity(0.7))),
+                                                                  ])),
+                                                            ],
+                                                          ))
+                                                        ],
+                                                      ),
+                                                      SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Flexible(
+                                                            child: Container(
+                                                              child: Row(
+                                                                children: [
+                                                                  Flexible(
+                                                                    child: Row(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .end,
+                                                                      children: [
+                                                                        Image
+                                                                            .asset(
+                                                                          "assets/images/emote_clap.png",
+                                                                          width:
+                                                                              16,
+                                                                          height:
+                                                                              16,
+                                                                        ),
+                                                                        SizedBox(
+                                                                          width:
+                                                                              2,
+                                                                        ),
+                                                                        Flexible(
+                                                                          child: Text(
+                                                                              itemSub.voted_id_1.toString(),
+                                                                              maxLines: 1,
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                              style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black)),
+                                                                        )
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                  SizedBox(
+                                                                      width: 5),
+                                                                  Flexible(
+                                                                    child: Row(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .end,
+                                                                      children: [
+                                                                        Image
+                                                                            .asset(
+                                                                          "assets/images/emote_rose.png",
+                                                                          width:
+                                                                              16,
+                                                                          height:
+                                                                              16,
+                                                                        ),
+                                                                        SizedBox(
+                                                                          width:
+                                                                              2,
+                                                                        ),
+                                                                        Flexible(
+                                                                          child: Text(
+                                                                              itemSub.voted_id_2.toString(),
+                                                                              maxLines: 1,
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                              style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black)),
+                                                                        )
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                  SizedBox(
+                                                                      width: 5),
+                                                                  Flexible(
+                                                                    child: Row(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .end,
+                                                                      children: [
+                                                                        Image
+                                                                            .asset(
+                                                                          "assets/images/emote_suprise.png",
+                                                                          width:
+                                                                              16,
+                                                                          height:
+                                                                              16,
+                                                                        ),
+                                                                        SizedBox(
+                                                                          width:
+                                                                              2,
+                                                                        ),
+                                                                        Text(
+                                                                            itemSub
+                                                                                .voted_id_3
+                                                                                .toString(),
+                                                                            maxLines:
+                                                                                1,
+                                                                            overflow: TextOverflow
+                                                                                .ellipsis,
+                                                                            style: TextStyle(
+                                                                                fontSize: 12,
+                                                                                fontFamily: 'RobotoMedium',
+                                                                                color: Colors.black))
+                                                                      ],
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Flexible(
+                                                              child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .end,
+                                                            children: [
+                                                              Image.asset(
+                                                                "assets/images/ic_favorite_2x.png",
+                                                                width: 16,
+                                                                height: 16,
+                                                                color: Colors
+                                                                    .black,
+                                                              ),
+                                                              SizedBox(
+                                                                  width: 5),
+                                                              Text(
+                                                                  itemSub
+                                                                      .favorite_count
+                                                                      .toString(),
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          13,
+                                                                      fontFamily:
+                                                                          'RobotoBold',
+                                                                      color: Colors
+                                                                          .black)),
+                                                              SizedBox(
+                                                                  width: 5),
+                                                              Image.asset(
+                                                                "assets/images/ic_chat_2x.png",
+                                                                width: 16,
+                                                                height: 16,
+                                                                color: Colors
+                                                                    .black,
+                                                              ),
+                                                              SizedBox(
+                                                                  width: 5),
+                                                              RichText(
+                                                                  text: TextSpan(
+                                                                      text: itemSub
+                                                                          .replies_count
+                                                                          .toString(),
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              13,
+                                                                          fontFamily:
+                                                                              'RobotoBold',
+                                                                          color: Colors
+                                                                              .black),
+                                                                      children: <
+                                                                          TextSpan>[
+                                                                    TextSpan(
+                                                                        text:
+                                                                            " bình luận",
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                12,
+                                                                            fontFamily:
+                                                                                'RobotoRegular',
+                                                                            color:
+                                                                                HattoColors.colorTimeLine.withOpacity(0.7))),
+                                                                  ])),
+                                                            ],
+                                                          ))
+                                                        ],
+                                                      )
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          )),
+                                    );
+                                  }
+                                }),
+                          )),
+                        ],
+                      ),
+                    );
+                  }
+                }),
+          ),
+          RefreshIndicator(
+            key: PageStorageKey(locationTabKey),
+            onRefresh: getListSpecialSubmission,
+            child: FutureBuilder(
+                future: specialSubmissionFuture,
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (snapshot.data == null) {
+                    return Container(
+                        child: ColorLoader5(
+                      dotOneColor: Colors.redAccent,
+                      dotTwoColor: Colors.blueAccent,
+                      dotThreeColor: Colors.green,
+                      dotType: DotType.circle,
+                      dotIcon: Icon(Icons.adjust),
+                      duration: Duration(seconds: 1),
+                    ));
+                  } else {
+                    return Container(
+                      height: size.height,
+                      child: Column(
+                        children: <Widget>[
+                          Expanded(
+                              child: ListView.builder(
+                                  controller: hideBottomBarScrollController3,
+                                  itemCount: listSpecialSubmission.length,
+                                  physics: BouncingScrollPhysics(),
+                                  itemBuilder: (context, index) {
+                                    var itemSub = listSpecialSubmission[index];
+                                    double scale = 1.0;
+                                    if (topContainer > 0.5) {
+                                      scale = index + 0.5 - topContainer;
+                                      if (scale < 0) {
+                                        scale = 0;
+                                      } else if (scale > 1) {
+                                        scale = 1;
+                                      }
+                                    }
+                                    return GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                                context,
+                                                new MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        DetailSubmission(
+                                                            itemSub, index)))
+                                            .then((value) {
+                                          if (value != null) {
+                                            Submission itemsDetailBack =
+                                                value as Submission;
+                                            setState(() {
+                                              listSpecialSubmission[index] =
+                                                  itemsDetailBack;
+//                                            itemSub = itemsDetailBack;
+                                            });
+                                          }
+                                        });
+                                      },
+                                      child: Container(
+                                          width: double.infinity,
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 20, vertical: 10),
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(10.0)),
+                                              color: Colors.white,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    color: Colors.black
+                                                        .withAlpha(100),
+                                                    blurRadius: 10.0),
+                                              ]),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 0),
+                                            child: Column(
+//                                          crossAxisAlignment:
+//                                              CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                Hero(
+                                                  child: Stack(
+                                                    children: [
+                                                      Container(
+                                                          height: 300,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            image: DecorationImage(
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                                image: CachedNetworkImageProvider(
+                                                                    itemSub
+                                                                        .URL_img_id)),
+                                                            borderRadius: BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10.0),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        10.0)),
+                                                          )),
+                                                      Positioned(
+                                                          child: Image.asset(
+                                                              "assets/images/ic_rectangle_green.png",
+                                                              width: 35,
+                                                              height: 45),
+                                                          left: 10),
+                                                      Positioned(
+                                                        child: Image.asset(
+                                                            "assets/images/ic_buaan.png",
+                                                            width: 20,
+                                                            height: 20,
+                                                            color:
+                                                                Colors.white),
+                                                        left: 17.5,
+                                                        top: 10,
+                                                      )
+                                                    ],
+                                                  ),
+                                                  tag: index.toString() +
+                                                      itemSub.forum_id,
+                                                ),
+                                                SizedBox(width: 10),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+//                                                mainAxisSize: MainAxisSize.max,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .stretch,
+                                                    children: <Widget>[
+                                                      Row(
+//                                                    crossAxisAlignment:
+//                                                        CrossAxisAlignment
+//                                                            .start,
+                                                        mainAxisSize:
+                                                            MainAxisSize.max,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        children: <Widget>[
+                                                          Hero(
+                                                              tag: index
+                                                                      .toString() +
+                                                                  itemSub
+                                                                      .portrait_url,
+                                                              child:
+                                                                  getAvatarUser(
+                                                                      itemSub,
+                                                                      20)),
+                                                          SizedBox(width: 5),
+                                                          Flexible(
+                                                            child: Container(
+                                                              child: Column(
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .min,
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .stretch,
+                                                                  children: <
+                                                                      Widget>[
+                                                                    Row(
+                                                                      children: [
+                                                                        Flexible(
+                                                                          child:
+                                                                              Container(
+                                                                            child:
+                                                                                Text(
+                                                                              itemSub.user_name,
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                              maxLines: 1,
+                                                                              style: TextStyle(fontSize: 15, fontFamily: 'RobotoMedium', color: !itemSub.isVipCheck() ? Colors.black : HattoColors.colorPrimary),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        Row(
+                                                                          children: [
+                                                                            Text(
+                                                                              AppUtils.formatNumber(itemSub.remain_rewards),
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                              maxLines: 1,
+                                                                              style: TextStyle(fontSize: 15, fontFamily: 'RobotoMedium', color: HattoColors.colorPrimary),
+                                                                            ),
+                                                                            SizedBox(width: 1),
+                                                                            Container(
+                                                                                width: 15,
+                                                                                height: 15,
+                                                                                child: Image.asset("assets/images/ic_dua.png"))
+                                                                          ],
+                                                                        ),
+                                                                      ],
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .spaceBetween,
+                                                                    ),
+                                                                    SizedBox(
+                                                                        height:
+                                                                            5),
+                                                                    Row(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .center,
+                                                                      children: <
+                                                                          Widget>[
+                                                                        Visibility(
+                                                                          visible: itemSub.isVipCheck()
+                                                                              ? true
+                                                                              : false,
+                                                                          child: Container(
+                                                                              decoration: new BoxDecoration(color: HattoColors.colorPrimary, borderRadius: new BorderRadius.all(Radius.circular(8))),
+                                                                              child: Padding(
+                                                                                padding: const EdgeInsets.only(left: 2, right: 2, top: 2, bottom: 2),
+                                                                                child: Center(
+                                                                                  child: Text(
+                                                                                    "Super VIP".toUpperCase(),
+                                                                                    style: TextStyle(fontSize: 7, fontFamily: 'RobotoBold', color: Colors.white),
+                                                                                  ),
+                                                                                ),
+                                                                              )),
+                                                                        ),
+                                                                        SizedBox(
+                                                                            width:
+                                                                                3),
+                                                                        Container(
+                                                                            height:
+                                                                                15,
+                                                                            width:
+                                                                                15,
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              image: DecorationImage(fit: BoxFit.cover, image: CachedNetworkImageProvider(getRankIcon(itemSub.rank_id))),
+                                                                            )),
+                                                                        SizedBox(
+                                                                            width:
+                                                                                3),
+                                                                        Text(
+                                                                          itemSub
+                                                                              .rank_desc,
+                                                                          overflow:
+                                                                              TextOverflow.ellipsis,
+                                                                          maxLines:
+                                                                              1,
                                                                           style: TextStyle(
-                                                                              fontSize: 12,
+                                                                              fontSize: 11,
                                                                               fontFamily: 'RobotoRegular',
-                                                                              color: HattoColors.colorTimeLine.withOpacity(0.7))),
-                                                                    ])),
+                                                                              color: HattoColors.colorTimeLine),
+                                                                        ),
+                                                                      ],
+                                                                    )
+                                                                  ]),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Text(
+                                                        itemSub.class_desc,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        maxLines: 2,
+                                                        style: const TextStyle(
+                                                            fontFamily:
+                                                                'RobotoMedium',
+                                                            fontSize: 20),
+                                                      ),
+                                                      Visibility(
+                                                        visible:
+                                                            itemSub.location_name !=
+                                                                    null
+                                                                ? true
+                                                                : false,
+                                                        child: Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  top: 2),
+                                                          child: Row(
+//                                                    crossAxisAlignment:
+//                                                        CrossAxisAlignment
+//                                                            .start,
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .max,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .start,
+                                                            children: <Widget>[
+                                                              getAvatarLocation(
+                                                                  itemSub),
+                                                              SizedBox(
+                                                                  width: 5),
+                                                              Flexible(
+                                                                child:
+                                                                    Container(
+                                                                  child: Column(
+                                                                      mainAxisSize:
+                                                                          MainAxisSize
+                                                                              .min,
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .stretch,
+                                                                      children: <
+                                                                          Widget>[
+                                                                        Row(
+                                                                          children: [
+                                                                            Flexible(
+                                                                              child: Container(
+                                                                                child: Text(
+                                                                                  itemSub.location_name ?? "",
+                                                                                  overflow: TextOverflow.ellipsis,
+                                                                                  maxLines: 1,
+                                                                                  style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            Visibility(
+                                                                              visible: itemSub.location_home_delivery != 0 ? true : false,
+                                                                              child: Row(
+                                                                                children: [
+                                                                                  Container(width: 15, height: 15, child: Image.asset("assets/images/ic_bike_delivery_2x.png")),
+                                                                                  SizedBox(width: 1),
+                                                                                  Text(
+                                                                                    "Có giao hàng qua Hatto",
+                                                                                    overflow: TextOverflow.ellipsis,
+                                                                                    maxLines: 1,
+                                                                                    style: TextStyle(fontSize: 11, fontFamily: 'RobotoMedium', color: Colors.black),
+                                                                                  ),
+                                                                                ],
+                                                                                crossAxisAlignment: CrossAxisAlignment.end,
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.spaceBetween,
+                                                                        ),
+                                                                        SizedBox(
+                                                                            height:
+                                                                                5),
+                                                                        Row(
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment.center,
+                                                                          children: <
+                                                                              Widget>[
+                                                                            Flexible(
+                                                                              child: Text(
+                                                                                itemSub.location_address ?? "",
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                                maxLines: 2,
+                                                                                style: TextStyle(fontSize: 11, fontFamily: 'RobotoRegular', color: HattoColors.colorTimeLine),
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        )
+                                                                      ]),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Text(
+                                                        itemSub.extra_desc,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        maxLines: 3,
+                                                        style: TextStyle(
+                                                            fontSize: 12,
+                                                            fontFamily:
+                                                                'RobotoRegular',
+                                                            color:
+                                                                Colors.black),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Flexible(
+                                                            child: Row(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Image.asset(
+                                                                    "assets/images/ic_clock.png",
+                                                                    width: 10,
+                                                                    height: 10),
+                                                                SizedBox(
+                                                                    width: 2),
+                                                                Text(
+                                                                  AppUtils.getDateTimeAgo(
+                                                                      itemSub
+                                                                          .timestamp),
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  maxLines: 1,
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          12,
+                                                                      fontFamily:
+                                                                          'RobotoRegular',
+                                                                      color: HattoColors
+                                                                          .colorTimeLine),
+                                                                ),
+                                                                SizedBox(
+                                                                    width: 5),
+                                                                AppUtils.getSharingOptionIcon(
+                                                                    itemSub
+                                                                        .sharing_option,
+                                                                    10,
+                                                                    10)
                                                               ],
-                                                            ))
-                                                          ],
-                                                        )
-                                                      ],
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            )),
-                                      );
-                                    })),
-                          ],
-                        ),
-                      );
-                    }
-                  }),
+                                                            ),
+                                                          ),
+                                                          Flexible(
+                                                              child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .end,
+                                                            children: [
+                                                              RichText(
+                                                                  text: TextSpan(
+                                                                      text: itemSub
+                                                                          .total_unique_views
+                                                                          .toString(),
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              13,
+                                                                          fontFamily:
+                                                                              'RobotoBold',
+                                                                          color: Colors
+                                                                              .black),
+                                                                      children: <
+                                                                          TextSpan>[
+                                                                    TextSpan(
+                                                                        text:
+                                                                            " lượt xem",
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                12,
+                                                                            fontFamily:
+                                                                                'RobotoRegular',
+                                                                            color:
+                                                                                HattoColors.colorTimeLine.withOpacity(0.7))),
+                                                                  ])),
+                                                            ],
+                                                          ))
+                                                        ],
+                                                      ),
+                                                      SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Flexible(
+                                                            child: Container(
+                                                              child: Row(
+                                                                children: [
+                                                                  Flexible(
+                                                                    child: Row(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .end,
+                                                                      children: [
+                                                                        Image
+                                                                            .asset(
+                                                                          "assets/images/emote_clap.png",
+                                                                          width:
+                                                                              16,
+                                                                          height:
+                                                                              16,
+                                                                        ),
+                                                                        SizedBox(
+                                                                          width:
+                                                                              2,
+                                                                        ),
+                                                                        Flexible(
+                                                                          child: Text(
+                                                                              itemSub.voted_id_1.toString(),
+                                                                              maxLines: 1,
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                              style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black)),
+                                                                        )
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                  SizedBox(
+                                                                      width: 5),
+                                                                  Flexible(
+                                                                    child: Row(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .end,
+                                                                      children: [
+                                                                        Image
+                                                                            .asset(
+                                                                          "assets/images/emote_rose.png",
+                                                                          width:
+                                                                              16,
+                                                                          height:
+                                                                              16,
+                                                                        ),
+                                                                        SizedBox(
+                                                                          width:
+                                                                              2,
+                                                                        ),
+                                                                        Flexible(
+                                                                          child: Text(
+                                                                              itemSub.voted_id_2.toString(),
+                                                                              maxLines: 1,
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                              style: TextStyle(fontSize: 12, fontFamily: 'RobotoMedium', color: Colors.black)),
+                                                                        )
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                  SizedBox(
+                                                                      width: 5),
+                                                                  Flexible(
+                                                                    child: Row(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .end,
+                                                                      children: [
+                                                                        Image
+                                                                            .asset(
+                                                                          "assets/images/emote_suprise.png",
+                                                                          width:
+                                                                              16,
+                                                                          height:
+                                                                              16,
+                                                                        ),
+                                                                        SizedBox(
+                                                                          width:
+                                                                              2,
+                                                                        ),
+                                                                        Text(
+                                                                            itemSub
+                                                                                .voted_id_3
+                                                                                .toString(),
+                                                                            maxLines:
+                                                                                1,
+                                                                            overflow: TextOverflow
+                                                                                .ellipsis,
+                                                                            style: TextStyle(
+                                                                                fontSize: 12,
+                                                                                fontFamily: 'RobotoMedium',
+                                                                                color: Colors.black))
+                                                                      ],
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Flexible(
+                                                              child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .end,
+                                                            children: [
+                                                              Image.asset(
+                                                                "assets/images/ic_favorite_2x.png",
+                                                                width: 16,
+                                                                height: 16,
+                                                                color: Colors
+                                                                    .black,
+                                                              ),
+                                                              SizedBox(
+                                                                  width: 5),
+                                                              Text(
+                                                                  itemSub
+                                                                      .favorite_count
+                                                                      .toString(),
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          13,
+                                                                      fontFamily:
+                                                                          'RobotoBold',
+                                                                      color: Colors
+                                                                          .black)),
+                                                              SizedBox(
+                                                                  width: 5),
+                                                              Image.asset(
+                                                                "assets/images/ic_chat_2x.png",
+                                                                width: 16,
+                                                                height: 16,
+                                                                color: Colors
+                                                                    .black,
+                                                              ),
+                                                              SizedBox(
+                                                                  width: 5),
+                                                              RichText(
+                                                                  text: TextSpan(
+                                                                      text: itemSub
+                                                                          .replies_count
+                                                                          .toString(),
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              13,
+                                                                          fontFamily:
+                                                                              'RobotoBold',
+                                                                          color: Colors
+                                                                              .black),
+                                                                      children: <
+                                                                          TextSpan>[
+                                                                    TextSpan(
+                                                                        text:
+                                                                            " bình luận",
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                12,
+                                                                            fontFamily:
+                                                                                'RobotoRegular',
+                                                                            color:
+                                                                                HattoColors.colorTimeLine.withOpacity(0.7))),
+                                                                  ])),
+                                                            ],
+                                                          ))
+                                                        ],
+                                                      )
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          )),
+                                    );
+                                  })),
+                        ],
+                      ),
+                    );
+                  }
+                }),
+          ),
+        ],
+      ),
+      bottomNavigationBar: AnimatedContainer(
+        duration: Duration(milliseconds: 300),
+        height: isVisibleBottomBar ? 56.0 : 0.0,
+        child: Wrap(
+          children: [
+            Stack(
+              children: [
+                BottomNavigationBar(
+                  items: <BottomNavigationBarItem>[
+                    BottomNavigationBarItem(
+                      activeIcon: ImageIcon(
+                          AssetImage("assets/images/combinedshape.png"),
+                          color: HattoColors.colorPrimary),
+                      icon: ImageIcon(
+                          AssetImage("assets/images/combinedshape.png"),
+                          color: Colors.grey),
+                      title: Padding(
+                        padding: EdgeInsets.all(0),
+                        child: Text('Trang chủ'),
+                      ),
+                    ),
+                    BottomNavigationBarItem(
+                      activeIcon: ImageIcon(
+                          AssetImage("assets/images/ic_search.png"),
+                          color: HattoColors.colorPrimary),
+                      icon: ImageIcon(AssetImage("assets/images/ic_search.png"),
+                          color: Colors.grey),
+                      title: Padding(
+                        padding: EdgeInsets.all(0),
+                        child: Text('Tìm kiếm'),
+                      ),
+                    ),
+                    BottomNavigationBarItem(
+                      activeIcon:
+                          Icon(Icons.camera, color: HattoColors.colorPrimary),
+                      icon: Icon(Icons.camera, color: Colors.white),
+                      title: Padding(
+                        padding: EdgeInsets.all(0),
+                        child: Text(''),
+                      ),
+                    ),
+                    BottomNavigationBarItem(
+                      activeIcon: ImageIcon(
+                          AssetImage("assets/images/ic_bell_2.png"),
+                          color: HattoColors.colorPrimary),
+                      icon: Stack(children: [
+                        ImageIcon(AssetImage("assets/images/ic_bell_2.png"),
+                            color: Colors.grey),
+                        Visibility(
+                          visible: countNotification > 0 ? true : false,
+                          child: Positioned(
+                            right: 0,
+                            child: new Container(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 1, horizontal: 3),
+                              decoration: new BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              constraints: BoxConstraints(
+                                minWidth: 12,
+                                minHeight: 12,
+                              ),
+                              child: new Text(
+                                '$countNotification',
+                                style: new TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'RobotoRegular',
+                                  fontSize: 10,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        )
+                      ]),
+                      title: Padding(
+                        padding: EdgeInsets.all(0),
+                        child: Text('Thông báo'),
+                      ),
+                    ),
+                    BottomNavigationBarItem(
+                      activeIcon:
+                          Icon(Icons.menu, color: HattoColors.colorPrimary),
+                      icon: Icon(Icons.menu, color: Colors.grey),
+                      title: Padding(
+                        padding: EdgeInsets.all(0),
+                        child: Text('Thêm'),
+                      ),
+                    )
+                  ],
+                  type: BottomNavigationBarType.fixed,
+                  showSelectedLabels: true,
+                  showUnselectedLabels: true,
+                  unselectedItemColor: Colors.grey,
+                  currentIndex: _selectedIndex,
+                  selectedItemColor: HattoColors.colorPrimary,
+                  onTap: _onItemTapped,
+                ),
+                BottomCameraWidget()
+              ],
             ),
           ],
         ),
-        bottomNavigationBar: AnimatedContainer(
-          duration: Duration(milliseconds: 300),
-          height: isVisibleBottomBar ? 56.0 : 0.0,
-          child: Wrap(
-            children: [
-              Stack(
-                children: [
-                  BottomNavigationBar(
-                    items: <BottomNavigationBarItem>[
-                      BottomNavigationBarItem(
-                        activeIcon: ImageIcon(
-                            AssetImage("assets/images/combinedshape.png"),
-                            color: HattoColors.colorPrimary),
-                        icon: ImageIcon(AssetImage("assets/images/combinedshape.png"),
-                            color: Colors.grey),
-                        title: Padding(
-                          padding: EdgeInsets.all(0),
-                          child: Text('Trang chủ'),
-                        ),
-                      ),
-                      BottomNavigationBarItem(
-                        activeIcon: ImageIcon(
-                            AssetImage("assets/images/ic_search.png"),
-                            color: HattoColors.colorPrimary),
-                        icon: ImageIcon(AssetImage("assets/images/ic_search.png"),
-                            color: Colors.grey),
-                        title: Padding(
-                          padding: EdgeInsets.all(0),
-                          child: Text('Tìm kiếm'),
-                        ),
-                      ),
-                      BottomNavigationBarItem(
-                        activeIcon:
-                            Icon(Icons.camera, color: HattoColors.colorPrimary),
-                        icon: Icon(Icons.camera, color: Colors.white),
-                        title: Padding(
-                          padding: EdgeInsets.all(0),
-                          child: Text(''),
-                        ),
-                      ),
-                      BottomNavigationBarItem(
-                        activeIcon: ImageIcon(
-                            AssetImage("assets/images/ic_bell_2.png"),
-                            color: HattoColors.colorPrimary),
-                        icon: Stack(children: [
-                          ImageIcon(AssetImage("assets/images/ic_bell_2.png"),
-                              color: Colors.grey),
-                          Visibility(
-                            visible: countNotification > 0 ? true : false,
-                            child: Positioned(
-                              right: 0,
-                              child: new Container(
-                                padding:
-                                    EdgeInsets.symmetric(vertical: 1, horizontal: 3),
-                                decoration: new BoxDecoration(
-                                  color: Colors.red,
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                constraints: BoxConstraints(
-                                  minWidth: 12,
-                                  minHeight: 12,
-                                ),
-                                child: new Text(
-                                  '$countNotification',
-                                  style: new TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'RobotoRegular',
-                                    fontSize: 10,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                          )
-                        ]),
-                        title: Padding(
-                          padding: EdgeInsets.all(0),
-                          child: Text('Thông báo'),
-                        ),
-                      ),
-                      BottomNavigationBarItem(
-                        activeIcon: Icon(Icons.menu, color: HattoColors.colorPrimary),
-                        icon: Icon(Icons.menu, color: Colors.grey),
-                        title: Padding(
-                          padding: EdgeInsets.all(0),
-                          child: Text('Thêm'),
-                        ),
-                      )
-                    ],
-                    type: BottomNavigationBarType.fixed,
-                    showSelectedLabels: true,
-                    showUnselectedLabels: true,
-                    unselectedItemColor: Colors.grey,
-                    currentIndex: _selectedIndex,
-                    selectedItemColor: HattoColors.colorPrimary,
-                    onTap: _onItemTapped,
-                  ),
-                  BottomCameraWidget()
-                ],
-              ),
-            ],
+      ),
+      floatingActionButton: AnimatedOpacity(
+        opacity: isVisibleBottomBar? 0.0 : 1.0,
+        duration: Duration(milliseconds: 300),
+        child: SizedBox(
+          width: 45.0,
+          height: 45.0,
+          child: FloatingActionButton(
+            backgroundColor: Colors.white,
+            onPressed: () {
+
+              switch (tabBarController.index)
+              {
+                case 0:
+                  hideBottomBarScrollController1.animateTo(hideBottomBarScrollController1.position.minScrollExtent,
+                      curve: Curves.easeOut,
+                      duration: const Duration(milliseconds: 300));
+                  break;
+                case 1:
+                  hideBottomBarScrollController2.animateTo(hideBottomBarScrollController2.position.minScrollExtent,
+                      curve: Curves.easeOut,
+                      duration: const Duration(milliseconds: 300));
+                  break;
+                case 2:
+                  hideBottomBarScrollController3.animateTo(hideBottomBarScrollController3.position.minScrollExtent,
+                      curve: Curves.easeOut,
+                      duration: const Duration(milliseconds: 300));
+                  break;
+              }
+
+
+              Timer(
+                Duration(milliseconds: 600),
+                    (){
+                          setState(() {
+                        isVisibleBottomBar=true;
+                      });
+                    }
+              );
+
+
+            },
+            child: Icon(Icons.arrow_upward,color: HattoColors.colorPrimary,),
           ),
-        ));
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
+    );
   }
 
   Container ContainerRecommenderSubmission() => Container(
@@ -3623,28 +3666,24 @@ class _BottomCameraWidgetState extends State<BottomCameraWidget> {
                 widget.flagOpenCamera = !widget.flagOpenCamera;
               });
 
-              if(!widget.flagOpenCamera)
-                {
-                  shouldUpdate = await showDialog(
-                      barrierDismissible: true,
-                      context: context,
-                      builder: (BuildContext context){
-                        return CustomDialogs(
-                          title: "Đây là test thôi :D",
-                          description:
-                          "Đây là app Hatto viết bằng Flutter!",
-                          buttonText: "Đóng",
-                        );
-                      }
-                  );
-                }
+              if (!widget.flagOpenCamera) {
+                shouldUpdate = await showDialog(
+                    barrierDismissible: true,
+                    context: context,
+                    builder: (BuildContext context) {
+                      return CustomDialogs(
+                        title: "Đây là test thôi :D",
+                        description: "Đây là app Hatto viết bằng Flutter!",
+                        buttonText: "Đóng",
+                      );
+                    });
+              }
 
-              if(shouldUpdate)
-                {
-                  setState(() {
-                    widget.flagOpenCamera = shouldUpdate;
-                  });
-                }
+              if (shouldUpdate) {
+                setState(() {
+                  widget.flagOpenCamera = shouldUpdate;
+                });
+              }
             },
             child: Container(
               child: Container(
@@ -3685,7 +3724,6 @@ class _BottomCameraWidgetState extends State<BottomCameraWidget> {
     );
   }
 }
-
 
 class HexColor extends Color {
   static int _getColorFromHex(String hexColor) {
