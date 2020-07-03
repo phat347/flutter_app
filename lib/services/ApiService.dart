@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutterapp/models/Submission.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -11,6 +14,12 @@ abstract class ApiService {
 
   static ApiService create(){
     final dio = new Dio();
+    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+        (HttpClient client) {
+      client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+      return client;
+    };
     dio.interceptors.add(PrettyDioLogger());
     return ApiService(dio);
   }

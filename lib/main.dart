@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapp/Utils/AppUtils.dart';
 import 'package:flutterapp/current_user.dart';
@@ -19,6 +20,7 @@ import 'package:flutterapp/screens/DetailSubmission.dart';
 import 'package:flutterapp/screens/GalleryPhotoZoom.dart';
 import 'package:flutterapp/select_distance.dart';
 import 'package:flutterapp/services/ApiService.dart';
+import 'package:flutterapp/services/CustomProxy.dart';
 import 'package:flutterapp/widgets/dialogs/CustomDialogs.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -35,6 +37,13 @@ import 'HattoColors.dart';
 import 'models/RecipeSearch.dart';
 
 void main() {
+
+  //Nếu bắt Charles thì bật
+  if (!kReleaseMode) {
+    // For Android devices you can also allowBadCertificates: true below, but you should ONLY do this when !kReleaseMode
+    final proxy = CustomProxy(ipAddress: "192.168.16.44", port: 8888,allowBadCertificates: false);
+    proxy.enable();
+  }
   runApp(MyApp());
 }
 
@@ -1467,8 +1476,8 @@ class _MyHomePageState extends State<MyHomePage>
             RefreshIndicator(
               key: PageStorageKey(submissionTagKey),
               onRefresh: () async {
-                await getListSubmission();
-                getRecommenderSubmission();
+               getRecommenderSubmission();
+               await getListSubmission();
               },
               child: FutureBuilder(
                   future: submissionFuture,
