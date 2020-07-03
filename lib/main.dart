@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutterapp/Utils/AppUtils.dart';
 import 'package:flutterapp/current_user.dart';
 import 'package:flutterapp/famous_group.dart';
@@ -170,7 +171,9 @@ class _MyHomePageState extends State<MyHomePage>
   }
 
   void _handleTabSelection() {
-    setState(() {});
+    setState(() {
+      isVisibleBottomBar = true;
+    });
   }
 
   void getSelectDistanceList() {
@@ -200,6 +203,15 @@ class _MyHomePageState extends State<MyHomePage>
     mCurrentUser = User.fromJson(json_data);
   }
 
+  ScrollController hideBottomNavController;
+
+
+  ScrollController hideBottomBarScrollController1;
+  ScrollController hideBottomBarScrollController2;
+  ScrollController hideBottomBarScrollController3;
+  bool isVisibleBottomBar;
+
+
   @override
   void initState() {
     super.initState();
@@ -220,6 +232,87 @@ class _MyHomePageState extends State<MyHomePage>
     tabBarController =
         new TabController(initialIndex: 1, length: 3, vsync: this);
     tabBarController.addListener(_handleTabSelection);
+
+    isVisibleBottomBar = true;
+
+    hideBottomNavController = ScrollController();
+    hideBottomBarScrollController1 = ScrollController();
+    hideBottomBarScrollController2 = ScrollController();
+    hideBottomBarScrollController3 = ScrollController();
+
+
+
+    hideBottomBarScrollController1.addListener(() {
+      if (hideBottomBarScrollController1.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        if (isVisibleBottomBar)
+          setState(() {
+            isVisibleBottomBar = false;
+          });
+      }
+      if (hideBottomBarScrollController1.position.userScrollDirection ==
+          ScrollDirection.forward) {
+        if (!isVisibleBottomBar)
+          setState(() {
+            isVisibleBottomBar = true;
+          });
+      }
+    });
+
+    hideBottomBarScrollController2.addListener(() {
+      if (hideBottomBarScrollController2.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        if (isVisibleBottomBar)
+          setState(() {
+            isVisibleBottomBar = false;
+          });
+      }
+      if (hideBottomBarScrollController2.position.userScrollDirection ==
+          ScrollDirection.forward) {
+        if (!isVisibleBottomBar)
+          setState(() {
+            isVisibleBottomBar = true;
+          });
+      }
+    });
+
+    hideBottomBarScrollController3.addListener(() {
+      if (hideBottomBarScrollController3.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        if (isVisibleBottomBar)
+          setState(() {
+            isVisibleBottomBar = false;
+          });
+      }
+      if (hideBottomBarScrollController3.position.userScrollDirection ==
+          ScrollDirection.forward) {
+        if (!isVisibleBottomBar)
+          setState(() {
+            isVisibleBottomBar = true;
+          });
+      }
+    });
+
+
+    hideBottomNavController.addListener(
+          () {
+        if (hideBottomNavController.position.userScrollDirection ==
+            ScrollDirection.reverse) {
+          if (isVisibleBottomBar)
+            setState(() {
+              isVisibleBottomBar = false;
+            });
+        }
+        if (hideBottomNavController.position.userScrollDirection ==
+            ScrollDirection.forward) {
+          if (!isVisibleBottomBar)
+            setState(() {
+              isVisibleBottomBar = true;
+            });
+        }
+      },
+    );
+
   }
 
   Future<List<Submission>> getListSubmission() async {
@@ -860,6 +953,7 @@ class _MyHomePageState extends State<MyHomePage>
                             ),
                             Expanded(
                                 child: ListView.builder(
+                                    controller: hideBottomBarScrollController1,
                                     itemCount: listSpecialSubmission.length+1,
                                     physics: BouncingScrollPhysics(),
                                     itemBuilder: (context, index) {
@@ -1789,6 +1883,7 @@ class _MyHomePageState extends State<MyHomePage>
                               onLoadMore: loadMoreSubmission,
                               textBuilder: DefaultLoadMoreTextBuilder.vietnam,
                               child: ListView.builder(
+                                  controller: hideBottomBarScrollController2,
                                   itemCount: listSubmission.length + 1,
                                   physics: BouncingScrollPhysics(),
                                   itemBuilder: (context, index) {
@@ -2410,6 +2505,7 @@ class _MyHomePageState extends State<MyHomePage>
                           children: <Widget>[
                             Expanded(
                                 child: ListView.builder(
+                                    controller: hideBottomBarScrollController3,
                                     itemCount: listSpecialSubmission.length,
                                     physics: BouncingScrollPhysics(),
                                     itemBuilder: (context, index) {
@@ -3010,100 +3106,108 @@ class _MyHomePageState extends State<MyHomePage>
             ),
           ],
         ),
-        bottomNavigationBar: Stack(
-          children: [
-            BottomNavigationBar(
-              items: <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
-                  activeIcon: ImageIcon(
-                      AssetImage("assets/images/combinedshape.png"),
-                      color: HattoColors.colorPrimary),
-                  icon: ImageIcon(AssetImage("assets/images/combinedshape.png"),
-                      color: Colors.grey),
-                  title: Padding(
-                    padding: EdgeInsets.all(0),
-                    child: Text('Trang chủ'),
-                  ),
-                ),
-                BottomNavigationBarItem(
-                  activeIcon: ImageIcon(
-                      AssetImage("assets/images/ic_search.png"),
-                      color: HattoColors.colorPrimary),
-                  icon: ImageIcon(AssetImage("assets/images/ic_search.png"),
-                      color: Colors.grey),
-                  title: Padding(
-                    padding: EdgeInsets.all(0),
-                    child: Text('Tìm kiếm'),
-                  ),
-                ),
-                BottomNavigationBarItem(
-                  activeIcon:
-                      Icon(Icons.camera, color: HattoColors.colorPrimary),
-                  icon: Icon(Icons.camera, color: Colors.white),
-                  title: Padding(
-                    padding: EdgeInsets.all(0),
-                    child: Text(''),
-                  ),
-                ),
-                BottomNavigationBarItem(
-                  activeIcon: ImageIcon(
-                      AssetImage("assets/images/ic_bell_2.png"),
-                      color: HattoColors.colorPrimary),
-                  icon: Stack(children: [
-                    ImageIcon(AssetImage("assets/images/ic_bell_2.png"),
-                        color: Colors.grey),
-                    Visibility(
-                      visible: countNotification > 0 ? true : false,
-                      child: Positioned(
-                        right: 0,
-                        child: new Container(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 1, horizontal: 3),
-                          decoration: new BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          constraints: BoxConstraints(
-                            minWidth: 12,
-                            minHeight: 12,
-                          ),
-                          child: new Text(
-                            '$countNotification',
-                            style: new TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'RobotoRegular',
-                              fontSize: 10,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
+        bottomNavigationBar: AnimatedContainer(
+          duration: Duration(milliseconds: 300),
+          height: isVisibleBottomBar ? 56.0 : 0.0,
+          child: Wrap(
+            children: [
+              Stack(
+                children: [
+                  BottomNavigationBar(
+                    items: <BottomNavigationBarItem>[
+                      BottomNavigationBarItem(
+                        activeIcon: ImageIcon(
+                            AssetImage("assets/images/combinedshape.png"),
+                            color: HattoColors.colorPrimary),
+                        icon: ImageIcon(AssetImage("assets/images/combinedshape.png"),
+                            color: Colors.grey),
+                        title: Padding(
+                          padding: EdgeInsets.all(0),
+                          child: Text('Trang chủ'),
                         ),
                       ),
-                    )
-                  ]),
-                  title: Padding(
-                    padding: EdgeInsets.all(0),
-                    child: Text('Thông báo'),
+                      BottomNavigationBarItem(
+                        activeIcon: ImageIcon(
+                            AssetImage("assets/images/ic_search.png"),
+                            color: HattoColors.colorPrimary),
+                        icon: ImageIcon(AssetImage("assets/images/ic_search.png"),
+                            color: Colors.grey),
+                        title: Padding(
+                          padding: EdgeInsets.all(0),
+                          child: Text('Tìm kiếm'),
+                        ),
+                      ),
+                      BottomNavigationBarItem(
+                        activeIcon:
+                            Icon(Icons.camera, color: HattoColors.colorPrimary),
+                        icon: Icon(Icons.camera, color: Colors.white),
+                        title: Padding(
+                          padding: EdgeInsets.all(0),
+                          child: Text(''),
+                        ),
+                      ),
+                      BottomNavigationBarItem(
+                        activeIcon: ImageIcon(
+                            AssetImage("assets/images/ic_bell_2.png"),
+                            color: HattoColors.colorPrimary),
+                        icon: Stack(children: [
+                          ImageIcon(AssetImage("assets/images/ic_bell_2.png"),
+                              color: Colors.grey),
+                          Visibility(
+                            visible: countNotification > 0 ? true : false,
+                            child: Positioned(
+                              right: 0,
+                              child: new Container(
+                                padding:
+                                    EdgeInsets.symmetric(vertical: 1, horizontal: 3),
+                                decoration: new BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                constraints: BoxConstraints(
+                                  minWidth: 12,
+                                  minHeight: 12,
+                                ),
+                                child: new Text(
+                                  '$countNotification',
+                                  style: new TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'RobotoRegular',
+                                    fontSize: 10,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          )
+                        ]),
+                        title: Padding(
+                          padding: EdgeInsets.all(0),
+                          child: Text('Thông báo'),
+                        ),
+                      ),
+                      BottomNavigationBarItem(
+                        activeIcon: Icon(Icons.menu, color: HattoColors.colorPrimary),
+                        icon: Icon(Icons.menu, color: Colors.grey),
+                        title: Padding(
+                          padding: EdgeInsets.all(0),
+                          child: Text('Thêm'),
+                        ),
+                      )
+                    ],
+                    type: BottomNavigationBarType.fixed,
+                    showSelectedLabels: true,
+                    showUnselectedLabels: true,
+                    unselectedItemColor: Colors.grey,
+                    currentIndex: _selectedIndex,
+                    selectedItemColor: HattoColors.colorPrimary,
+                    onTap: _onItemTapped,
                   ),
-                ),
-                BottomNavigationBarItem(
-                  activeIcon: Icon(Icons.menu, color: HattoColors.colorPrimary),
-                  icon: Icon(Icons.menu, color: Colors.grey),
-                  title: Padding(
-                    padding: EdgeInsets.all(0),
-                    child: Text('Thêm'),
-                  ),
-                )
-              ],
-              type: BottomNavigationBarType.fixed,
-              showSelectedLabels: true,
-              showUnselectedLabels: true,
-              unselectedItemColor: Colors.grey,
-              currentIndex: _selectedIndex,
-              selectedItemColor: HattoColors.colorPrimary,
-              onTap: _onItemTapped,
-            ),
-            BottomCameraWidget()
-          ],
+                  BottomCameraWidget()
+                ],
+              ),
+            ],
+          ),
         ));
   }
 
