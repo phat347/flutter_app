@@ -90,9 +90,13 @@ class _MyHomePageState extends State<MyHomePage>
   bool isVisibleBottomBar;
   int countNotification = 99;
   int _selectedIndex = 0;
+
+  PageController _pageController;
+
   @override
   void initState() {
     super.initState();
+    _pageController = PageController(keepPage: false);
 
     isVisibleBottomBar = true;
 
@@ -103,6 +107,8 @@ class _MyHomePageState extends State<MyHomePage>
     if (index != 2) {
       setState(() {
         _selectedIndex = index;
+        _pageController.animateToPage(index,
+            duration: Duration(milliseconds: 300), curve: Curves.easeOut);
       });
     }
   }
@@ -116,6 +122,7 @@ class _MyHomePageState extends State<MyHomePage>
   @override
   void dispose() {
     // TODO: implement dispose
+    _pageController.dispose();
 
     super.dispose();
   }
@@ -147,8 +154,12 @@ class _MyHomePageState extends State<MyHomePage>
     final Size size = MediaQuery.of(context).size;
     final double categoryHeight = size.height * 0.30;
     return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex,
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: (index) {
+          setState(() => _selectedIndex = index);
+        },
+        physics: NeverScrollableScrollPhysics(),
         children: <Widget> [
           HomeWidget(widgetHomecallback),
           Scaffold(body: Container(child: Center(child: Text("Search Scaffold")),),),

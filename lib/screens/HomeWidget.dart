@@ -52,7 +52,7 @@ class HomeWidget extends StatefulWidget {
   _HomeWidgetState createState() => _HomeWidgetState();
 }
 
-class _HomeWidgetState extends State<HomeWidget>  with SingleTickerProviderStateMixin{
+class _HomeWidgetState extends State<HomeWidget>  with SingleTickerProviderStateMixin,AutomaticKeepAliveClientMixin<HomeWidget>{
 
   TabController tabBarController;
   bool closeTopContainer = false;
@@ -3507,6 +3507,10 @@ class _HomeWidgetState extends State<HomeWidget>  with SingleTickerProviderState
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
 class HexColor extends Color {
   static int _getColorFromHex(String hexColor) {
