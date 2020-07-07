@@ -32,6 +32,8 @@ dependencies:
   retrofit_generator: ^1.3.7+2
   dio: ^3.0.9
   bubble_tab_indicator: ^0.1.4
+  liquid_swipe: ^1.4.3
+  flutter_svg: ^0.18.0
   intl: ^0.16.1
   fluttertoast: ^4.0.0
   flutter:
@@ -118,6 +120,7 @@ flutter:
     - assets/images/ic_chat_hatto.png
     - assets/images/ic_rice.png
     - assets/images/ic_plus.png
+    - assets/images/food.svg
 
 
   fonts:

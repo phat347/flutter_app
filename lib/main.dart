@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutterapp/Utils/AppUtils.dart';
 import 'package:flutterapp/current_user.dart';
 import 'package:flutterapp/famous_group.dart';
@@ -37,6 +38,9 @@ import 'package:photo_view/photo_view_gallery.dart';
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'HattoColors.dart';
 import 'models/RecipeSearch.dart';
+
+import 'package:liquid_swipe/liquid_swipe.dart';
+
 
 void main() {
   //Nếu bắt Charles thì bật
@@ -79,6 +83,39 @@ class MyHomePage extends StatefulWidget {
 
   ApiService apiService = ApiService.create();
 
+
+  final pages = [
+    Container(color: HattoColors.colorPrimary,child: Column(
+      mainAxisSize: MainAxisSize.max,crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          child: SvgPicture.asset(
+            "assets/images/food.svg",
+            color: Colors.white,
+          ),width: 200,height: 200,
+        ),
+        SizedBox(height: 20,),
+        Center(child: Text("Nơi ai cũng có thể sành ăn",style: TextStyle(color: Colors.white,fontSize: 15,fontFamily: 'RobotoBold'),)),
+      ],
+    ),),
+    Container(color: Colors.white,child: Column(
+      mainAxisSize: MainAxisSize.max,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          child: SvgPicture.asset(
+            "assets/images/food.svg",color: HattoColors.colorPrimary,),
+          width: 200,
+            height: 200,
+        ),
+        SizedBox(height: 20,),
+        Center(child: Text("Nơi ai cũng có thể sành ăn",style: TextStyle(color: HattoColors.colorPrimary,fontSize: 15,fontFamily: 'RobotoBold'),)),
+      ],
+    ),),
+//    Container(color:Colors.redAccent,child: Center(child: Text("Search 3")),),
+  ];
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -162,7 +199,11 @@ class _MyHomePageState extends State<MyHomePage>
         physics: NeverScrollableScrollPhysics(),
         children: <Widget> [
           HomeWidget(widgetHomecallback),
-          Scaffold(body: Container(child: Center(child: Text("Search Scaffold")),),),
+          Scaffold(body: LiquidSwipe(
+            enableLoop: true,
+              enableSlideIcon: false,
+              pages: widget.pages
+          )),
           Scaffold(),
           Scaffold(body: Container(child: Center(child: Text("Notification Scaffold")),),),
           Scaffold(body: Container(child: Center(child: Text("MENU Scaffold")),),),
