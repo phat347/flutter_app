@@ -21,6 +21,7 @@ import 'package:flutterapp/recipe_search.dart';
 import 'package:flutterapp/screens/DetailSubmission.dart';
 import 'package:flutterapp/screens/GalleryPhotoZoom.dart';
 import 'package:flutterapp/screens/HomeWidget.dart';
+import 'package:flutterapp/screens/SearchScreenWidget.dart';
 import 'package:flutterapp/select_distance.dart';
 import 'package:flutterapp/services/ApiService.dart';
 import 'package:flutterapp/services/CustomProxy.dart';
@@ -40,7 +41,6 @@ import 'HattoColors.dart';
 import 'models/RecipeSearch.dart';
 
 import 'package:liquid_swipe/liquid_swipe.dart';
-
 
 void main() {
   //Nếu bắt Charles thì bật
@@ -83,37 +83,63 @@ class MyHomePage extends StatefulWidget {
 
   ApiService apiService = ApiService.create();
 
-
   final pages = [
-    Container(color: HattoColors.colorPrimary,child: Column(
-      mainAxisSize: MainAxisSize.max,crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SizedBox(
-          child: SvgPicture.asset(
-            "assets/images/food.svg",
-            color: Colors.white,
-          ),width: 200,height: 200,
-        ),
-        SizedBox(height: 20,),
-        Center(child: Text("Nơi ai cũng có thể sành ăn",style: TextStyle(color: Colors.white,fontSize: 15,fontFamily: 'RobotoBold'),)),
-      ],
-    ),),
-    Container(color: Colors.white,child: Column(
-      mainAxisSize: MainAxisSize.max,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SizedBox(
-          child: SvgPicture.asset(
-            "assets/images/food.svg",color: HattoColors.colorPrimary,),
-          width: 200,
+    Container(
+      color: HattoColors.colorPrimary,
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            child: SvgPicture.asset(
+              "assets/images/food.svg",
+              color: Colors.white,
+            ),
+            width: 200,
             height: 200,
-        ),
-        SizedBox(height: 20,),
-        Center(child: Text("Nơi ai cũng có thể sành ăn",style: TextStyle(color: HattoColors.colorPrimary,fontSize: 15,fontFamily: 'RobotoBold'),)),
-      ],
-    ),),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Center(
+              child: Text(
+            "Nơi ai cũng có thể sành ăn",
+            style: TextStyle(
+                color: Colors.white, fontSize: 15, fontFamily: 'RobotoBold'),
+          )),
+        ],
+      ),
+    ),
+    Container(
+      color: Colors.white,
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            child: SvgPicture.asset(
+              "assets/images/food.svg",
+              color: HattoColors.colorPrimary,
+            ),
+            width: 200,
+            height: 200,
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Center(
+              child: Text(
+            "Nơi ai cũng có thể sành ăn",
+            style: TextStyle(
+                color: HattoColors.colorPrimary,
+                fontSize: 15,
+                fontFamily: 'RobotoBold'),
+          )),
+        ],
+      ),
+    ),
 //    Container(color:Colors.redAccent,child: Center(child: Text("Search 3")),),
   ];
 
@@ -123,7 +149,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
-
   bool isVisibleBottomBar;
   int countNotification = 99;
   int _selectedIndex = 0;
@@ -136,8 +161,6 @@ class _MyHomePageState extends State<MyHomePage>
     _pageController = PageController(keepPage: false);
 
     isVisibleBottomBar = true;
-
-
   }
 
   void _onItemTapped(int index) {
@@ -183,8 +206,6 @@ class _MyHomePageState extends State<MyHomePage>
         fontSize: 16.0);
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     print("setState _MyHomePageState");
@@ -197,16 +218,22 @@ class _MyHomePageState extends State<MyHomePage>
           setState(() => _selectedIndex = index);
         },
         physics: NeverScrollableScrollPhysics(),
-        children: <Widget> [
+        children: <Widget>[
           HomeWidget(widgetHomecallback),
-          Scaffold(body: LiquidSwipe(
-            enableLoop: true,
-              enableSlideIcon: false,
-              pages: widget.pages
-          )),
+          SearchScreenWidget(),
           Scaffold(),
-          Scaffold(body: Container(child: Center(child: Text("Notification Scaffold")),),),
-          Scaffold(body: Container(child: Center(child: Text("MENU Scaffold")),),),
+
+          Scaffold(
+              body: LiquidSwipe(
+                  enableLoop: true,
+                  enableSlideIcon: false,
+                  pages: widget.pages)),
+//          Scaffold(body: Container(child: Center(child: Text("Notification Scaffold")),),),
+          Scaffold(
+            body: Container(
+              child: Center(child: Text("MENU Scaffold")),
+            ),
+          ),
         ],
       ),
       bottomNavigationBar: AnimatedContainer(
@@ -316,8 +343,6 @@ class _MyHomePageState extends State<MyHomePage>
       ),
     );
   }
-
-
 }
 
 class BottomCameraWidget extends StatefulWidget {
