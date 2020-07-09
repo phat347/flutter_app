@@ -5,6 +5,8 @@ import 'package:flutterapp/loaders/dot_type.dart';
 import 'package:flutterapp/models/Submission.dart';
 import 'package:flutterapp/screens/DetailSubmission.dart';
 import 'package:flutterapp/services/ApiService.dart';
+import 'package:focused_menu/focused_menu.dart';
+import 'package:focused_menu/modals.dart';
 import 'package:logger/logger.dart';
 
 import '../HattoColors.dart';
@@ -95,13 +97,42 @@ class _SearchScreenWidgetState extends State<SearchScreenWidget> with SingleTick
                   itemBuilder: (context, index) {
                     var itemSub = listRecommenderSubmission[index];
 
-                    return GestureDetector(
-                      onTap: () {
+                    return FocusedMenuHolder(
+                      menuWidth: MediaQuery.of(context).size.width*0.50,
+                      blurSize: 5.0,
+                      menuItemExtent: 45,
+
+                      duration: Duration(milliseconds: 100),
+                      animateMenuItems: true,
+                      blurBackgroundColor: Colors.black54,
+                      bottomOffsetHeight: 100,
+                      menuItems: <FocusedMenuItem>[
+                        FocusedMenuItem(title: Text("Mở"),trailingIcon: Icon(Icons.open_in_new) ,onPressed: (){
+                          Navigator.push(
+                              context,
+                              new MaterialPageRoute(
+                                  builder: (context) =>
+                                      DetailSubmission(itemSub, index)))
+                              .then((value) {
+                            if (value != null) {
+                              Submission itemsDetailBack = value as Submission;
+                              setState(() {
+                                listRecommenderSubmission[index] = itemsDetailBack;
+//                                            itemSub = itemsDetailBack;
+                              });
+                            }
+                          });
+                        }),
+                        FocusedMenuItem(title: Text("Chia sẻ"),trailingIcon: Icon(Icons.share) ,onPressed: (){}),
+                        FocusedMenuItem(title: Text("Yêu thích"),trailingIcon: Icon(Icons.favorite_border) ,onPressed: (){}),
+                        FocusedMenuItem(title: Text("Bỏ",style: TextStyle(color: Colors.white),),trailingIcon: Icon(Icons.delete,color: Colors.white,) ,onPressed: (){},backgroundColor: Colors.redAccent),
+                      ],
+                      onPressed: (){
                         Navigator.push(
-                                context,
-                                new MaterialPageRoute(
-                                    builder: (context) =>
-                                        DetailSubmission(itemSub, index)))
+                            context,
+                            new MaterialPageRoute(
+                                builder: (context) =>
+                                    DetailSubmission(itemSub, index)))
                             .then((value) {
                           if (value != null) {
                             Submission itemsDetailBack = value as Submission;

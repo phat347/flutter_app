@@ -33,6 +33,7 @@ dependencies:
   dio: ^3.0.9
   bubble_tab_indicator: ^0.1.4
   liquid_swipe: ^1.4.3
+  focused_menu: ^1.0.1
   flutter_svg: ^0.18.0
   intl: ^0.16.1
   fluttertoast: ^4.0.0
