@@ -2,14 +2,17 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapp/loaders/color_loader_5.dart';
 import 'package:flutterapp/loaders/dot_type.dart';
+import 'package:flutterapp/models/SelecteDistance.dart';
 import 'package:flutterapp/models/Submission.dart';
 import 'package:flutterapp/screens/DetailSubmission.dart';
 import 'package:flutterapp/services/ApiService.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
 
 import '../HattoColors.dart';
+import '../select_distance.dart';
 
 class SearchScreenWidget extends StatefulWidget {
   Logger logger = Logger();
@@ -19,17 +22,32 @@ class SearchScreenWidget extends StatefulWidget {
   _SearchScreenWidgetState createState() => _SearchScreenWidgetState();
 }
 
-class _SearchScreenWidgetState extends State<SearchScreenWidget> with SingleTickerProviderStateMixin,AutomaticKeepAliveClientMixin<SearchScreenWidget>{
+class _SearchScreenWidgetState extends State<SearchScreenWidget>
+    with
+        SingleTickerProviderStateMixin,
+        AutomaticKeepAliveClientMixin<SearchScreenWidget> {
   Future recommnederSubmissionFuture;
   List<Submission> listRecommenderSubmission = [];
+  List<SelectDistance> listSelectDistance = [];
+  SelectDistance selectedItem;
+
 
   final GlobalKey<RefreshIndicatorState> submissionTagKey2 =
       new GlobalKey<RefreshIndicatorState>();
+
+  void getSelectDistanceList() {
+    List<Map<String, Object>> json_data = select_distance;
+    listSelectDistance = json_data
+        .map((json_data) => SelectDistance.fromJson(json_data))
+        .toList();
+    selectedItem = listSelectDistance[0];
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     recommnederSubmissionFuture = getRecommenderSubmission();
+    getSelectDistanceList();
     super.initState();
   }
 
@@ -62,11 +80,178 @@ class _SearchScreenWidgetState extends State<SearchScreenWidget> with SingleTick
 
   @override
   Widget build(BuildContext context) {
+    selectedItem = Provider.of<SelectDistance>(context,listen: false);
     final Orientation orientation = MediaQuery.of(context).orientation;
     var size = MediaQuery.of(context).size;
-    final double itemHeight = (orientation == Orientation.portrait)?(size.height)/3.4:(size.height) / 2.6;
-    final double itemWidth = (orientation == Orientation.portrait)?size.width / 2:size.width/3;
+    final double itemHeight = (orientation == Orientation.portrait)
+        ? (size.height) / 3.4
+        : (size.height) / 2.6;
+    final double itemWidth =
+        (orientation == Orientation.portrait) ? size.width / 2 : size.width / 3;
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        iconTheme: IconThemeData(
+          color: Colors.black, //change your color here
+        ),
+        backgroundColor: Colors.white,
+        titleSpacing: 0,
+        automaticallyImplyLeading: false,
+        brightness: Brightness.light,
+        title: Container(child: Column(children: [Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Row(children: [Flexible(
+            flex: 1,
+            child: GestureDetector(
+              onTap: () {
+                showModalBottomSheet(
+                    backgroundColor: Colors.transparent,
+                    enableDrag: true,
+                    context: context,
+                    builder: (context) {
+                      return SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.all(
+                              20.0),
+                          child: Column(
+                            mainAxisSize:
+                            MainAxisSize.min,
+                            children: [
+                              ClipRRect(
+                                  child: Column(
+                                    children: [
+                                      ...listSelectDistance
+                                          .map((e) =>
+                                          Container(
+                                            child:
+                                            Column(
+                                              children: [
+                                                GestureDetector(
+                                                  child: Container(
+                                                      decoration: BoxDecoration(color: Colors.white),
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.symmetric(vertical: 8),
+                                                        child: Center(
+                                                          child: Text(
+                                                            e.name,
+                                                            style: TextStyle(fontSize: 15, fontFamily: 'RobotoRegular'),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      width: size.width),
+                                                  onTap: () {
+                                                      selectedItem.setSelectedDistance(e);
+                                                    Navigator.pop(context);
+                                                  },
+                                                ),
+                                                Container(
+                                                  height: 1,
+                                                  color: HattoColors.greyD3,
+                                                )
+                                              ],
+                                            ),
+                                          ))
+                                          .toList(),
+                                    ],
+                                  ),
+                                  borderRadius:
+                                  BorderRadius
+                                      .circular(
+                                      20)),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              ClipRRect(
+                                child: GestureDetector(
+                                  child: Container(
+                                      decoration:
+                                      BoxDecoration(
+                                          color: Colors
+                                              .white),
+                                      child: Padding(
+                                        padding: const EdgeInsets
+                                            .symmetric(
+                                            vertical:
+                                            10),
+                                        child: Center(
+                                          child: Text(
+                                            "Hủy bỏ",
+                                            style: TextStyle(
+                                                fontSize:
+                                                15,
+                                                fontFamily:
+                                                'RobotoRegular'),
+                                          ),
+                                        ),
+                                      ),
+                                      width:
+                                      size.width),
+                                  onTap: () {
+                                    Navigator.pop(
+                                        context);
+                                  },
+                                ),
+                                borderRadius:
+                                BorderRadius.all(
+                                    Radius.circular(
+                                        20)),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    });
+              },
+              child: Container(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          borderRadius:
+                          BorderRadius.circular(12),
+                          color: HattoColors.greyD3),
+                      child: Padding(
+                        padding:
+                        const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4),
+                        child: ChangeNotifierProvider<SelectDistance>.value(
+                          value: selectedItem,
+                          child: Consumer<SelectDistance>(builder: (context,data,child){return Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                data.name,
+                                style: TextStyle(
+                                    fontFamily:
+                                    "RobotoBold",
+                                    fontSize: 12,
+                                    color: HattoColors
+                                        .colorPrimary),
+                                overflow:
+                                TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                              Icon(
+                                Icons.keyboard_arrow_down,
+                                color: HattoColors
+                                    .colorPrimary,
+                                size: 15,
+                              )
+                            ],
+                          );}),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          )],),
+        )],),),
+      ),
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: getRecommenderSubmission,
@@ -86,7 +271,7 @@ class _SearchScreenWidgetState extends State<SearchScreenWidget> with SingleTick
               } else {
                 return GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      mainAxisSpacing: 5,
+                        mainAxisSpacing: 5,
                         crossAxisSpacing: 0,
                         crossAxisCount:
                             (orientation == Orientation.portrait) ? 2 : 3,
@@ -100,66 +285,88 @@ class _SearchScreenWidgetState extends State<SearchScreenWidget> with SingleTick
                       var itemSub = listRecommenderSubmission[index];
 
                       return FocusedMenuHolder(
-                        menuWidth: MediaQuery.of(context).size.width*0.50,
+                        menuWidth: MediaQuery.of(context).size.width * 0.50,
                         blurSize: 5.0,
                         menuItemExtent: 45,
-
                         duration: Duration(milliseconds: 100),
                         animateMenuItems: true,
                         blurBackgroundColor: Colors.black54,
                         bottomOffsetHeight: 100,
                         menuItems: <FocusedMenuItem>[
-                          FocusedMenuItem(title: Text("Mở"),trailingIcon: Icon(Icons.open_in_new) ,onPressed: (){
-                            Navigator.push(
-                                context,
-                                new MaterialPageRoute(
-                                    builder: (context) =>
-                                        DetailSubmission(itemSub, index)))
-                                .then((value) {
-                              if (value != null) {
-                                Submission itemsDetailBack = value as Submission;
-                                setState(() {
-                                  listRecommenderSubmission[index] = itemsDetailBack;
+                          FocusedMenuItem(
+                              title: Text("Mở"),
+                              trailingIcon: Icon(Icons.open_in_new),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    new MaterialPageRoute(
+                                        builder: (context) => DetailSubmission(
+                                            itemSub, index))).then((value) {
+                                  if (value != null) {
+                                    Submission itemsDetailBack =
+                                        value as Submission;
+                                    setState(() {
+                                      listRecommenderSubmission[index] =
+                                          itemsDetailBack;
 //                                            itemSub = itemsDetailBack;
+                                    });
+                                  }
                                 });
-                              }
-                            });
-                          }),
-                          FocusedMenuItem(title: Text("Chia sẻ"),trailingIcon: Icon(Icons.share) ,onPressed: (){}),
-                          FocusedMenuItem(title: Text("Yêu thích"),trailingIcon: Icon(Icons.favorite_border) ,onPressed: (){}),
-                          FocusedMenuItem(title: Text("Bỏ",style: TextStyle(color: Colors.white),),trailingIcon: Icon(Icons.delete,color: Colors.white,) ,onPressed: (){
-                            setState(() {
-                              listRecommenderSubmission.removeAt(index);
-                            });
-                          },backgroundColor: Colors.redAccent),
+                              }),
+                          FocusedMenuItem(
+                              title: Text("Chia sẻ"),
+                              trailingIcon: Icon(Icons.share),
+                              onPressed: () {}),
+                          FocusedMenuItem(
+                              title: Text("Yêu thích"),
+                              trailingIcon: Icon(Icons.favorite_border),
+                              onPressed: () {}),
+                          FocusedMenuItem(
+                              title: Text(
+                                "Bỏ",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              trailingIcon: Icon(
+                                Icons.delete,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  listRecommenderSubmission.removeAt(index);
+                                });
+                              },
+                              backgroundColor: Colors.redAccent),
                         ],
-                        onPressed: (){
+                        onPressed: () {
                           Navigator.push(
-                              context,
-                              new MaterialPageRoute(
-                                  builder: (context) =>
-                                      DetailSubmission(itemSub, index)))
+                                  context,
+                                  new MaterialPageRoute(
+                                      builder: (context) =>
+                                          DetailSubmission(itemSub, index)))
                               .then((value) {
                             if (value != null) {
                               Submission itemsDetailBack = value as Submission;
                               setState(() {
-                                listRecommenderSubmission[index] = itemsDetailBack;
+                                listRecommenderSubmission[index] =
+                                    itemsDetailBack;
 //                                            itemSub = itemsDetailBack;
                               });
                             }
                           });
                         },
                         child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                           child: Container(
                             width: itemWidth,
                             decoration: BoxDecoration(
                                 color: Colors.white,
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
                                 boxShadow: [
                                   BoxShadow(
                                       color: Colors.black.withAlpha(100),
-                                      blurRadius: 10.0),
+                                      blurRadius: 10.0,offset: Offset(4,6)),
                                 ]),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,7 +375,10 @@ class _SearchScreenWidgetState extends State<SearchScreenWidget> with SingleTick
                                   children: [
                                     Container(
                                         width: itemWidth,
-                                        height: (orientation == Orientation.portrait)?itemHeight-55:itemHeight,
+                                        height: (orientation ==
+                                                Orientation.portrait)
+                                            ? itemHeight - 55
+                                            : itemHeight,
                                         decoration: BoxDecoration(
                                           image: DecorationImage(
                                               fit: BoxFit.cover,
@@ -195,7 +405,10 @@ class _SearchScreenWidgetState extends State<SearchScreenWidget> with SingleTick
                                     ),
                                     Container(
                                       width: itemWidth,
-                                      height: (orientation == Orientation.portrait)?itemHeight-55:itemHeight,
+                                      height:
+                                          (orientation == Orientation.portrait)
+                                              ? itemHeight - 55
+                                              : itemHeight,
                                       child: Align(
                                         alignment: Alignment.bottomCenter,
                                         child: Container(
@@ -206,7 +419,8 @@ class _SearchScreenWidgetState extends State<SearchScreenWidget> with SingleTick
                                                     begin: Alignment.topCenter,
                                                     end: Alignment.bottomCenter,
                                                     colors: [
-                                                  HattoColors.gradientBlackStart,
+                                                  HattoColors
+                                                      .gradientBlackStart,
                                                   HattoColors.gradientBlackEnd
                                                 ])),
                                           ),
@@ -214,14 +428,19 @@ class _SearchScreenWidgetState extends State<SearchScreenWidget> with SingleTick
                                       ),
                                     ),
                                     Container(
-                                      height: (orientation == Orientation.portrait)?itemHeight-55:itemHeight,
+                                      height:
+                                          (orientation == Orientation.portrait)
+                                              ? itemHeight - 55
+                                              : itemHeight,
                                       child: Align(
                                         alignment: Alignment.bottomCenter,
                                         child: Container(
                                           child: Container(
                                             child: Padding(
-                                              padding: const EdgeInsets.symmetric(
-                                                  vertical: 5, horizontal: 5),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 5,
+                                                      horizontal: 5),
                                               child: Row(
                                                 children: [
                                                   Flexible(
@@ -240,15 +459,16 @@ class _SearchScreenWidgetState extends State<SearchScreenWidget> with SingleTick
                                                         Flexible(
                                                           child: Text(
                                                             "${itemSub.i_found + itemSub.NUM_MATCHES}",
-                                                            overflow: TextOverflow
-                                                                .ellipsis,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
                                                             maxLines: 1,
                                                             style: TextStyle(
                                                                 fontSize: 13,
                                                                 fontFamily:
                                                                     "RobotoMedium",
-                                                                color:
-                                                                    Colors.white),
+                                                                color: Colors
+                                                                    .white),
                                                           ),
                                                         ),
                                                       ],
@@ -270,15 +490,16 @@ class _SearchScreenWidgetState extends State<SearchScreenWidget> with SingleTick
                                                         Flexible(
                                                           child: Text(
                                                             "${itemSub.total_unique_views}",
-                                                            overflow: TextOverflow
-                                                                .ellipsis,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
                                                             maxLines: 1,
                                                             style: TextStyle(
                                                                 fontSize: 13,
                                                                 fontFamily:
                                                                     "RobotoMedium",
-                                                                color:
-                                                                    Colors.white),
+                                                                color: Colors
+                                                                    .white),
                                                           ),
                                                         ),
                                                       ],
@@ -294,7 +515,8 @@ class _SearchScreenWidgetState extends State<SearchScreenWidget> with SingleTick
                                                       flex: 1,
                                                       child: Row(
                                                         mainAxisAlignment:
-                                                            MainAxisAlignment.end,
+                                                            MainAxisAlignment
+                                                                .end,
                                                         children: [
                                                           Container(
                                                             child: Center(
@@ -312,8 +534,8 @@ class _SearchScreenWidgetState extends State<SearchScreenWidget> with SingleTick
                                                                     BorderRadius
                                                                         .circular(
                                                                             18),
-                                                                color:
-                                                                    Colors.white),
+                                                                color: Colors
+                                                                    .white),
                                                           ),
                                                         ],
                                                       ),
@@ -328,7 +550,9 @@ class _SearchScreenWidgetState extends State<SearchScreenWidget> with SingleTick
                                     )
                                   ],
                                 ),
-                                SizedBox(height: 3,),
+                                SizedBox(
+                                  height: 3,
+                                ),
                                 Padding(
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: 5),
@@ -340,7 +564,8 @@ class _SearchScreenWidgetState extends State<SearchScreenWidget> with SingleTick
                                     ),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Flexible(
                                           child: Text(
@@ -366,7 +591,8 @@ class _SearchScreenWidgetState extends State<SearchScreenWidget> with SingleTick
                                                 maxLines: 1,
                                                 style: TextStyle(
                                                     color: itemSub.isVipCheck()
-                                                        ? HattoColors.colorPrimary
+                                                        ? HattoColors
+                                                            .colorPrimary
                                                         : Colors.black,
                                                     fontFamily: "RobotoMedium",
                                                     fontSize: 13),

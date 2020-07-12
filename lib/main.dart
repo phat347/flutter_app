@@ -38,6 +38,7 @@ import 'package:logger/logger.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
+import 'package:provider/provider.dart';
 import 'HattoColors.dart';
 import 'models/RecipeSearch.dart';
 
@@ -61,17 +62,23 @@ class MyApp extends StatelessWidget {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent, //or set color with: Color(0xFF0000FF)
     ));
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        fontFamily: 'Roboto',
-        primarySwatch: Colors.red,
-        primaryTextTheme: TextTheme(headline6: TextStyle(color: Colors.black)),
-        scaffoldBackgroundColor: Colors.white,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<SelectDistance>(create: (_) => SelectDistance("✈️ Mọi nơi 🥩",-1)),
+
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          fontFamily: 'Roboto',
+          primarySwatch: Colors.red,
+          primaryTextTheme: TextTheme(headline6: TextStyle(color: Colors.black)),
+          scaffoldBackgroundColor: Colors.white,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: MyHomePage(title: 'Flutter Demo Home Page'),
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }

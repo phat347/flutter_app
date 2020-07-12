@@ -17,4 +17,11 @@ class SelectDistance extends ChangeNotifier{
 
   Map<String,dynamic> toJson() => _$SelectDistanceToJson(this);
 
+  void setSelectedDistance(SelectDistance e)
+  {
+    this.name = e.name;
+    this.value = e.value;
+    notifyListeners();
+  }
+
 }
