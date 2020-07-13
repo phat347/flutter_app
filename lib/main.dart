@@ -62,23 +62,17 @@ class MyApp extends StatelessWidget {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent, //or set color with: Color(0xFF0000FF)
     ));
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<SelectDistance>(create: (_) => SelectDistance("✈️ Mọi nơi 🥩",-1)),
-
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          fontFamily: 'Roboto',
-          primarySwatch: Colors.red,
-          primaryTextTheme: TextTheme(headline6: TextStyle(color: Colors.black)),
-          scaffoldBackgroundColor: Colors.white,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        home: MyHomePage(title: 'Flutter Demo Home Page'),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        fontFamily: 'Roboto',
+        primarySwatch: Colors.red,
+        primaryTextTheme: TextTheme(headline6: TextStyle(color: Colors.black)),
+        scaffoldBackgroundColor: Colors.white,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
@@ -162,10 +156,21 @@ class _MyHomePageState extends State<MyHomePage>
   int _selectedIndex = 0;
 
   PageController _pageController;
+  List<SelectDistance> listSelectDistance = [];
+  SelectDistance selectedItem;
+
+  void getSelectDistanceList() {
+    List<Map<String, Object>> json_data = select_distance;
+    listSelectDistance = json_data
+        .map((json_data) => SelectDistance.fromJson(json_data))
+        .toList();
+    selectedItem = listSelectDistance[0];
+  }
 
   @override
   void initState() {
     super.initState();
+    getSelectDistanceList();
     _pageController = PageController(keepPage: false);
 
     isVisibleBottomBar = true;
@@ -219,130 +224,136 @@ class _MyHomePageState extends State<MyHomePage>
     print("setState _MyHomePageState");
     final Size size = MediaQuery.of(context).size;
     final double categoryHeight = size.height * 0.30;
-    return Scaffold(
-      body: PageView(
-        controller: _pageController,
-        onPageChanged: (index) {
-          setState(() => _selectedIndex = index);
-        },
-        physics: NeverScrollableScrollPhysics(),
-        children: <Widget>[
-          HomeWidget(widgetHomecallback),
-          SearchScreenWidget(),
-          Scaffold(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<SelectDistance>(create: (_) => selectedItem),
 
-          LiquidSwipeScreen(),
+      ],
+      child: Scaffold(
+        body: PageView(
+          controller: _pageController,
+          onPageChanged: (index) {
+            setState(() => _selectedIndex = index);
+          },
+          physics: NeverScrollableScrollPhysics(),
+          children: <Widget>[
+            HomeWidget(widgetHomecallback),
+            SearchScreenWidget(),
+            Scaffold(),
+
+            LiquidSwipeScreen(),
 //          Scaffold(body: Container(child: Center(child: Text("Notification Scaffold")),),),
-          Scaffold(
-            body: Container(
-              child: Center(child: Text("MENU Scaffold")),
-            ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: AnimatedContainer(
-        duration: Duration(milliseconds: 300),
-        height: isVisibleBottomBar ? 56.0 : 0.0,
-        child: Wrap(
-          children: [
-            Stack(
-              children: [
-                BottomNavigationBar(
-                  items: <BottomNavigationBarItem>[
-                    BottomNavigationBarItem(
-                      activeIcon: ImageIcon(
-                          AssetImage("assets/images/combinedshape.png"),
-                          color: HattoColors.colorPrimary),
-                      icon: ImageIcon(
-                          AssetImage("assets/images/combinedshape.png"),
-                          color: Colors.grey),
-                      title: Padding(
-                        padding: EdgeInsets.all(0),
-                        child: Text('Trang chủ'),
-                      ),
-                    ),
-                    BottomNavigationBarItem(
-                      activeIcon: ImageIcon(
-                          AssetImage("assets/images/ic_search.png"),
-                          color: HattoColors.colorPrimary),
-                      icon: ImageIcon(AssetImage("assets/images/ic_search.png"),
-                          color: Colors.grey),
-                      title: Padding(
-                        padding: EdgeInsets.all(0),
-                        child: Text('Tìm kiếm'),
-                      ),
-                    ),
-                    BottomNavigationBarItem(
-                      activeIcon:
-                          Icon(Icons.camera, color: HattoColors.colorPrimary),
-                      icon: Icon(Icons.camera, color: Colors.white),
-                      title: Padding(
-                        padding: EdgeInsets.all(0),
-                        child: Text(''),
-                      ),
-                    ),
-                    BottomNavigationBarItem(
-                      activeIcon: ImageIcon(
-                          AssetImage("assets/images/ic_bell_2.png"),
-                          color: HattoColors.colorPrimary),
-                      icon: Stack(children: [
-                        ImageIcon(AssetImage("assets/images/ic_bell_2.png"),
-                            color: Colors.grey),
-                        Visibility(
-                          visible: countNotification > 0 ? true : false,
-                          child: Positioned(
-                            right: 0,
-                            child: new Container(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 1, horizontal: 3),
-                              decoration: new BoxDecoration(
-                                color: Colors.red,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              constraints: BoxConstraints(
-                                minWidth: 12,
-                                minHeight: 12,
-                              ),
-                              child: new Text(
-                                '$countNotification',
-                                style: new TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: 'RobotoRegular',
-                                  fontSize: 10,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                        )
-                      ]),
-                      title: Padding(
-                        padding: EdgeInsets.all(0),
-                        child: Text('Thông báo'),
-                      ),
-                    ),
-                    BottomNavigationBarItem(
-                      activeIcon:
-                          Icon(Icons.menu, color: HattoColors.colorPrimary),
-                      icon: Icon(Icons.menu, color: Colors.grey),
-                      title: Padding(
-                        padding: EdgeInsets.all(0),
-                        child: Text('Thêm'),
-                      ),
-                    )
-                  ],
-                  type: BottomNavigationBarType.fixed,
-                  showSelectedLabels: true,
-                  showUnselectedLabels: true,
-                  unselectedItemColor: Colors.grey,
-                  currentIndex: _selectedIndex,
-                  selectedItemColor: HattoColors.colorPrimary,
-                  onTap: _onItemTapped,
-                ),
-                BottomCameraWidget()
-              ],
+            Scaffold(
+              body: Container(
+                child: Center(child: Text("MENU Scaffold")),
+              ),
             ),
           ],
+        ),
+        bottomNavigationBar: AnimatedContainer(
+          duration: Duration(milliseconds: 300),
+          height: isVisibleBottomBar ? 56.0 : 0.0,
+          child: Wrap(
+            children: [
+              Stack(
+                children: [
+                  BottomNavigationBar(
+                    items: <BottomNavigationBarItem>[
+                      BottomNavigationBarItem(
+                        activeIcon: ImageIcon(
+                            AssetImage("assets/images/combinedshape.png"),
+                            color: HattoColors.colorPrimary),
+                        icon: ImageIcon(
+                            AssetImage("assets/images/combinedshape.png"),
+                            color: Colors.grey),
+                        title: Padding(
+                          padding: EdgeInsets.all(0),
+                          child: Text('Trang chủ'),
+                        ),
+                      ),
+                      BottomNavigationBarItem(
+                        activeIcon: ImageIcon(
+                            AssetImage("assets/images/ic_search.png"),
+                            color: HattoColors.colorPrimary),
+                        icon: ImageIcon(AssetImage("assets/images/ic_search.png"),
+                            color: Colors.grey),
+                        title: Padding(
+                          padding: EdgeInsets.all(0),
+                          child: Text('Tìm kiếm'),
+                        ),
+                      ),
+                      BottomNavigationBarItem(
+                        activeIcon:
+                            Icon(Icons.camera, color: HattoColors.colorPrimary),
+                        icon: Icon(Icons.camera, color: Colors.white),
+                        title: Padding(
+                          padding: EdgeInsets.all(0),
+                          child: Text(''),
+                        ),
+                      ),
+                      BottomNavigationBarItem(
+                        activeIcon: ImageIcon(
+                            AssetImage("assets/images/ic_bell_2.png"),
+                            color: HattoColors.colorPrimary),
+                        icon: Stack(children: [
+                          ImageIcon(AssetImage("assets/images/ic_bell_2.png"),
+                              color: Colors.grey),
+                          Visibility(
+                            visible: countNotification > 0 ? true : false,
+                            child: Positioned(
+                              right: 0,
+                              child: new Container(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 1, horizontal: 3),
+                                decoration: new BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                constraints: BoxConstraints(
+                                  minWidth: 12,
+                                  minHeight: 12,
+                                ),
+                                child: new Text(
+                                  '$countNotification',
+                                  style: new TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'RobotoRegular',
+                                    fontSize: 10,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          )
+                        ]),
+                        title: Padding(
+                          padding: EdgeInsets.all(0),
+                          child: Text('Thông báo'),
+                        ),
+                      ),
+                      BottomNavigationBarItem(
+                        activeIcon:
+                            Icon(Icons.menu, color: HattoColors.colorPrimary),
+                        icon: Icon(Icons.menu, color: Colors.grey),
+                        title: Padding(
+                          padding: EdgeInsets.all(0),
+                          child: Text('Thêm'),
+                        ),
+                      )
+                    ],
+                    type: BottomNavigationBarType.fixed,
+                    showSelectedLabels: true,
+                    showUnselectedLabels: true,
+                    unselectedItemColor: Colors.grey,
+                    currentIndex: _selectedIndex,
+                    selectedItemColor: HattoColors.colorPrimary,
+                    onTap: _onItemTapped,
+                  ),
+                  BottomCameraWidget()
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
