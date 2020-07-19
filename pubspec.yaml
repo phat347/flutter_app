@@ -36,6 +36,7 @@ dependencies:
   focused_menu: ^1.0.1
   flutter_svg: ^0.18.0
   intl: ^0.16.1
+  translator: ^0.1.4
   fluttertoast: ^4.0.0
   flutter:
     sdk: flutter
