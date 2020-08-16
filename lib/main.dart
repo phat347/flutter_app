@@ -22,6 +22,7 @@ import 'package:flutterapp/screens/DetailSubmission.dart';
 import 'package:flutterapp/screens/GalleryPhotoZoom.dart';
 import 'package:flutterapp/screens/HomeWidget.dart';
 import 'package:flutterapp/screens/LiquidSwipeScreen.dart';
+import 'package:flutterapp/screens/MenuScreen.dart';
 import 'package:flutterapp/screens/SearchScreenWidget.dart';
 import 'package:flutterapp/select_distance.dart';
 import 'package:flutterapp/services/ApiService.dart';
@@ -243,11 +244,7 @@ class _MyHomePageState extends State<MyHomePage>
 
             LiquidSwipeScreen(),
 //          Scaffold(body: Container(child: Center(child: Text("Notification Scaffold")),),),
-            Scaffold(
-              body: Container(
-                child: Center(child: Text("MENU Scaffold")),
-              ),
-            ),
+            MenuScreen()
           ],
         ),
         bottomNavigationBar: AnimatedContainer(
